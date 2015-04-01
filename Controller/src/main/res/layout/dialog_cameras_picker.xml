@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/title_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Controller.OrangeTitle"
+        android:text="@string/cameras_position_designation"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/right_camera_label_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Controller.GreyTitle"
+        android:layout_below="@+id/title_textView"
+        android:text="@string/right_camera_label"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Spinner
+        android:id="@+id/right_camera_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Controller.Form.Element"
+        android:layout_below="@+id/right_camera_label_textView"
+        android:layout_centerHorizontal="true"
+        tools:listitem="@layout/row_device" />
+
+    <TextView
+        android:id="@+id/left_camera_label_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Controller.GreyTitle"
+        android:layout_below="@+id/right_camera_spinner"
+        android:text="@string/left_camera_label"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Spinner
+        android:id="@+id/left_camera_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Controller.Form.Element"
+        android:layout_below="@+id/left_camera_label_textView"
+        android:layout_centerHorizontal="true"
+        tools:listitem="@layout/row_device" />
+
+</RelativeLayout>

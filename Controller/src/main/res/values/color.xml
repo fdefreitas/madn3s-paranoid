@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparent">#00000000</color>
+    <color name="vitamin_c">#FF9900</color>
+    <color name="route_66">#424242</color>
+    <color name="steady_grey">#E9E9E9</color>
+    <color name="BC">#BCBCBC</color>
+    <color name="gamebookers_blue">#3299BB</color>
+    <color name="white">#FFF</color>
+</resources>

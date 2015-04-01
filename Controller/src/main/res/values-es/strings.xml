@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MADN3SController</string>
+    <string name="title_section1">Sección 1</string>
+    <string name="title_section2">Sección 2</string>
+    <string name="title_section3">Sección 3</string>
+    <string name="navigation_drawer_open">Abrir navigation drawer</string>
+    <string name="navigation_drawer_close">Cerrar navigation drawer</string>
+    <string name="action_example">Acción de Ejemplo</string>
+    <string name="action_settings">Configuraciones</string>
+    
+    <string name="description_arrow_front">Flecha Frontal</string>
+    <string name="description_arrow_left">Flecha Izquierda</string>
+    <string name="description_arrow_back">Flecha Atrás</string>
+    <string name="description_arrow_right">Flecha Derecha</string>
+    <string name="new_devices">Dispositivos Nuevos</string>
+    <string name="paired_devices">Dispositivos Apareados</string>
+    <string name="cameras">Cámaras</string>
+    <string name="nxt">NXT</string>
+    <string name="connect">Conectar</string>
+    <string name="scan">Scanear</string>
+    <string name="hint_indicator_device_not_connected">Indicador de Dispositivo No Conectado</string>
+    <string name="hint_indicator_device_connected">Indicador de Dispositivo Conectado</string>
+
+    <string name="selected_devices">Dispositivos Seleccionados</string>
+    <string name="device_name">Nombre de Dispositivo</string>
+    <string name="device_address">Dirección de Dispositivo</string>
+    <string name="next">Siguiente</string>
+    <string name="error_connect_failed">Conexión Fallida</string>
+    <string name="error_connect_lost">Conexión Perdida</string>
+    
+    <string name="calibration">Calibración</string>
+    <string name="nxt_action">Enviando señal a NXT</string>
+    <string name="right_camera_action">Enviando señal a Camera1</string>
+    <string name="left_camera_action">Enviando señal a Camera2</string>
+    
+    <string name="step1">Paso 1</string>
+    <string name="step2">Paso 2</string>
+    <string name="step3">Paso 3</string>
+    
+    <string name="project_name">Nombre de Proyecto</string>
+    <string name="save">Guardar</string>
+    <string name="generate">Generar Modelo</string>
+    <string name="view">Ver Modelo</string>
+    
+    <string name="scanner">Scanner</string>
+    <string name="remote_control">R/C</string>
+    <string name="model_gallery">Galería</string>
+    
+</resources>

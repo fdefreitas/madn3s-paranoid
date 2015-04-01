@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ProgressBar
+        android:id="@+id/scanner_global_progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/element_vertical_margin"
+        android:indeterminate="true"
+        android:max="100"
+        android:progress="85"
+        android:secondaryProgress="50" />
+
+    <LinearLayout
+        android:id="@+id/scanner_project_name_linearLayout"
+        style="@style/Controller.Scanner.Step"
+        android:layout_below="@+id/scanner_global_progressBar" >
+
+        <EditText
+            android:id="@+id/scanner_project_name_editText"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="3"
+            android:ems="10"
+            android:hint="@string/project_name" />
+        
+        <Button
+            android:id="@+id/calibrate_button"
+            style="@style/Controller.Button.Primary"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:paddingTop="@dimen/element_padding"
+            android:paddingBottom="@dimen/element_padding"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_marginRight="4dp"
+            android:text="@string/calibrate" />
+
+        <Button
+            android:id="@+id/scan_button"
+            style="@style/Controller.Button.Primary"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:paddingTop="@dimen/element_padding"
+            android:paddingBottom="@dimen/element_padding"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:text="@string/scan" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/calibration_relativeLayout"
+        android:layout_below="@id/scanner_project_name_linearLayout"
+        style="@style/Controller.Scanner.Step" >
+
+        <TextView
+            android:id="@+id/calibration_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/calibration"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <FrameLayout
+            android:id="@+id/calibration_status_frameLayout"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true" >
+
+            <ImageView
+                android:id="@+id/calibration_failure_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/indicator_not_connected"
+                android:contentDescription="@string/hint_indicator_device_not_connected"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/calibration_working_progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/calibration_success_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/indicator_connected"
+                android:contentDescription="@string/hint_indicator_device_connected"
+                android:visibility="gone" />
+        </FrameLayout>
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/nxt_action_relativeLayout"
+        style="@style/Controller.Scanner.Step"
+        android:layout_below="@id/calibration_relativeLayout" >
+
+        <TextView
+            android:id="@+id/nxt_action_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nxt_action"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <FrameLayout
+            android:id="@+id/nxt_action_status_frameLayout"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true" >
+
+            <ImageView
+                android:id="@+id/nxt_action_failure_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/indicator_not_connected"
+                android:contentDescription="@string/hint_indicator_device_not_connected"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/nxt_action_working_progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/nxt_action_success_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/indicator_connected"
+                android:contentDescription="@string/hint_indicator_device_connected"
+                android:visibility="gone" />
+        </FrameLayout>
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/camera1_action_relativeLayout"
+        style="@style/Controller.Scanner.Step"
+        android:layout_below="@id/nxt_action_relativeLayout" >
+
+        <TextView
+            android:id="@+id/camera1_action_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/right_camera_action"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <FrameLayout
+            android:id="@+id/camera1_action_status_frameLayout"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true" >
+
+            <ImageView
+                android:id="@+id/camera1_action_failure_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/indicator_not_connected"
+                android:contentDescription="@string/hint_indicator_device_not_connected"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/camera1_action_working_progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/camera1_action_success_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/indicator_connected"
+                android:contentDescription="@string/hint_indicator_device_connected"
+                android:visibility="gone" />
+        </FrameLayout>
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/camera2_action_relativeLayout"
+        style="@style/Controller.Scanner.Step"
+        android:layout_below="@id/camera1_action_relativeLayout">
+
+        <TextView
+            android:id="@+id/camera2_action_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/left_camera_action"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <FrameLayout
+            android:id="@+id/camera2_action_status_frameLayout"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true" >
+
+            <ImageView
+                android:id="@+id/camera2_action_failure_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/indicator_not_connected"
+                android:contentDescription="@string/hint_indicator_device_not_connected"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/camera2_action_working_progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/camera2_action_success_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/indicator_connected"
+                android:contentDescription="@string/hint_indicator_device_connected"
+                android:visibility="gone" />
+        </FrameLayout>
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/scan_progress_relativeLayout"
+        style="@style/Controller.Scanner.Step"
+        android:layout_below="@id/camera2_action_relativeLayout">
+
+        <TextView
+            android:id="@+id/scan_progress_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/scan_progress"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+        <TextView
+            android:id="@+id/scan_step_current_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/scan_step_separator_textView"
+            android:text="@string/example_lower"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <TextView
+            android:id="@+id/scan_step_separator_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/scan_step_total_textView"
+            android:text="@string/slash"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <TextView
+            android:id="@+id/scan_step_total_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/example_total"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </RelativeLayout>
+    
+    <Chronometer
+        android:id="@+id/elapsed_chronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/scan_progress_relativeLayout"
+        android:format="%s"
+        android:textSize="24sp"
+        android:gravity="center_vertical" />
+
+    <ProgressBar
+        android:id="@+id/model_generation_progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/element_vertical_margin"
+        android:layout_marginBottom="@dimen/element_vertical_margin"
+        android:layout_marginLeft="@dimen/element_horizontal_margin"
+        android:layout_marginRight="@dimen/element_horizontal_margin"
+        android:indeterminate="true"
+        android:layout_below="@id/elapsed_chronometer" />
+
+    <Button
+        android:id="@+id/model_generation_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Controller.Button.Primary"
+        android:layout_below="@id/model_generation_progressBar"
+        android:layout_centerHorizontal="true"
+        android:enabled="false"
+        android:text="@string/generate" />
+    
+    <RelativeLayout
+        android:id="@+id/step1_generation_relativeLayout"
+        style="@style/Controller.Scanner.Step"
+        android:layout_below="@id/model_generation_button" >
+
+        <TextView
+            android:id="@+id/step1_generation_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/step1"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <FrameLayout
+            android:id="@+id/step1_generation_status_frameLayout"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true" >
+
+            <ImageView
+                android:id="@+id/step1_generation_failure_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/indicator_not_connected"
+                android:contentDescription="@string/hint_indicator_device_not_connected"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/step1_generation_working_progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/step1_generation_success_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/indicator_connected"
+                android:contentDescription="@string/hint_indicator_device_connected"
+                android:visibility="gone" />
+        </FrameLayout>
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/step2_generation_relativeLayout"
+        style="@style/Controller.Scanner.Step"
+        android:layout_below="@id/step1_generation_relativeLayout" >
+
+        <TextView
+            android:id="@+id/step2_generation_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/step2"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <FrameLayout
+            android:id="@+id/step2_generation_status_frameLayout"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true" >
+
+            <ImageView
+                android:id="@+id/step2_generation_failure_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/indicator_not_connected"
+                android:contentDescription="@string/hint_indicator_device_not_connected"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/step2_generation_working_progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/step2_generation_success_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/indicator_connected"
+                android:contentDescription="@string/hint_indicator_device_connected"
+                android:visibility="gone" />
+        </FrameLayout>
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/step3_generation_relativeLayout"
+        style="@style/Controller.Scanner.Step"
+        android:layout_below="@id/step2_generation_relativeLayout" >
+
+        <TextView
+            android:id="@+id/step3_generation_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/step3"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <FrameLayout
+            android:id="@+id/step3_generation_status_frameLayout"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true" >
+
+            <ImageView
+                android:id="@+id/step3_generation_failure_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/indicator_not_connected"
+                android:contentDescription="@string/hint_indicator_device_not_connected"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/step3_generation_working_progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/step3_generation_success_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/indicator_connected"
+                android:contentDescription="@string/hint_indicator_device_connected"
+                android:visibility="gone" />
+        </FrameLayout>
+    </RelativeLayout>
+    
+    <Button
+        android:id="@+id/view_model_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/step3_generation_relativeLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="8dp"
+        android:enabled="false"
+        style="@style/Controller.Button.Primary"
+        android:text="@string/view" />
+
+</RelativeLayout>

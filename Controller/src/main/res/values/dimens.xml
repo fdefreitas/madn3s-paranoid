@@ -1,0 +1,26 @@
+<resources>
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="navigation_drawer_width">240dp</dimen>
+
+    <dimen name="container_margin">16dp</dimen>
+    <dimen name="arrow_side">48dp</dimen>
+    <dimen name="subtitle_padding">8dp</dimen>
+    <dimen name="list_item_padding">8dp</dimen>
+    <dimen name="nested_list_margin">4dp</dimen>
+    
+    <dimen name="button_vertical_padding">4dp</dimen>
+    <dimen name="button_horizontal_padding">8dp</dimen>
+    <dimen name="element_padding">8dp</dimen>
+    <dimen name="element_vertical_margin">4dp</dimen>
+    <dimen name="element_horizontal_margin">8dp</dimen>
+    
+    <dimen name="scanner_step_height">48dp</dimen>
+    
+    <dimen name="input_small_width">60dp</dimen>
+    <dimen name="input_medium_width">80dp</dimen>
+    <dimen name="input_large_width">120dp</dimen>
+
+</resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="Controller" parent="AppTheme"></style>
+    
+    <style name="Controller.OrangeTitle">
+        <item name="android:padding">4dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:background">@color/vitamin_c</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    
+    <style name="Controller.GreyTitle">
+        <item name="android:padding">@dimen/element_padding</item>
+        <item name="android:layout_marginTop">@dimen/element_vertical_margin</item>
+        <item name="android:layout_marginBottom">@dimen/element_vertical_margin</item>
+        <item name="android:background">@color/BC</item>
+        <item name="android:textColor">@color/route_66</item>
+    </style>
+    
+    <style name="Controller.Button">
+        <item name="android:paddingTop">@dimen/button_vertical_padding</item>
+        <item name="android:paddingRight">@dimen/button_horizontal_padding</item>
+        <item name="android:paddingBottom">@dimen/button_vertical_padding</item>
+        <item name="android:paddingLeft">@dimen/button_horizontal_padding</item>
+        <item name="android:layout_marginTop">@dimen/element_vertical_margin</item>
+        <item name="android:layout_marginBottom">@dimen/element_vertical_margin</item>
+    </style>
+    
+    <style name="Controller.Button.Primary" parent="Controller.Button">
+        <item name="android:background">@drawable/selector_button_primary</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    
+    <style name="Controller.Scanner" parent="Controller">
+    </style>
+    
+    <style name="Controller.Scanner.Step" parent="Controller.Scanner">
+        <item name="android:padding">@dimen/element_padding</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/scanner_step_height</item>
+        <item name="android:layout_marginTop">@dimen/element_vertical_margin</item>
+        <item name="android:layout_marginRight">@dimen/element_horizontal_margin</item>
+        <item name="android:layout_marginBottom">@dimen/element_vertical_margin</item>
+        <item name="android:layout_marginLeft">@dimen/element_horizontal_margin</item>
+        <item name="android:background">@color/steady_grey</item>
+        <item name="android:textColor">@color/route_66</item>
+    </style>
+    
+    <style name="Controller.Form" parent="Controller">
+    </style>
+    
+    <style name="Controller.Form.Container" parent="Controller.Form">
+        
+        <item name="android:paddingBottom">@dimen/element_padding</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginTop">@dimen/element_vertical_margin</item>
+        <item name="android:layout_marginRight">@dimen/element_horizontal_margin</item>
+        <item name="android:layout_marginBottom">@dimen/element_vertical_margin</item>
+        <item name="android:layout_marginLeft">@dimen/element_horizontal_margin</item>
+        <item name="android:background">@color/steady_grey</item>
+        <item name="android:textColor">@color/route_66</item>
+    </style>
+    
+    <style name="Controller.Form.Element" parent="Controller.Form">
+        <item name="android:layout_marginTop">@dimen/element_vertical_margin</item>
+        <item name="android:layout_marginRight">@dimen/element_horizontal_margin</item>
+        <item name="android:layout_marginBottom">@dimen/element_vertical_margin</item>
+        <item name="android:layout_marginLeft">@dimen/element_horizontal_margin</item>
+    </style>
+    
+</resources>

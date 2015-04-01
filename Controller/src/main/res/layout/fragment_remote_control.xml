@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/top_arrow_imageView"
+        android:layout_width="@dimen/arrow_side"
+        android:layout_height="@dimen/arrow_side"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/description_arrow_front"
+        android:src="@drawable/up_arrow" />
+
+    <ImageView
+        android:id="@+id/circle_imageView"
+        android:layout_width="@dimen/arrow_side"
+        android:layout_height="@dimen/arrow_side"
+        android:layout_below="@+id/top_arrow_imageView"
+        android:layout_margin="16dp"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/description_circle"
+        android:src="@drawable/circle" />
+
+    <ImageView
+        android:id="@+id/bottom_arrow_imageView"
+        android:layout_width="@dimen/arrow_side"
+        android:layout_height="@dimen/arrow_side"
+        android:layout_below="@+id/circle_imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/arrow_back"
+        android:contentDescription="@string/description_arrow_back" />
+
+    <ImageView
+        android:id="@+id/left_arrow_imageView"
+        android:layout_width="@dimen/arrow_side"
+        android:layout_height="@dimen/arrow_side"
+        android:layout_alignTop="@+id/right_arrow_imageView"
+        android:layout_toLeftOf="@+id/circle_imageView"
+        android:contentDescription="@string/description_arrow_left"
+        android:src="@drawable/arrow_left" />
+
+    <ImageView
+        android:id="@+id/right_arrow_imageView"
+        android:layout_width="@dimen/arrow_side"
+        android:layout_height="@dimen/arrow_side"
+        android:layout_above="@+id/bottom_arrow_imageView"
+        android:layout_toRightOf="@+id/circle_imageView"
+        android:contentDescription="@string/description_arrow_right"
+        android:src="@drawable/arrow_right" />
+
+</RelativeLayout>
