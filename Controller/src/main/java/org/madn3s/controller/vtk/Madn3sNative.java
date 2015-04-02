@@ -26,7 +26,7 @@ public class Madn3sNative {
 
 //	public static native synchronized boolean doDelaunay(String message);
 
-	public static native synchronized boolean testLog(String message);
+    public static native synchronized boolean jsonToVTK(String data, String projectPathStr, boolean ascii);
 
 //	public static native synchronized boolean doProcess(String pointsJsonStr);
 }
