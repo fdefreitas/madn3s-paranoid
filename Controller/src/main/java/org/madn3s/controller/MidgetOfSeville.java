@@ -26,15 +26,7 @@ import org.opencv.video.Video;
 
 import java.util.ArrayList;
 
-import static org.madn3s.controller.Consts.FRAME_PREFIX;
-import static org.madn3s.controller.Consts.KEY_CALIBRATION;
-import static org.madn3s.controller.Consts.KEY_CALIB_CAMERA_MATRIX;
-import static org.madn3s.controller.Consts.KEY_CALIB_DISTORTION_COEFFICIENTS;
-import static org.madn3s.controller.Consts.KEY_CALIB_IMAGE_POINTS;
-import static org.madn3s.controller.Consts.KEY_FILE_PATH;
-import static org.madn3s.controller.Consts.KEY_POINTS;
-import static org.madn3s.controller.Consts.SIDE_LEFT;
-import static org.madn3s.controller.Consts.SIDE_RIGHT;
+import static org.madn3s.controller.Consts.*;
 
 public class MidgetOfSeville {
 	static final String tag = MidgetOfSeville.class.getSimpleName();
@@ -173,15 +165,15 @@ public class MidgetOfSeville {
 			        vRightOrtogonal = vRightOrtogonal.t();
 			        last = vRightOrtogonal.cols();
 			        Mat point = vRightOrtogonal.col(last - 1);
-//			        JSONObject pointJsonResult = new JSONObject();
+			        JSONObject pointJsonResult = new JSONObject();
 			        if(point.rows() == 3){
 			        	double[] coordinates = new double[3];
 			        	point.get(0, 0, coordinates);
-//			        	pointJsonResult.put(KEY_X, coordinates[0]);
-//			        	pointJsonResult.put(KEY_Y, coordinates[1]);
-//			        	pointJsonResult.put(KEY_Z, coordinates[2]);
-//			        	result.put(pointJsonResult);
-			        	result.put(coordinates[0] + " " + coordinates[1] + " " + coordinates[2] + "\n" );
+			        	pointJsonResult.put(KEY_X, coordinates[0]);
+			        	pointJsonResult.put(KEY_Y, coordinates[1]);
+			        	pointJsonResult.put(KEY_Z, coordinates[2]);
+			        	result.put(pointJsonResult);
+//			        	result.put(coordinates[0] + " " + coordinates[1] + " " + coordinates[2] + "\n" );
 			        } else {
 			        	Log.e(tag, "No se obtuvieron coordenadas X, Y y Z");
 			        }

@@ -19,6 +19,7 @@ import org.madn3s.controller.R;
 import org.madn3s.controller.components.CameraSelectionDialogFragment;
 import org.madn3s.controller.models.NewDevicesAdapter;
 import org.madn3s.controller.models.PairedDevicesAdapter;
+import org.madn3s.controller.vtk.Madn3sNative;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -160,16 +161,17 @@ public class DiscoveryFragment extends BaseFragment {
 							Log.d(tag, "Couldn't save the complete framesJson to External. ", e);
 						}
 
+                        String[] pyrlksResults = new String[points];
+
 						try {
-							for(int f = 0; f < points; ++f){
-								result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(f));
+							for(int frameIndex = 0; frameIndex < points; ++frameIndex){
+								result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(frameIndex));
 								if(result != null){
-//									int length = framePointsJsonArr.length();
-									vtkFileBufferLines += result.length();
-									for(int i = 0; i < result.length(); ++i){
-//										framePointsJsonArr.put(i + length, result.get(i));
-										vtkFileBuffer.append(result.get(i));
-									}
+                                    pyrlksResults[frameIndex] = result.toString();
+//									vtkFileBufferLines += result.length();
+//									for(int i = 0; i < result.length(); ++i){
+//										vtkFileBuffer.append(result.get(i));
+//									}
 								} else {
 									Log.e(tag, "result null");
 								}
@@ -178,7 +180,9 @@ public class DiscoveryFragment extends BaseFragment {
 //							String pointsJsonPath = MADN3SController.saveJsonToExternal(framePointsJsonArr.toString(1), "final-points");
 							String vtkFilePath = MADN3SController.createVtpFromPoints(vtkFileBuffer.toString(), vtkFileBufferLines, "vtkData");
 							String vtkFileResultPath = MADN3SController.getOutputMediaFile(MADN3SController.MEDIA_TYPE_VTU, "vtkResult").getAbsolutePath();
-//							KiwiNative.doIcp(vtkFilePath, vtkFileResultPath, 40, 0.001, 15);
+                            Log.d(tag, "vtkFilePath: " + vtkFilePath);
+							Madn3sNative.doIcp(pyrlksResults, MADN3SController.getAppDirectory().getAbsolutePath(), true, 40, 0.001, 15, true);
+//                            Madn3sNative.doDelaunay("khgks", 0.6);
 						} catch (JSONException e) {
 							e.printStackTrace();
 						}

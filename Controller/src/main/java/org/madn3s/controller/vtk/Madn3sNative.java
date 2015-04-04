@@ -20,13 +20,8 @@ public class Madn3sNative {
 		System.loadLibrary("Madn3sNative");
 	}
 
-//	public static native synchronized void init(int width, int height);
+    public static native synchronized boolean doIcp(String[] pyrlksData, String projectPath, boolean ascii
+            , int nLandmarks, double maxMeanDistance, int nIterations, boolean debug);
 
-//	public static native synchronized boolean doIcp(String filePath, String fileResultPath, int nLandmarks, double maxMeanDistance, int nIterations);
-
-//	public static native synchronized boolean doDelaunay(String message);
-
-    public static native synchronized boolean jsonToVTK(String data, String projectPathStr, boolean ascii);
-
-//	public static native synchronized boolean doProcess(String pointsJsonStr);
+	public static native synchronized boolean doDelaunay(String icpFilePath, double alpha);
 }

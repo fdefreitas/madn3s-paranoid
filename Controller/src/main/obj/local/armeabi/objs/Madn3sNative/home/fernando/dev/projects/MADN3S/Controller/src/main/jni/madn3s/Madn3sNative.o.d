@@ -20,6 +20,7 @@
  /home/fernando/dev/android-ndk-r10d/sources/cxx-stl/gnu-libstdc++/4.9/include/cassert \
  /home/fernando/dev/android-ndk-r10d/sources/cxx-stl/gnu-libstdc++/4.9/include/fstream \
  /home/fernando/dev/android-ndk-r10d/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream \
+ /home/fernando/dev/android-ndk-r10d/sources/cxx-stl/gnu-libstdc++/4.9/include/sstream \
  /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/json-cpp/json.h \
  /home/fernando/dev/android-ndk-r10d/sources/cxx-stl/gnu-libstdc++/4.9/include/vector \
  /home/fernando/dev/android-ndk-r10d/sources/cxx-stl/gnu-libstdc++/4.9/include/map \
@@ -171,6 +172,8 @@
 /home/fernando/dev/android-ndk-r10d/sources/cxx-stl/gnu-libstdc++/4.9/include/fstream:
 
 /home/fernando/dev/android-ndk-r10d/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream:
+
+/home/fernando/dev/android-ndk-r10d/sources/cxx-stl/gnu-libstdc++/4.9/include/sstream:
 
 /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/json-cpp/json.h:
 
