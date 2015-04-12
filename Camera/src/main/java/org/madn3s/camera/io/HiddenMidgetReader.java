@@ -19,7 +19,7 @@ import android.util.Log;
  * Created by ninja_midget on 2/1/14.
  */
 public class HiddenMidgetReader extends HandlerThread implements Callback {
-	
+
 	private final static String tag = HiddenMidgetReader.class.getSimpleName();
 	public static UniversalComms bridge;
 	@SuppressWarnings("unused")
@@ -31,7 +31,7 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
 		super(name);
 		this.mBluetoothSocketWeakReference = mBluetoothSocketWeakReference;
 	}
-	
+
 	public HiddenMidgetReader(String name, int priority) {
 		super(name, priority);
 	}
@@ -56,20 +56,20 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
 						break;
 					}
 		        }
-				
+
 				while(MADN3SCamera.isRunning.get()){
 					if(MADN3SCamera.isPictureTaken.get()){
 						Log.d(tag, "Esperando mensaje.");
 						message = getMessage();
 						if(message != null && !message.isEmpty()){
-//							Log.d(tag, "Mensaje Recibido: " + message);
+							Log.d(tag, "Mensaje Recibido: " + message);
 							JSONObject msg = new JSONObject(message);
 							if(msg.has(Consts.KEY_ACTION)){
 								String action = msg.getString(Consts.KEY_ACTION);
 								 if(action.equalsIgnoreCase(Consts.ACTION_EXIT_APP)){
 									break;
 								}
-							}	
+							}
 							bridge.callback(message);
 //							Log.d(tag, "Iniciando wait().");
 							MADN3SCamera.isPictureTaken.set(false);
@@ -80,7 +80,7 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
 				 e.printStackTrace();
 			 }
 	}
-	
+
 	private String getMessage(){
 		try{
         	int byteTemp = 0;
@@ -89,11 +89,11 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
         	bao.reset();
         	InputStream inputStream = mSocket.getInputStream();
         	while(true){
-        		while (inputStream.available() == 0 && threshold < 3000) { 
+        		while (inputStream.available() == 0 && threshold < 3000) {
                     Thread.sleep(1);
                     threshold++;
                 }
-        		
+
         		if(threshold < 3000){
         			threshold = 0;
         			byteTemp = inputStream.read();

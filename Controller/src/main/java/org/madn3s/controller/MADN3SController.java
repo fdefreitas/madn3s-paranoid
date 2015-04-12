@@ -556,7 +556,8 @@ public class MADN3SController extends Application {
 
     public static String saveJsonToExternal(String output, String fileName) throws JSONException {
 		try {
-			File calibrationFile = getOutputMediaFile(MEDIA_TYPE_JSON, fileName);
+            String projectName = MADN3SController.sharedPrefsGetString(KEY_PROJECT_NAME);
+			File calibrationFile = getOutputMediaFile(MEDIA_TYPE_JSON, projectName, fileName);
 			Log.i(MidgetOfSeville.tag, "saveJsonToExternal. filepath: " + calibrationFile.getAbsolutePath());
 			FileOutputStream fos = new FileOutputStream(calibrationFile);
 			fos.write(output.getBytes());

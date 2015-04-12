@@ -318,9 +318,11 @@ public class MidgetOfSeville {
 
 			MADN3SController.sharedPrefsPutJSONObject(KEY_CALIBRATION, calibrationJson);
 
-		} catch (JSONException e){
-			e.printStackTrace();
-		}
+//		} catch (JSONException e){
+//			e.printStackTrace();
+		} catch (Exception e){
+            e.printStackTrace();
+        }
 	}
 
 	private static void calcBoardCornerPositions(Mat corners) {

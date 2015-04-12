@@ -18,9 +18,15 @@ import org.madn3s.controller.io.UniversalComms;
 import org.madn3s.controller.models.ScanStepViewHolder;
 import org.madn3s.controller.models.StatusViewHolder;
 import org.madn3s.controller.viewer.opengl.ModelDisplayActivity;
+import org.madn3s.controller.vtk.Madn3sNative;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -102,6 +108,7 @@ public class ScannerFragment extends BaseFragment {
 	                public void run() {
 	                	calibrateButton.setEnabled(false);
 	                	scanButton.setEnabled(true);
+                        playSound("Calibration", "Calibration Finished");
 	                }
 				});
 			}
@@ -156,23 +163,23 @@ public class ScannerFragment extends BaseFragment {
 		scanButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String projectName = projectNameEditText.getText().toString();
-				if(projectName != null && !projectName.isEmpty()){
-					projectNameEditText.setEnabled(false);
-					MADN3SController.sharedPrefsPutString(KEY_PROJECT_NAME, projectName);
-//					scan(projectName);
-				} else {
-					//TODO extract String resource
-					Toast missingName = Toast.makeText(getActivity().getBaseContext(), "Falta el nombre del proyecto", Toast.LENGTH_LONG);
-					missingName.show();
-				}
+                scan();
 			}
 		});
 		calibrateButton = (Button) getView().findViewById(R.id.calibrate_button);
 		calibrateButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				calibrate();
+                String projectName = projectNameEditText.getText().toString();
+                if(projectName != null && !projectName.isEmpty()){
+                    projectNameEditText.setEnabled(false);
+                    MADN3SController.sharedPrefsPutString(KEY_PROJECT_NAME, projectName);
+                    calibrate();
+                } else {
+                    //TODO extract String resource
+                    Toast missingName = Toast.makeText(getActivity().getBaseContext(), "Falta el nombre del proyecto", Toast.LENGTH_LONG);
+                    missingName.show();
+                }
 			}
 		});
 		calibrationViewHolder = new ScanStepViewHolder(
@@ -232,29 +239,7 @@ public class ScannerFragment extends BaseFragment {
 		generateModelButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				int points = MADN3SController.sharedPrefsGetInt(KEY_POINTS);
-				JSONArray framesJson = MADN3SController.sharedPrefsGetJSONArray(Consts.KEY_FRAMES);
-				JSONArray framePointsJsonArr = new JSONArray();
-				JSONArray result;
-				try {
-					for(int f = 0; f < points; ++f){
-						result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(f));
-						if(result != null){
-							int length = framePointsJsonArr.length();
-							for(int i = 0; i < result.length(); ++i){
-								framePointsJsonArr.put(i + length, result.get(i));
-							}
-						} else {
-							Log.e(tag, "generateModel. onClick. Couldn't calculateOpticalFlow. result null");
-						}
-					}
-
-					String pointsJsonPath = MADN3SController.saveJsonToExternal(framePointsJsonArr.toString(1), "3d-points");
-//					KiwiNative.doProcess(pointsJson.toString());
-
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
+                generate();
 			}
 		});
 
@@ -281,18 +266,78 @@ public class ScannerFragment extends BaseFragment {
 		resetChron();
 	}
 
-	@Override
-	public void onDestroy(){
-		super.onDestroy();
-	}
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+    }
+
+    private void generate() {
+        int points = MADN3SController.sharedPrefsGetInt(KEY_POINTS);
+        JSONArray framesJson = MADN3SController.sharedPrefsGetJSONArray(Consts.KEY_FRAMES);
+        JSONArray framePointsJsonArr = new JSONArray();
+        JSONArray result;
+        try {
+            for(int f = 0; f < points; ++f){
+                result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(f));
+                if(result != null){
+                    int length = framePointsJsonArr.length();
+                    for(int i = 0; i < result.length(); ++i){
+                        framePointsJsonArr.put(i + length, result.get(i));
+                    }
+                } else {
+                    Log.e(tag, "generateModel. onClick. Couldn't calculateOpticalFlow. result null");
+                }
+            }
+
+        //Traido de ScannerFragment#Test
+
+        String pointsJsonPath = MADN3SController.saveJsonToExternal(framePointsJsonArr.toString(1), "3d-points");
+        result = new JSONArray();
+        StringBuffer vtkFileBuffer = new StringBuffer();
+        int vtkFileBufferLines = 0;
+
+        points = MADN3SController.sharedPrefsGetInt(KEY_POINTS);
+        framesJson = new JSONArray();
+        for(int i = 0; i < points; i++){
+        JSONObject frame = MADN3SController.sharedPrefsGetJSONObject(FRAME_PREFIX + i);
+        framesJson.put(frame);
+        }
+
+        try {
+            Log.d(tag, "Saving the complete framesJson to External. ");
+            MADN3SController.saveJsonToExternal(framesJson.toString(1), "frames");
+            } catch (JSONException e) {
+            Log.d(tag, "Couldn't save the complete framesJson to External. ", e);
+            }
+
+            String[] pyrlksResults = new String[points];
+
+            for(int frameIndex = 0; frameIndex < points; ++frameIndex){
+            result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(frameIndex));
+            if(result != null){
+            pyrlksResults[frameIndex] = result.toString();
+            } else {
+            Log.e(tag, "result null");
+            }
+            }
+
+            String vtkFilePath = MADN3SController.createVtpFromPoints(vtkFileBuffer.toString(), vtkFileBufferLines, "vtkData");
+            Log.d(tag, "vtkFilePath: " + vtkFilePath);
+            Madn3sNative.doIcp(pyrlksResults, MADN3SController.getAppDirectory().getAbsolutePath(), true, 40, 0.001, 15, true);
+            //                            Madn3sNative.doDelaunay("khgks", 0.6);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
 	@SuppressLint("SimpleDateFormat")
-	public void scan(String projectName){
+	public void scan(){
 		//TODO FIX THIS SHIT! Ponerle modo debug para pruebas nativas
 		try{
 			MADN3SController.sharedPrefsPutInt(KEY_ITERATION, 0);
 			int points = MADN3SController.sharedPrefsGetInt(KEY_POINTS);
-			//TODO permtir borrar contenedor para no hacer for
+			//TODO permtir borrar contenedor para no hacer for (ya esta hecho en otro lado)
 			for(int i = 0; i < points; ++i){
 				MADN3SController.removeKeyFromSharedPreferences("frame-"+i);
 			}
@@ -302,7 +347,7 @@ public class ScannerFragment extends BaseFragment {
 
 			JSONObject json = new JSONObject();
 	        json.put(KEY_ACTION, ACTION_TAKE_PICTURE);
-	        json.put(KEY_PROJECT_NAME, projectName);
+	        json.put(KEY_PROJECT_NAME, MADN3SController.sharedPrefsGetString(KEY_PROJECT_NAME));
 	        Log.d(tag, "enviando comando");
 	        bridge.callback(json.toString());
 		} catch (Exception e) {
@@ -357,6 +402,22 @@ public class ScannerFragment extends BaseFragment {
     public void resetChron(){
     	elapsedChronometer.setBase(SystemClock.elapsedRealtime());
     	showElapsedTime("resetChron");
+    }
+
+    private void playSound(String title, String msg){
+        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        Notification mNotification = new Notification.Builder(getActivity())
+                .setContentTitle(title)
+                .setContentText(msg)
+                .setSmallIcon(R.drawable.ic_launcher)
+//                .setContentIntent(pIntent)
+                .setSound(soundUri)
+                .build();
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(0, mNotification);
     }
 
 }
