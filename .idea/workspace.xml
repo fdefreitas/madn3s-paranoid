@@ -22,369 +22,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="01d3b7cb-771b-4106-8f1c-961fc16fc58e" name="Default" comment="- Muchos cambios desde reunión con tutores&#10;- codigo nativo cableado para una iteración">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/libs/armeabi-v7a/libMadn3sNative.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/libs/armeabi-v7a/libjson-cpp.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/libs/armeabi/libMadn3sNative.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/libs/armeabi/libjson-cpp.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/libMadn3sNative.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/libandroid_support.a" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/libc++_shared.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/libgnustl_shared.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/libjson-cpp.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/libjson.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/libmadn3s.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/Madn3sNative/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/Madn3sNative.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/locale/duplocale.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/locale/freelocale.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/locale/localeconv.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/locale/newlocale.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/locale/uselocale.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/locale_support.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-ctype/iswalnum.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-ctype/iswalpha.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-ctype/iswblank.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-ctype/iswcntrl.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-ctype/iswctype.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-ctype/iswdigit.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-ctype/iswgraph.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-ctype/iswlower.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-ctype/iswprint.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-ctype/iswpunct.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-ctype/iswspace.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-ctype/iswupper.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-ctype/iswxdigit.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-ctype/towctrans.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-ctype/wcswidth.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-ctype/wctrans.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-ctype/wcwidth.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/catclose.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/catgets.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/catopen.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/iconv.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/intl.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/isalnum_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/isalpha_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/isblank_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/iscntrl_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/isdigit_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/isgraph_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/islower_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/isprint_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/ispunct_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/isspace_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/isupper_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/iswalnum_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/iswalpha_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/iswblank_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/iswcntrl_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/iswctype_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/iswdigit_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/iswgraph_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/iswlower_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/iswprint_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/iswpunct_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/iswspace_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/iswupper_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/iswxdigit_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/isxdigit_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/langinfo.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/nl_langinfo_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/strcasecmp_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/strcoll.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/strcoll_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/strerror_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/strfmon.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/strftime_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/strncasecmp_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/strxfrm.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/strxfrm_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/tolower_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/toupper_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/towctrans_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/towlower_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/towupper_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/wcscoll.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/wcscoll_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/wcsxfrm.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/wcsxfrm_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/wctrans_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-locale/wctype_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-math/frexp.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-math/frexpf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-math/frexpl.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-multibyte/btowc.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-multibyte/internal.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-multibyte/mblen.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-multibyte/mbrlen.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-multibyte/mbrtowc.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-multibyte/mbsinit.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-multibyte/mbsnrtowcs.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-multibyte/mbsrtowcs.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-multibyte/mbstowcs.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-multibyte/mbtowc.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-multibyte/wcrtomb.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-multibyte/wcsnrtombs.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-multibyte/wcsrtombs.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-multibyte/wcstombs.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-multibyte/wctob.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-multibyte/wctomb.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-stdio/printf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-stdio/snprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-stdio/sprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-stdio/swprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-stdio/vprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-stdio/vsprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-stdio/vwprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/musl-stdio/wprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/stdio/vfprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/stdio/vfwprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/stdlib_support.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/android_support/src/wchar_support.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/array_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/auxilary.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/call_unexpected.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/class_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/cxxabi.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/cxxabi_vec.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/delete.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/dwarf_helper.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/dynamic_cast.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/enum_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/exception.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/fatal_error.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/function_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/fundamental_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/helper_func_internal.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/new.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/one_time_construction.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/pbase_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/personality.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/pointer_to_member_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/pointer_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/si_class_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/terminate.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/__/gabi++/src/vmi_class_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/algorithm.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/bind.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/chrono.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/condition_variable.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/debug.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/exception.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/future.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/hash.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/ios.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/iostream.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/locale.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/memory.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/mutex.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/new.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/random.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/regex.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/stdexcept.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/string.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/strstream.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/support/android/locale_android.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/system_error.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/thread.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/typeinfo.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/utility.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/c++_shared/libcxx/src/valarray.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/json-cpp/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/json-cpp/jsoncpp.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/madn3s/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/madn3s.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/madn3s/madn3s/KiwiNative.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs-debug/madn3s/madn3s/madn3s.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs/Madn3sNative/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/Madn3sNative.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs/json-cpp/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/json-cpp/jsoncpp.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/libMadn3sNative.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/libandroid_support.a" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/libc++_static.a" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/libgnustl_shared.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/libjson-cpp.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/libjson.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/libmadn3s.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs-debug/Madn3sNative/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/Madn3sNative.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs-debug/json-cpp/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/json-cpp/jsoncpp.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs-debug/madn3s/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/madn3s.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs-debug/madn3s/madn3s/madn3s.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/Madn3sNative/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/Madn3sNative.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/locale/duplocale.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/locale/freelocale.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/locale/localeconv.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/locale/newlocale.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/locale/uselocale.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/locale_support.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-ctype/iswalnum.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-ctype/iswalpha.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-ctype/iswblank.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-ctype/iswcntrl.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-ctype/iswctype.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-ctype/iswdigit.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-ctype/iswgraph.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-ctype/iswlower.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-ctype/iswprint.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-ctype/iswpunct.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-ctype/iswspace.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-ctype/iswupper.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-ctype/iswxdigit.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-ctype/towctrans.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-ctype/wcswidth.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-ctype/wctrans.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-ctype/wcwidth.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/catclose.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/catgets.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/catopen.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/iconv.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/intl.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/isalnum_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/isalpha_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/isblank_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/iscntrl_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/isdigit_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/isgraph_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/islower_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/isprint_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/ispunct_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/isspace_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/isupper_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/iswalnum_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/iswalpha_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/iswblank_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/iswcntrl_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/iswctype_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/iswdigit_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/iswgraph_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/iswlower_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/iswprint_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/iswpunct_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/iswspace_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/iswupper_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/iswxdigit_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/isxdigit_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/langinfo.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/nl_langinfo_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/strcasecmp_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/strcoll.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/strcoll_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/strerror_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/strfmon.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/strftime_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/strncasecmp_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/strxfrm.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/strxfrm_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/tolower_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/toupper_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/towctrans_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/towlower_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/towupper_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/wcscoll.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/wcscoll_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/wcsxfrm.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/wcsxfrm_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/wctrans_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-locale/wctype_l.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-math/frexp.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-math/frexpf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-math/frexpl.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-multibyte/btowc.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-multibyte/internal.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-multibyte/mblen.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-multibyte/mbrlen.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-multibyte/mbrtowc.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-multibyte/mbsinit.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-multibyte/mbsnrtowcs.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-multibyte/mbsrtowcs.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-multibyte/mbstowcs.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-multibyte/mbtowc.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-multibyte/wcrtomb.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-multibyte/wcsnrtombs.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-multibyte/wcsrtombs.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-multibyte/wcstombs.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-multibyte/wctob.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-multibyte/wctomb.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-stdio/printf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-stdio/snprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-stdio/sprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-stdio/swprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-stdio/vprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-stdio/vsprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-stdio/vwprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/musl-stdio/wprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/stdio/vfprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/stdio/vfwprintf.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/stdlib_support.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/android_support/src/wchar_support.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/array_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/auxilary.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/call_unexpected.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/class_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/cxxabi.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/cxxabi_vec.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/delete.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/dwarf_helper.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/dynamic_cast.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/enum_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/exception.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/fatal_error.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/function_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/fundamental_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/helper_func_internal.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/new.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/one_time_construction.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/pbase_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/personality.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/pointer_to_member_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/pointer_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/si_class_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/terminate.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/__/gabi++/src/vmi_class_type_info.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/algorithm.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/bind.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/chrono.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/condition_variable.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/debug.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/exception.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/future.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/hash.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/ios.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/iostream.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/locale.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/memory.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/mutex.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/new.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/random.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/regex.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/stdexcept.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/string.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/strstream.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/support/android/locale_android.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/system_error.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/thread.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/typeinfo.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/utility.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/c++_static/libcxx/src/valarray.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/json-cpp/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/json-cpp/jsoncpp.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/mips/libgnustl_shared.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/mips/libjson-cpp.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/mips/libjson.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/mips/objs/Madn3sNative/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/Madn3sNative.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/mips/objs/json-cpp/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/json-cpp/jsoncpp.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/x86/libgnustl_shared.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/x86/libjson-cpp.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/x86/libjson.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/x86/objs-debug/Madn3sNative/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/Madn3sNative.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/x86/objs-debug/json-cpp/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/json-cpp/jsoncpp.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/x86/objs-debug/madn3s/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/madn3s.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/x86/objs-debug/madn3s/madn3s/madn3s.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/x86/objs/Madn3sNative/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/Madn3sNative.o.d" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/x86/objs/json-cpp/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/json-cpp/jsoncpp.o.d" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/libs/armeabi/libMadn3sNative.so" afterPath="$PROJECT_DIR$/Controller/src/main/libs/armeabi/libMadn3sNative.so" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/libs/armeabi-v7a/libMadn3sNative.so" afterPath="$PROJECT_DIR$/Controller/src/main/libs/armeabi-v7a/libMadn3sNative.so" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/libMadn3sNative.so" afterPath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/libMadn3sNative.so" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/libMadn3sNative.so" afterPath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/libMadn3sNative.so" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/.gitignore" afterPath="$PROJECT_DIR$/Controller/src/main/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/Controller/src/main/AndroidManifest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/DiscoveryFragment.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/DiscoveryFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MADN3SController.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MADN3SController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/jni/madn3s/Madn3sNative.cpp" afterPath="$PROJECT_DIR$/Controller/src/main/jni/madn3s/Madn3sNative.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MainActivity.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MidgetOfSeville.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MidgetOfSeville.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/vtk/Madn3sNative.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/vtk/Madn3sNative.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/ScannerFragment.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/ScannerFragment.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -412,48 +58,69 @@
       <file leaf-file-name="DiscoveryFragment.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/DiscoveryFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2643" max-vertical-offset="6270">
-              <caret line="186" column="29" selection-start-line="186" selection-start-column="29" selection-end-line="186" selection-end-column="29" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1890" max-vertical-offset="6270">
+              <caret line="201" column="77" selection-start-line="201" selection-start-column="77" selection-end-line="201" selection-end-column="77" />
+              <folding>
+                <element signature="e#5040#10133#0" expanded="true" />
+                <element signature="e#5119#8586#0" expanded="true" />
+                <element signature="e#6035#6047#0" expanded="true" />
+                <element signature="e#8578#8579#0" expanded="true" />
+                <element signature="e#10128#10129#0" expanded="true" />
+                <element signature="e#11082#11083#0" expanded="true" />
+                <element signature="e#11137#11138#0" expanded="true" />
+                <element signature="e#11212#12578#0" expanded="true" />
+                <element signature="e#12574#12575#0" expanded="true" />
+                <element signature="e#14980#14997#0" expanded="true" />
+                <element signature="e#15364#15381#0" expanded="true" />
+                <element signature="e#15671#16774#0" expanded="true" />
+                <element signature="e#16769#16770#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainActivity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MainActivity.java">
+      <file leaf-file-name="MADN3SController.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MADN3SController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="972" max-vertical-offset="4842">
-              <caret line="54" column="40" selection-start-line="54" selection-start-column="40" selection-end-line="54" selection-end-column="40" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="6105" max-vertical-offset="9615">
+              <caret line="116" column="32" selection-start-line="116" selection-start-column="32" selection-end-line="116" selection-end-column="32" />
+              <folding>
+                <element signature="e#5703#5742#0" expanded="true" />
+                <element signature="e#9478#9506#0" expanded="true" />
+                <element signature="e#30647#30648#0" expanded="true" />
+                <element signature="e#30679#30680#0" expanded="true" />
+                <element signature="e#36575#36778#0" expanded="true" />
+                <element signature="e#36761#36762#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Madn3sNative.cpp" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Madn3sNative.cpp" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Controller/src/main/jni/madn3s/Madn3sNative.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.786106" vertical-offset="6028" max-vertical-offset="7425">
-              <caret line="45" column="40" selection-start-line="45" selection-start-column="40" selection-end-line="45" selection-end-column="40" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1238" max-vertical-offset="4755">
+              <caret line="114" column="28" selection-start-line="114" selection-start-column="28" selection-end-line="114" selection-end-column="28" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MidgetOfSeville.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MidgetOfSeville.java">
+      <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Controller/src/main/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="337.0" vertical-offset="3314" max-vertical-offset="5160">
-              <caret line="202" column="23" selection-start-line="202" selection-start-column="23" selection-end-line="202" selection-end-column="23" />
+            <state vertical-scroll-proportion="0.08035714" vertical-offset="0" max-vertical-offset="560">
+              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ScannerFragment.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/ScannerFragment.java">
+      <file leaf-file-name="Madn3sNative.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/vtk/Madn3sNative.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="5688" max-vertical-offset="7722">
-              <caret line="316" column="16" selection-start-line="316" selection-start-column="16" selection-end-line="316" selection-end-column="16" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
+              <caret line="28" column="92" selection-start-line="28" selection-start-column="92" selection-end-line="28" selection-end-column="92" />
               <folding />
             </state>
           </provider>
@@ -2602,20 +2269,20 @@
         <option value="$PROJECT_DIR$/Controller/build.gradle" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/Controller/src/main/jni/Application.mk" />
-        <option value="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/vtk/Madn3sNative.java" />
-        <option value="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MADN3SController.java" />
         <option value="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/io/BraveheartMidgetService.java" />
         <option value="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MADN3SCamera.java" />
         <option value="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/io/HiddenMidgetReader.java" />
         <option value="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/io/BraveHeartMidgetService.java" />
         <option value="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MainActivity.java" />
-        <option value="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/ScannerFragment.java" />
         <option value="$PROJECT_DIR$/Controller/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/json" />
         <option value="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MainActivity.java" />
         <option value="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MidgetOfSeville.java" />
-        <option value="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/DiscoveryFragment.java" />
         <option value="$PROJECT_DIR$/Controller/src/main/jni/Android.mk" />
+        <option value="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MADN3SController.java" />
+        <option value="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/ScannerFragment.java" />
+        <option value="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/vtk/Madn3sNative.java" />
+        <option value="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/DiscoveryFragment.java" />
         <option value="$PROJECT_DIR$/Controller/src/main/jni/madn3s/Madn3sNative.cpp" />
         <option value="$PROJECT_DIR$/Controller/src/main/.gitignore" />
       </list>
@@ -2842,6 +2509,74 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="controller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MADN3S" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MADN3S" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Controller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="controller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vtk" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MADN3S" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MADN3S" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Controller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="controller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fragments" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -3073,7 +2808,11 @@
       <created>1428878029099</created>
       <updated>1428878029099</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="- Muchos cambios desde reunión con tutores&#10;- codigo nativo cableado para una iteración">
+      <created>1431201116714</created>
+      <updated>1431201116714</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -3084,13 +2823,15 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3270869" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42930153" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3270869" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3986014" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3986014" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32867134" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41958043" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32027256" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41908008" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24848942" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -3098,15 +2839,13 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24773414" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3216783" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32027256" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Memory Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32867134" sideWeight="0.5539514" order="14" side_tool="true" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32867134" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3216783" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -3160,7 +2899,8 @@
     <MESSAGE value="- Avances en ICP (explota, comentado) &#10;- Delaunay agregado sin que explote" />
     <MESSAGE value="Cambios en ICP" />
     <MESSAGE value="Pipeline de Scan funcional de nuevo" />
-    <option name="LAST_COMMIT_MESSAGE" value="Pipeline de Scan funcional de nuevo" />
+    <MESSAGE value="- Muchos cambios desde reunión con tutores&#10;- codigo nativo cableado para una iteración" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Muchos cambios desde reunión con tutores&#10;- codigo nativo cableado para una iteración" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -3395,13 +3135,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MADN3SController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="7547" max-vertical-offset="10584">
-          <caret line="522" column="33" selection-start-line="522" selection-start-column="33" selection-end-line="522" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/io/BraveHeartMidgetService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.69201523" vertical-offset="6908" max-vertical-offset="7434">
@@ -3437,21 +3170,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/ScannerFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="4136" max-vertical-offset="6372">
-          <caret line="316" column="16" selection-start-line="316" selection-start-column="16" selection-end-line="316" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/vtk/Madn3sNative.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33395177" vertical-offset="0" max-vertical-offset="539">
-          <caret line="22" column="46" selection-start-line="22" selection-start-column="46" selection-end-line="22" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Controller/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1080">
@@ -3471,22 +3189,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="162" max-vertical-offset="4428">
           <caret line="54" column="40" selection-start-line="54" selection-start-column="40" selection-end-line="54" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/DiscoveryFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2643" max-vertical-offset="6270">
-          <caret line="186" column="29" selection-start-line="186" selection-start-column="29" selection-end-line="186" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MidgetOfSeville.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="337.0" vertical-offset="3314" max-vertical-offset="5160">
-          <caret line="202" column="23" selection-start-line="202" selection-start-column="23" selection-end-line="202" selection-end-column="23" />
           <folding />
         </state>
       </provider>
@@ -3515,18 +3217,79 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/src/main/.gitignore">
+    <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MidgetOfSeville.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.05357143" vertical-offset="0" max-vertical-offset="135">
-          <caret line="2" column="5" selection-start-line="2" selection-start-column="5" selection-end-line="2" selection-end-column="5" />
+        <state vertical-scroll-proportion="0.3651376" vertical-offset="4001" max-vertical-offset="5160">
+          <caret line="306" column="21" selection-start-line="306" selection-start-column="21" selection-end-line="306" selection-end-column="21" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/ScannerFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3691" max-vertical-offset="5310">
+          <caret line="326" column="26" selection-start-line="326" selection-start-column="26" selection-end-line="326" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/vtk/Madn3sNative.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
+          <caret line="28" column="92" selection-start-line="28" selection-start-column="92" selection-end-line="28" selection-end-column="92" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MADN3SController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="5745" max-vertical-offset="9615">
+          <caret line="116" column="32" selection-start-line="116" selection-start-column="32" selection-end-line="116" selection-end-column="32" />
+          <folding>
+            <element signature="e#5703#5742#0" expanded="true" />
+            <element signature="e#9478#9506#0" expanded="true" />
+            <element signature="e#30647#30648#0" expanded="true" />
+            <element signature="e#30679#30680#0" expanded="true" />
+            <element signature="e#36575#36778#0" expanded="true" />
+            <element signature="e#36761#36762#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/DiscoveryFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1890" max-vertical-offset="6270">
+          <caret line="201" column="77" selection-start-line="201" selection-start-column="77" selection-end-line="201" selection-end-column="77" />
+          <folding>
+            <element signature="e#5040#10133#0" expanded="true" />
+            <element signature="e#5119#8586#0" expanded="true" />
+            <element signature="e#6035#6047#0" expanded="true" />
+            <element signature="e#8578#8579#0" expanded="true" />
+            <element signature="e#10128#10129#0" expanded="true" />
+            <element signature="e#11082#11083#0" expanded="true" />
+            <element signature="e#11137#11138#0" expanded="true" />
+            <element signature="e#11212#12578#0" expanded="true" />
+            <element signature="e#12574#12575#0" expanded="true" />
+            <element signature="e#14980#14997#0" expanded="true" />
+            <element signature="e#15364#15381#0" expanded="true" />
+            <element signature="e#15671#16774#0" expanded="true" />
+            <element signature="e#16769#16770#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Controller/src/main/jni/madn3s/Madn3sNative.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.786106" vertical-offset="6028" max-vertical-offset="7425">
-          <caret line="45" column="40" selection-start-line="45" selection-start-column="40" selection-end-line="45" selection-end-column="40" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1238" max-vertical-offset="4755">
+          <caret line="114" column="28" selection-start-line="114" selection-start-column="28" selection-end-line="114" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/src/main/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.08035714" vertical-offset="0" max-vertical-offset="560">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
           <folding />
         </state>
       </provider>

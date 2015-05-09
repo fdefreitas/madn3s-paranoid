@@ -9,6 +9,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -27,6 +28,7 @@ import org.madn3s.controller.io.UniversalComms;
 import org.madn3s.controller.vtk.Madn3sNative;
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.xmlpull.v1.XmlSerializer;
@@ -92,7 +94,33 @@ public class MADN3SController extends Application {
 	public static NXTTalker talker;
 	public static boolean isOpenCvLoaded;
 
-	public static enum Mode {
+    public static JSONArray applyTransform(Mat icpMatrix, JSONArray result, ArrayList<JSONObject> pointsList) {
+        Mat pAux = new Mat(4, 1, CvType.CV_64F);
+
+        try {
+            JSONObject point;
+
+            for (int i = 0; i < result.length(); ++i) {
+                pAux = getMatFromJsonObject(result.getJSONObject(i));
+                Core.multiply(icpMatrix, pAux, pAux);
+                point = new JSONObject();
+                point.put("x", pAux.get(0, 0)[0]);
+                point.put("y", pAux.get(1, 0)[0]);
+                point.put("z", pAux.get(2, 0)[0]);
+
+                result.put(i, point);
+                pointsList.add(point);
+            }
+
+        } catch (Exception e){
+            Log.d(tag, "applyTransform. Error procesando punto");
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public static enum Mode {
 		SCANNER("SCANNER", 0), CONTROLLER("CONTROLLER", 1), SCAN("SCAN", 2);
 
 		private String strVal;
@@ -425,6 +453,28 @@ public class MADN3SController extends Application {
 			Log.e(tag, "generateModelButton.OnClick. Error composing points JSONObject");
 		}
 	}
+
+    /**
+     * Crea un Mat desde un JSONObject
+     */
+    public static Mat getMatFromJsonObject(JSONObject point){
+        try {
+            double[] data;
+            data = new double[3];
+
+            data[0] = point.getDouble("x");
+            data[1] = point.getDouble("y");
+            data[2] = point.getDouble("z");
+
+            int type = CvType.CV_64F;
+            Mat mat = new Mat(4, 1, type);
+            mat.put(0, 0, data);
+            return mat;
+
+        } catch (Exception e){
+            return new Mat();
+        }
+    }
 
 	/**
 	 * Crea un Mat desde un String

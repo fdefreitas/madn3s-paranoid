@@ -323,7 +323,7 @@ public class ScannerFragment extends BaseFragment {
 
             String vtkFilePath = MADN3SController.createVtpFromPoints(vtkFileBuffer.toString(), vtkFileBufferLines, "vtkData");
             Log.d(tag, "vtkFilePath: " + vtkFilePath);
-            Madn3sNative.doIcp(pyrlksResults, MADN3SController.getAppDirectory().getAbsolutePath(), true, 40, 0.001, 15, true);
+//            Madn3sNative.doIcp(pyrlksResults, MADN3SController.getAppDirectory().getAbsolutePath(), true, 40, 0.001, 15, true);
             //                            Madn3sNative.doDelaunay("khgks", 0.6);
 
         } catch (JSONException e) {

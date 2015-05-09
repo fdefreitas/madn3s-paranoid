@@ -20,8 +20,11 @@ public class Madn3sNative {
 		System.loadLibrary("Madn3sNative");
 	}
 
-    public static native synchronized boolean doIcp(String[] pyrlksData, String projectPath, boolean ascii
-            , int nLandmarks, double maxMeanDistance, int nIterations, boolean debug);
+    public static native synchronized String doIcp(String sourceJson, String targetJson,
+            String projectPath, int currentIteration, boolean ascii, int nLandmarks,
+            double maxMeanDistance, int nIterations, boolean debug);
 
 	public static native synchronized boolean doDelaunay(String icpFilePath, double alpha);
+
+    public static native synchronized String saveVtp(String data, String path, String name);
 }

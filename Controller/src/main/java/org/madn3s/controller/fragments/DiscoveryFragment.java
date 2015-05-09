@@ -20,6 +20,8 @@ import org.madn3s.controller.components.CameraSelectionDialogFragment;
 import org.madn3s.controller.models.NewDevicesAdapter;
 import org.madn3s.controller.models.PairedDevicesAdapter;
 import org.madn3s.controller.vtk.Madn3sNative;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -155,40 +157,51 @@ public class DiscoveryFragment extends BaseFragment {
 
                         JSONArray pyrlkResultsJsonArr = new JSONArray();
                         JSONArray result = null;
+                        JSONArray previous = null;
+                        ArrayList<JSONObject> pointsList = new ArrayList<JSONObject>();
+                        JSONObject source;
+                        JSONObject target;
                         int minLength = 2000;
 
+                        Mat icpMatrix = new Mat(4, 4, CvType.CV_64F);
+
+                        String icpResult = null;
+                        String filepath = MADN3SController.getAppDirectory().getAbsolutePath()
+                                + "/" + MADN3SController.sharedPrefsGetString(KEY_PROJECT_NAME) + "/";
+                        Log.d(tag, "filepath: " + filepath);
+
 						try {
+
 							for(int frameIndex = 0; frameIndex < points; ++frameIndex){
 								result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(frameIndex));
-								if(result != null){
-                                    Log.e(tag, "framePyr[" + frameIndex + "] length:" + result.length());
-//                                    if(result.length() < minLength && result.length() > 0){ minLength = result.length();}
-                                    pyrlkResultsJsonArr.put(frameIndex, result);
-								} else {
-									Log.e(tag, "result null");
-								}
+
+                                if(frameIndex > 0){
+                                    if(result.length() > 0) {
+                                        icpResult = Madn3sNative.doIcp(result.toString(), previous.toString(),
+                                                filepath, frameIndex, true, 40, 0.001, 15, true);
+                                        Log.d(tag, "icpResult:" + icpResult);
+                                        icpMatrix = MADN3SController.getMatFromString(icpResult);
+                                        previous = MADN3SController.applyTransform(icpMatrix, result, pointsList);
+                                    }
+                                } else {
+                                    previous = result;
+                                    JSONObject point;
+                                    /* Agregar los puntos del inicial al acumulado de puntos*/
+                                    for(int i = 0; i<result.length(); ++i){
+                                        point = result.getJSONObject(i);
+                                        pointsList.add(point);
+                                    }
+                                }
 							}
 
-//                            JSONArray tempPyr;
-//                            Log.e(tag, "minLength: " + minLength);
-//                            for(int index = 0; index < pyrlkResultsJsonArr.length(); ++index){
-//                                tempPyr = pyrlkResultsJsonArr.getJSONArray(index);
-//                                if(tempPyr.length() > minLength) {
-//                                    int length = tempPyr.length();
-//                                    for (int delIndex = minLength; delIndex < length; ++delIndex) {
-//                                        tempPyr.remove(minLength);
-//                                    }
-//                                }
-//                            }
+                            JSONArray meshResultJson = new JSONArray();
+                            for(JSONObject point:pointsList){
+                                meshResultJson.put(point);
+                            }
 
-//                            for(int index = 0; index < pyrlkResultsJsonArr.length(); ++index){
-//                                tempPyr = pyrlkResultsJsonArr.getJSONArray(index);
-//                                if(tempPyr.length() == 0){
-//                                    pyrlkResultsJsonArr.remove(index);
-//                                }
-//                            }
+                            Log.e(tag, "meshResult length: " + meshResultJson.length());
+                            Madn3sNative.saveVtp(meshResultJson.toString(), filepath, "final_mesh");
 
-                            Log.e(tag, "pyrlkResultsJsonArr length: " + pyrlkResultsJsonArr.length());
                             MADN3SController.saveJsonToExternal(pyrlkResultsJsonArr.toString(1), "frames-after-pyr");
 
 						} catch (JSONException e) {
@@ -198,29 +211,6 @@ public class DiscoveryFragment extends BaseFragment {
 						return pyrlkResultsJsonArr;
 					}
 
-					@Override
-					protected void onPostExecute(JSONArray resultArgs) {
-						super.onPostExecute(resultArgs);
-                        try {
-                            String[] pyrlksResults = new String[resultArgs.length()];
-                            JSONArray tempPyr;
-
-                            for(int index = 0; index < resultArgs.length(); ++index){
-                                tempPyr = resultArgs.getJSONArray(index);
-                                pyrlksResults[index] = tempPyr.toString();
-                            }
-
-                            String filepath = MADN3SController.getAppDirectory().getAbsolutePath()
-                                    + "/" + MADN3SController.sharedPrefsGetString(KEY_PROJECT_NAME) + "/";
-                            Log.d(tag, "filepath: " + filepath);
-                            Madn3sNative.doIcp(pyrlksResults, filepath, true, 40, 0.001, 15, true);
-    //                            Madn3sNative.doDelaunay("khgks", 0.6);
-
-                            Toast.makeText(getActivity(), "Calibration Finished", Toast.LENGTH_LONG).show();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-					}
 				}.execute();
 
 //				Imprime los puntos
