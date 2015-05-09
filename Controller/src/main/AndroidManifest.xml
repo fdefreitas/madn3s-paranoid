@@ -14,6 +14,7 @@
 
     <application
         android:allowBackup="true"
+        android:largeHeap="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
@@ -27,7 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+
         <activity android:name="org.madn3s.controller.viewer.models.files.ModelPickerActivity"
         	android:label="@string/app_name"
         	android:parentActivityName="org.madn3s.controller.MainActivity" >
@@ -35,7 +36,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.madn3s.controller.MainActivity" />
         </activity>
-        
+
         <activity
             android:name="org.madn3s.controller.viewer.opengl.ModelDisplayActivity"
             android:label="@string/app_name"
@@ -44,9 +45,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.madn3s.controller.MainActivity" />
         </activity>
-        
-        
-        
+
+
+
         <service android:name="org.madn3s.controller.io.BraveHeartMidgetService" />
     </application>
 

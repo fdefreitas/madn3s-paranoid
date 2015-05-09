@@ -51,8 +51,8 @@ public class MainActivity extends Activity implements
 
 		Intent williamWallaceIntent = new Intent(this, BraveHeartMidgetService.class);
 		startService(williamWallaceIntent);
-
-        MADN3SController.pointsTest();
+        MidgetOfSeville.restoreBackupJson();
+//        MADN3SController.pointsTest();
     }
 
     @Override

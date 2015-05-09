@@ -134,24 +134,16 @@ public class DiscoveryFragment extends BaseFragment {
 		testsButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new AsyncTask<Void, Void, Void>() {
+				new AsyncTask<Void, Void, JSONArray>() {
 
 					@Override
-					protected Void doInBackground(Void... params) {
-//						MidgetOfSeville.doStereoCalibration();
-
-//						JSONArray framePointsJsonArr = new JSONArray();
-						JSONArray result = new JSONArray();
-						StringBuffer vtkFileBuffer = new StringBuffer();
-						int vtkFileBufferLines = 0;
+					protected JSONArray doInBackground(Void... params) {
 
 						int points = MADN3SController.sharedPrefsGetInt(KEY_POINTS);
 						JSONArray framesJson = new JSONArray();
-//						JSONObject pointsJson = new JSONObject();
 						for(int i = 0; i < points; i++){
 							JSONObject frame = MADN3SController.sharedPrefsGetJSONObject(FRAME_PREFIX + i);
 							framesJson.put(frame);
-//							Log.d(tag, FRAME_PREFIX + i + " = " + frame.toString());
 						}
 
 						try {
@@ -161,39 +153,73 @@ public class DiscoveryFragment extends BaseFragment {
 							Log.d(tag, "Couldn't save the complete framesJson to External. ", e);
 						}
 
-                        String[] pyrlksResults = new String[points];
+                        JSONArray pyrlkResultsJsonArr = new JSONArray();
+                        JSONArray result = null;
+                        int minLength = 2000;
 
 						try {
 							for(int frameIndex = 0; frameIndex < points; ++frameIndex){
 								result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(frameIndex));
 								if(result != null){
-                                    pyrlksResults[frameIndex] = result.toString();
-//									vtkFileBufferLines += result.length();
-//									for(int i = 0; i < result.length(); ++i){
-//										vtkFileBuffer.append(result.get(i));
-//									}
+                                    Log.e(tag, "framePyr[" + frameIndex + "] length:" + result.length());
+//                                    if(result.length() < minLength && result.length() > 0){ minLength = result.length();}
+                                    pyrlkResultsJsonArr.put(frameIndex, result);
 								} else {
 									Log.e(tag, "result null");
 								}
 							}
 
-//							String pointsJsonPath = MADN3SController.saveJsonToExternal(framePointsJsonArr.toString(1), "final-points");
-							String vtkFilePath = MADN3SController.createVtpFromPoints(vtkFileBuffer.toString(), vtkFileBufferLines, "vtkData");
-							String vtkFileResultPath = MADN3SController.getOutputMediaFile(MADN3SController.MEDIA_TYPE_VTU, "vtkResult").getAbsolutePath();
-                            Log.d(tag, "vtkFilePath: " + vtkFilePath);
-							Madn3sNative.doIcp(pyrlksResults, MADN3SController.getAppDirectory().getAbsolutePath(), true, 40, 0.001, 15, true);
-//                            Madn3sNative.doDelaunay("khgks", 0.6);
+//                            JSONArray tempPyr;
+//                            Log.e(tag, "minLength: " + minLength);
+//                            for(int index = 0; index < pyrlkResultsJsonArr.length(); ++index){
+//                                tempPyr = pyrlkResultsJsonArr.getJSONArray(index);
+//                                if(tempPyr.length() > minLength) {
+//                                    int length = tempPyr.length();
+//                                    for (int delIndex = minLength; delIndex < length; ++delIndex) {
+//                                        tempPyr.remove(minLength);
+//                                    }
+//                                }
+//                            }
+
+//                            for(int index = 0; index < pyrlkResultsJsonArr.length(); ++index){
+//                                tempPyr = pyrlkResultsJsonArr.getJSONArray(index);
+//                                if(tempPyr.length() == 0){
+//                                    pyrlkResultsJsonArr.remove(index);
+//                                }
+//                            }
+
+                            Log.e(tag, "pyrlkResultsJsonArr length: " + pyrlkResultsJsonArr.length());
+                            MADN3SController.saveJsonToExternal(pyrlkResultsJsonArr.toString(1), "frames-after-pyr");
+
 						} catch (JSONException e) {
 							e.printStackTrace();
 						}
 
-						return null;
+						return pyrlkResultsJsonArr;
 					}
 
 					@Override
-					protected void onPostExecute(Void result) {
-						super.onPostExecute(result);
-						Toast.makeText(getActivity(), "Calibration Finished", Toast.LENGTH_LONG).show();
+					protected void onPostExecute(JSONArray resultArgs) {
+						super.onPostExecute(resultArgs);
+                        try {
+                            String[] pyrlksResults = new String[resultArgs.length()];
+                            JSONArray tempPyr;
+
+                            for(int index = 0; index < resultArgs.length(); ++index){
+                                tempPyr = resultArgs.getJSONArray(index);
+                                pyrlksResults[index] = tempPyr.toString();
+                            }
+
+                            String filepath = MADN3SController.getAppDirectory().getAbsolutePath()
+                                    + "/" + MADN3SController.sharedPrefsGetString(KEY_PROJECT_NAME) + "/";
+                            Log.d(tag, "filepath: " + filepath);
+                            Madn3sNative.doIcp(pyrlksResults, filepath, true, 40, 0.001, 15, true);
+    //                            Madn3sNative.doDelaunay("khgks", 0.6);
+
+                            Toast.makeText(getActivity(), "Calibration Finished", Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 					}
 				}.execute();
 

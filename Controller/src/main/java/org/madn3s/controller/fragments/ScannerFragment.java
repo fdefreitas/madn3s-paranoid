@@ -313,12 +313,12 @@ public class ScannerFragment extends BaseFragment {
             String[] pyrlksResults = new String[points];
 
             for(int frameIndex = 0; frameIndex < points; ++frameIndex){
-            result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(frameIndex));
-            if(result != null){
-            pyrlksResults[frameIndex] = result.toString();
-            } else {
-            Log.e(tag, "result null");
-            }
+                result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(frameIndex));
+                if(result != null){
+                    pyrlksResults[frameIndex] = result.toString();
+                } else {
+                    Log.e(tag, "result null");
+                }
             }
 
             String vtkFilePath = MADN3SController.createVtpFromPoints(vtkFileBuffer.toString(), vtkFileBufferLines, "vtkData");

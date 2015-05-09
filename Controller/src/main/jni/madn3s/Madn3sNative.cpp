@@ -15,12 +15,13 @@
 #include <vtkIterativeClosestPointTransform.h>
 #include <vtkSmartPointer.h>
 #include <vtkXMLPolyDataReader.h>
-
+#include <vtkAlgorithmOutput.h>
 #include <vtkVersion.h>
 #include <vtkTransform.h>
 #include <vtkVertexGlyphFilter.h>
 #include <vtkPoints.h>
 #include <vtkPolyData.h>
+#include <vtkPolygon.h>
 #include <vtkCleanPolyData.h>
 #include <vtkDelaunay3D.h>
 #include <vtkCellArray.h>
@@ -50,8 +51,149 @@ namespace patch
     }
 }
 
+namespace example {
+
+    void CreatePolyData(vtkSmartPointer<vtkPolyData> polydata){
+      // This function creates a set of 4 points (the origin and a point unit distance along each axis)
+
+        vtkSmartPointer<vtkPoints> points =
+        vtkSmartPointer<vtkPoints>::New();
+
+        // Create points
+        double origin[3] = {0.0, 0.0, 0.0};
+        points->InsertNextPoint(origin);
+        double p1[3] = {1.0, 0.0, 0.0};
+        points->InsertNextPoint(p1);
+        double p2[3] = {0.0, 1.0, 0.0};
+        points->InsertNextPoint(p2);
+        double p3[3] = {0.0, 0.0, 1.0};
+        points->InsertNextPoint(p3);
+
+        vtkSmartPointer<vtkPolyData> temp =
+        vtkSmartPointer<vtkPolyData>::New();
+        temp->SetPoints(points);
+
+        vtkSmartPointer<vtkVertexGlyphFilter> vertexFilter =
+        vtkSmartPointer<vtkVertexGlyphFilter>::New();
+        #if VTK_MAJOR_VERSION <= 5
+            vertexFilter->SetInputConnection(temp->GetProducerPort());
+        #else
+            vertexFilter->SetInputData(temp);
+        #endif
+        vertexFilter->Update();
+
+        polydata->ShallowCopy(vertexFilter->GetOutput());
+    }
+
+    void PerturbPolyData(vtkSmartPointer<vtkPolyData> polydata){
+        vtkSmartPointer<vtkPoints> points =
+        vtkSmartPointer<vtkPoints>::New();
+        points->ShallowCopy(polydata->GetPoints());
+
+        for(vtkIdType i = 0; i < points->GetNumberOfPoints(); i++){
+            double p[3];
+            points->GetPoint(i, p);
+            double perturb[3];
+            if(i%3 == 0)
+              {
+              perturb[0] = .1; perturb[1] = 0; perturb[2] = 0;
+              }
+            else if(i%3 == 1)
+              {
+              perturb[0] = 0; perturb[1] = .1; perturb[2] = 0;
+              }
+            else
+              {
+              perturb[0] = 0; perturb[1] = 0; perturb[2] = .1;
+              }
+
+            for(unsigned int j = 0; j < 3; j++)
+              {
+              p[j] += perturb[j];
+              }
+            points->SetPoint(i, p);
+        }
+
+        polydata->SetPoints(points);
+    }
+
+    void TranslatePolyData(vtkSmartPointer<vtkPolyData> polydata) {
+        vtkSmartPointer<vtkTransform> transform =
+        vtkSmartPointer<vtkTransform>::New();
+        transform->Translate(0,.3,0);
+
+        vtkSmartPointer<vtkTransformPolyDataFilter> transformFilter =
+        vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+        #if VTK_MAJOR_VERSION <= 5
+            transformFilter->SetInputConnection(polydata->GetProducerPort());
+        #else
+            transformFilter->SetInputData(polydata);
+        #endif
+        transformFilter->SetTransform(transform);
+        transformFilter->Update();
+
+        polydata->ShallowCopy(transformFilter->GetOutput());
+    }
+
+    std::string testExample(std::string outputFilePath){
+            vtkSmartPointer<vtkPolyData> source = vtkSmartPointer<vtkPolyData>::New();
+            vtkSmartPointer<vtkPolyData> target = vtkSmartPointer<vtkPolyData>::New();
+
+            std::cout << "Creating data..." << std::endl;
+            CreatePolyData(source);
+            target->ShallowCopy(source);
+            TranslatePolyData(target);
+            PerturbPolyData(target);
+
+            // Setup ICP transform
+            vtkSmartPointer<vtkIterativeClosestPointTransform> icp =
+              vtkSmartPointer<vtkIterativeClosestPointTransform>::New();
+            icp->SetSource(source);
+            icp->SetTarget(target);
+            icp->GetLandmarkTransform()->SetModeToRigidBody();
+            icp->SetMaximumNumberOfIterations(20);
+            //icp->StartByMatchingCentroidsOn();
+            icp->Modified();
+            icp->Update();
+
+            // Get the resulting transformation matrix (this matrix takes the source points to the target points)
+            vtkSmartPointer<vtkMatrix4x4> m = icp->GetMatrix();
+            std::cout << "The resulting matrix is: " << *m << std::endl;
+
+            // Transform the source points by the ICP solution
+            vtkSmartPointer<vtkTransformPolyDataFilter> icpTransformFilter =
+            vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+            icpTransformFilter->SetInputData(source);
+            icpTransformFilter->SetTransform(icp);
+            icpTransformFilter->Update();
+
+            /*
+            // If you need to take the target points to the source points, the matrix is:
+            icp->Inverse();
+            vtkSmartPointer<vtkMatrix4x4> minv = icp->GetMatrix();
+            std::cout << "The resulting inverse matrix is: " << *minv << std::cout;
+            */
+
+    //        vtkSmartPointer<vtkPolyDataMapper> solutionMapper =
+    //            vtkSmartPointer<vtkPolyDataMapper>::New();
+    //        solutionMapper->SetInputConnection(icpTransformFilter->GetOutputPort());
+
+            // Write the file
+            vtkSmartPointer<vtkXMLPolyDataWriter> writer = vtkSmartPointer<vtkXMLPolyDataWriter>::New();
+            writer->SetFileName(outputFilePath.c_str());
+            writer->SetInputConnection(icpTransformFilter->GetOutputPort());
+            writer->SetDataModeToAscii();
+
+            writer->Write();
+
+            return outputFilePath;
+        }
+
+}
+
 namespace {
     std::string saveVtp(vtkSmartPointer<vtkPolyData> data, std::string projectPathStr, std::string fileName, bool ascii);
+
 //----------------------------------------------------------------------------
     bool doDelaunay(vtkSmartPointer<vtkPolyData> source, vtkSmartPointer<vtkPolyData> target, int iterations
             , bool ascii, std::string pathStr){
@@ -77,8 +219,8 @@ namespace {
         LOGI("Native doIcp. Setup ICP transform. Target");
         icp->GetLandmarkTransform()->SetModeToRigidBody();
         LOGI("Native doIcp. Setup ICP transform. RigidBody *slaps knee*");
-//        icp->setMaximumNumberOfLandmarks(landmarks);
-//        icp->setMaximumMeanDistance(maxMeanDistance);
+        icp->SetMaximumNumberOfLandmarks(landmarks);
+        icp->SetMaximumMeanDistance(maxMeanDistance);
         icp->SetMaximumNumberOfIterations(iterations);
         LOGI("Native doIcp. Setup ICP transform. iterations");
         //icp->StartByMatchingCentroidsOn(); //Comentado desde el ejemplo
@@ -94,14 +236,10 @@ namespace {
         LOGI("Transform the source points by the ICP solution");
         vtkSmartPointer<vtkTransformPolyDataFilter> icpTransformFilter
             = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
-        #if VTK_MAJOR_VERSION <= 5
-          icpTransformFilter->SetInput(source);
-        #else
-          icpTransformFilter->SetInputData(source);
-        #endif
+        icpTransformFilter->SetInputData(source);
         icpTransformFilter->SetTransform(icp);
         icpTransformFilter->Update();
-
+//
         vtkSmartPointer<vtkPolyDataMapper> solutionMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
         solutionMapper->SetInputConnection(icpTransformFilter->GetOutputPort());
 
@@ -113,6 +251,8 @@ namespace {
 
     std::string doIcp(std::string strSource, std::string strTarget
             , int iterations, int landmarks, double maxMeanDistance, std::string projectPathStr, std::string fileName, bool ascii){
+
+//            return example::testExample("/storage/emulated/0/Pictures/MADN3SController/scumbag-robin/example-icp-test.vtp");
 
             LOGI("Native doIcp. source %s.", strSource.c_str());
             LOGI("Native doIcp. target %s.", strTarget.c_str());
@@ -142,40 +282,46 @@ namespace {
             icp->GetLandmarkTransform()->SetModeToRigidBody();
             LOGI("Native doIcp. Setup ICP transform. RigidBody *slaps knee*");
             icp->SetMaximumNumberOfLandmarks(landmarks);
-            icp->SetMaximumMeanDistance(maxMeanDistance);
-            icp->SetMaximumNumberOfIterations(iterations);
+            //icp->SetMaximumMeanDistance(maxMeanDistance);
+            //icp->SetMaximumNumberOfIterations(iterations);
+            icp->SetMaximumNumberOfIterations(5);
 //            LOGI("Native doIcp. Setup ICP transform. iterations");
-            icp->StartByMatchingCentroidsOn(); //Comentado desde el ejemplo
+            //icp->StartByMatchingCentroidsOn(); //Comentado desde el ejemplo
             icp->Modified();
             LOGI("Native doIcp. Setup ICP transform. Modified");
             icp->Update();
             LOGI("Native doIcp. Setup ICP transform. Update");
 
-    //        LOGI("Get the resulting transformation matrix (this matrix takes the source points to the target points)");
-    //        vtkSmartPointer<vtkMatrix4x4> m = icp->GetMatrix();
-    //        LOGI("The resulting matrix is: N/A");
+            LOGI("Get the resulting transformation matrix (this matrix takes the source points to the target points)");
+            vtkSmartPointer<vtkMatrix4x4> m = icp->GetMatrix();
+            LOGI("The resulting matrix is: N/A");
 
             LOGI("Transform the source points by the ICP solution");
             vtkSmartPointer<vtkTransformPolyDataFilter> icpTransformFilter
                 = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
-            #if VTK_MAJOR_VERSION <= 5
-              icpTransformFilter->SetInput(source);
-            #else
-              icpTransformFilter->SetInputData(source);
-            #endif
+            icpTransformFilter->SetInputData(source);
             icpTransformFilter->SetTransform(icp);
             icpTransformFilter->Update();
+            LOGI("Finished Transformation by the ICP solution");
 
+            LOGI("Mapping the ICP solution");
             vtkSmartPointer<vtkPolyDataMapper> solutionMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-            solutionMapper->SetInputConnection(icpTransformFilter->GetOutputPort());
+            vtkSmartPointer<vtkAlgorithmOutput> transformOutput = vtkSmartPointer<vtkAlgorithmOutput>::New();
+            LOGI("Getting output port");
+            transformOutput = icpTransformFilter->GetOutputPort();
+            LOGI("setting input connection");
+            /* Here makes Boom! */
 
+            solutionMapper->SetInputConnection(transformOutput);
+
+            LOGI("Saving Mapped ICP solution to polydata");
             vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
             polydata = solutionMapper->GetInput();
 
-//            return polydata;
             return saveVtp(polydata, projectPathStr, fileName, ascii);
-        }
+    }
 
+//    vtkSmartPointer<vtkPolyData> jsonToVTK(const std::string& data, const std::string& projectPathStr, const std::string fileName, const bool& ascii, const bool& debug){
     std::string jsonToVTK(const std::string& data, const std::string& projectPathStr, const std::string fileName, const bool& ascii, const bool& debug){
         Json::Value root;
         Json::Reader reader;
@@ -186,9 +332,10 @@ namespace {
             return NULL;
         }
 
+        int numberOfPoints = root.size();
         //Extraer puntos de JSON (root)
         vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
-        for(int i = 0; i < root.size(); ++i){
+        for(int i = 0; i < numberOfPoints; ++i){
             double x = root[i]["x"].asDouble();
             double y = root[i]["y"].asDouble();
             double z = root[i]["z"].asDouble();
@@ -197,7 +344,34 @@ namespace {
 
         //Almacenar puntos en polydata
         vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
+
+        //New stuff from http://vtk.1045678.n5.nabble.com/Polygon-triangulation-using-vtkPolugon-Triangulate-td1238179.html
+//        LOGI("Creating Polygon");
+//        vtkSmartPointer<vtkPolygon> polygon = vtkSmartPointer<vtkPolygon>::New();
+//
+//        LOGI("Setting number of polygon points");
+//        points ->SetNumberOfPoints(numberOfPoints);
+//
+//        LOGI("Setting polygon points ids");
+//        polygon->GetPointIds()->SetNumberOfIds(numberOfPoints);
+//        for(int i = 0; i < numberOfPoints; ++i){
+//            polygon->GetPointIds()->SetId(i, i);
+//        }
+//
+//        LOGI("polydata allocate");
+//        polydata->Allocate();
+//        LOGI("polydata insert next cell");
+//        polydata->InsertNextCell(polygon->GetCellType(), polygon->GetPointIds());
+//        LOGI("polydata set points");
         polydata->SetPoints(points);
+
+//        vtkSmartPointer<vtkPolyData> temp = vtkSmartPointer<vtkPolyData>::New();
+//        temp->SetPoints(points);
+
+        vtkSmartPointer<vtkVertexGlyphFilter> vertexFilter = vtkSmartPointer<vtkVertexGlyphFilter>::New();
+        vertexFilter->AddInputData(polydata);
+        vertexFilter->Update();
+        polydata->ShallowCopy(vertexFilter->GetOutput());
 
 //        if(debug){
         return saveVtp(polydata, projectPathStr, fileName, ascii);
@@ -288,22 +462,20 @@ JNIEXPORT jboolean JNICALL Java_org_madn3s_controller_vtk_Madn3sNative_doIcp(JNI
 //    acumPolydata = doIcp(p0Polydata, p1Polydata, mIterations, mLandmarks, mMaxMeanDistance);
     acumPolydataStr = doIcp(p0Str, p1Str, mIterations, mLandmarks, mMaxMeanDistance, mProjectPathStr, "icp_1", mAscii);
 
-    jstring pnString = NULL;
-    for (int i = 2; i < stringCount; ++i) {
-        LOGI("doIcp JNI. do ICP with acum and p%s", patch::to_string(i).c_str());
-        pnString = (jstring) env->GetObjectArrayElement(pyrlksData, i);
-        const char *pnRawString = env->GetStringUTFChars(pnString, 0);
-        dataStr = pnRawString;
-        pnPolydataStr = jsonToVTK(dataStr, mProjectPathStr, patch::to_string(i), mAscii, mDebug);
-        env->ReleaseStringUTFChars(p0string, p0RawString);
-
-        LOGI("doIcp JNI. do ICP with acum and p%s. Running ICP", patch::to_string(i).c_str());
-//        acumPolydata = doIcp(acumPolydata, pnPolydata, mLandmarks, mMaxMeanDistance, mIterations
+//    jstring pnString = NULL;
+//    for (int i = 2; i < stringCount; ++i) {
+//        LOGI("doIcp JNI. do ICP with acum and p%s", patch::to_string(i).c_str());
+//        pnString = (jstring) env->GetObjectArrayElement(pyrlksData, i);
+//        const char *pnRawString = env->GetStringUTFChars(pnString, 0);
+//        dataStr = pnRawString;
+//        pnPolydataStr = jsonToVTK(dataStr, mProjectPathStr, patch::to_string(i), mAscii, mDebug);
+//        env->ReleaseStringUTFChars(p0string, p0RawString);
+//
+//        LOGI("doIcp JNI. do ICP with acum and p%s. Running ICP", patch::to_string(i).c_str());
+//        acumPolydataStr = doIcp(acumPolydataStr, pnPolydataStr, mLandmarks, mMaxMeanDistance, mIterations
 //            , mProjectPathStr, "icp_" + patch::to_string(i), mAscii);
-        acumPolydataStr = doIcp(acumPolydataStr, pnPolydataStr, mLandmarks, mMaxMeanDistance, mIterations
-            , mProjectPathStr, "icp_" + patch::to_string(i), mAscii);
-    }
-//    saveVtp(acumPolydata, mProjectPathStr, "icp", mAscii);
+//    }
+////    saveVtp(acumPolydata, mProjectPathStr, "icp", mAscii);
 
 	return true;
 }
