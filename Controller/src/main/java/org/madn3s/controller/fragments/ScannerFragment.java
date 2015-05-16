@@ -18,7 +18,6 @@ import org.madn3s.controller.io.UniversalComms;
 import org.madn3s.controller.models.ScanStepViewHolder;
 import org.madn3s.controller.models.StatusViewHolder;
 import org.madn3s.controller.viewer.opengl.ModelDisplayActivity;
-import org.madn3s.controller.vtk.Madn3sNative;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -98,10 +97,10 @@ public class ScannerFragment extends BaseFragment {
 			}
 		};
 
-		BraveHeartMidgetService.calibrationBridge = new UniversalComms() {
+		BraveHeartMidgetService.finishedCalibrationBridge = new UniversalComms() {
 			@Override
 			public void callback(Object msg) {
-				Log.d(tag, "ScannerFragment. calibrationBridge. Enabling Scanner button");
+				Log.d(tag, "ScannerFragment. finishedCalibrationBridge. Enabling Scanner button");
 
 				new Handler(Looper.getMainLooper()).post(new Runnable() {
 	                @Override

@@ -39,6 +39,7 @@ public class MainActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        BraveHeartMidgetService.mActivity = this;
 
         if (savedInstanceState == null) {
         	mDiscoveryFragment = new DiscoveryFragment();
@@ -51,7 +52,6 @@ public class MainActivity extends Activity implements
 
 		Intent williamWallaceIntent = new Intent(this, BraveHeartMidgetService.class);
 		startService(williamWallaceIntent);
-        MidgetOfSeville.restoreBackupJson();
 //        MADN3SController.pointsTest();
     }
 

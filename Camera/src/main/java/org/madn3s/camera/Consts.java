@@ -8,9 +8,9 @@ import android.graphics.Bitmap.CompressFormat;
 import android.util.Log;
 
 public class Consts {
-	
+
 	private static final String tag = Consts.class.getSimpleName();
-	
+
 	public static final String SERVICE_NAME ="MADN3S";
     public static final UUID APP_UUID = UUID.fromString("65da7fe0-8b80-11e3-baa8-0800200c9a66");
 
@@ -28,23 +28,27 @@ public class Consts {
 	public static final String KEY_MD5_BASE_64 = "md5_base64";
 	public static final String KEY_ITERATION = "iter";
 	public static final String KEY_RESULT = "result";
-	
+
 	public static final String ACTION_TAKE_PICTURE = "take_picture";
 	public static final String ACTION_SEND_PICTURE = "send_picture";
 	public static final String ACTION_END_PROJECT = "end_project";
 	public static final String ACTION_CALIBRATE = "calibrate";
 	public static final String ACTION_SEND_CALIBRATION_RESULT = "send_calibration";
+    public static final String ACTION_RECEIVE_CALIBRATION_RESULT = "received_calibration_result";
 	public static final String ACTION_CALIBRATION_RESULT = "calibration_result";
 	public static final String ACTION_EXIT_APP = "exit_app";
-	
+
 	public final static String EXTRA_CALLBACK_MSG = "message";
 	public static final String EXTRA_RESULT = "result";
-	
+
 	public static final String VALUE_CLEAN = "clean";
 	public static final String VALUE_DEFAULT_PROJECT_NAME = "default";
 	public static final String VALUE_DEFAULT_POSITION = "default";
-	public static final String IMAGE_EXT = ".jpg";
-	public static final String EMPTY_JSON_OBJECT_STRING = "{}";  
+    public static final String IMAGE_EXT = ".jpg";
+    public static final String JSON_EXT = ".json";
+    public static final String VTU_EXT = ".vtu";
+    public static final String MODEL_EXT = ".off";
+	public static final String EMPTY_JSON_OBJECT_STRING = "{}";
 
 	public static final CompressFormat BITMAP_COMPRESS_FORMAT = Bitmap.CompressFormat.JPEG;
 	public static final int COMPRESSION_QUALITY = 100;
@@ -59,8 +63,8 @@ public class Consts {
     public static final String KEY_CALIB_IMAGE_POINTS = "calib_image_points";
 
 	public static final String ORG_MADN3S_ACTION_CALIBRATE = "org.madn3s.action.CALIBRATE";
-    
-	public static void init(){
+
+    public static void init(){
 		Log.d(tag, "init()");
 		bitmapFactoryOptions.inSampleSize = 4;
 	    bitmapFactoryOptions.inDither = false;
@@ -68,7 +72,7 @@ public class Consts {
 	    bitmapFactoryOptions.inInputShareable = true;
 	    bitmapFactoryOptions.inTempStorage = new byte[32 * 1024];
 	    bitmapFactoryOptions.inPreferredConfig = DEFAULT_IN_PREFERRED_CONFIG;
-	    
+
 	    bitmapFactoryOptionsOnSend.inSampleSize = 1;
 	    bitmapFactoryOptionsOnSend.inDither = false;
 	    bitmapFactoryOptionsOnSend.inPurgeable = true;

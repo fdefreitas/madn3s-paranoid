@@ -23,7 +23,7 @@ import android.util.Base64;
 import android.util.Log;
 
 public class HiddenMidgetReader extends HandlerThread implements Callback {
-	
+
 	private static final String tag = HiddenMidgetReader.class.getSimpleName();
 	public static UniversalComms bridge;
 	public static UniversalComms connectionFragmentBridge;
@@ -40,7 +40,7 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
 		this.mBluetoothSocketWeakReference = mBluetoothSocketWeakReference;
 		this.side = Consts.VALUE_DEFAULT_SIDE;
 	}
-	
+
 	public HiddenMidgetReader(String name, WeakReference<BluetoothSocket> mBluetoothSocketWeakReference
 			, AtomicBoolean read, String side) {
 		super(name);
@@ -48,7 +48,7 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
 		this.read = read;
 		this.side = side;
 	}
-	
+
 	public HiddenMidgetReader(String name, int priority) {
 		super(name, priority);
 	}
@@ -73,12 +73,12 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
 					break;
 				}
 	        }
-			
+
 			int bondState = mSocket.getRemoteDevice().getBondState();
 			boolean isConnected = mSocket.isConnected();
 			int state, deviceIntValue;
 			Bundle bundle = new Bundle();
-			
+
 			if(isConnected){
 				switch (bondState){
 		            case BluetoothDevice.BOND_BONDED:
@@ -95,10 +95,10 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
 			} else {
 				state = MADN3SController.State.FAILED.getState();
 			}
-			
+
 			if(MADN3SController.isRightCamera(mSocket.getRemoteDevice().getAddress())){
 	        	deviceIntValue = Device.RIGHT_CAMERA.getValue();
-	        	
+
 	        	//TODO hacer setter en Application
 	        	if(MADN3SController.leftCamera == null){
 	        		Log.d(tag, "leftCamera null. Trying to recover.");
@@ -110,7 +110,7 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
 	        	}
 	        } else if(MADN3SController.isLeftCamera(mSocket.getRemoteDevice().getAddress())){
 	        	deviceIntValue = Device.LEFT_CAMERA.getValue();
-	        	
+
 	        	//TODO hacer setter en Application
 	        	if(MADN3SController.rightCamera == null){
 	        		Log.d(tag, "rightCamera null. Trying to recover.");
@@ -134,14 +134,14 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
 						if(start == 0){
 							start = System.currentTimeMillis();
 						}
-						
+
 						JSONObject msg;
 						ByteArrayOutputStream bao = getMessage();
 						byte[] bytes = bao.toByteArray();
-						
-//						Log.d(tag, "Escuchando. " + mSocket.getRemoteDevice().getName() 
+
+//						Log.d(tag, "Escuchando. " + mSocket.getRemoteDevice().getName()
 //								+ ". bao size: " + bytes.length);
-						
+
 						if(bytes.length > 0){
 							bytes = Base64.decode(bytes, Base64.DEFAULT);
 							Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length
@@ -150,13 +150,13 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
 							String md5Hex = new String(MADN3SController.getMD5EncryptedString(bytes));
 							Log.d(tag, "device: " + mSocket.getRemoteDevice().getName()
 									+ " side: " + side
-									+ " iter: " + MADN3SController.sharedPrefsGetInt(Consts.KEY_ITERATION) 
+									+ " iter: " + MADN3SController.sharedPrefsGetInt(Consts.KEY_ITERATION)
 									+ " MD5: " + md5Hex);
-							
+
 							if(bmp == null){
 								Log.d(tag, "instanceof String");
 								Log.d(tag, "Received String: " + message);
-								
+
 								if(message != null && !message.isEmpty()){
 									msg = new JSONObject(message);
 									String action = null;
@@ -172,6 +172,7 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
 									msg.put(Consts.KEY_SIDE, side);
 									msg.put(Consts.KEY_TIME, System.currentTimeMillis() - start);
 									if(action != null && action.equalsIgnoreCase(Consts.ACTION_CALIBRATION_RESULT)){
+                                        Log.d(tag, "HiddenMidgetReader. ACTION_CALIBRATION_RESULT. " + message);
 										calibrationBridge.callback(msg.toString());
 									} else {
 										bridge.callback(msg.toString());
@@ -179,14 +180,14 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
 									start = 0;
 									read.set(false);
 								}
-							} else {					
+							} else {
 								Log.d(tag, "instancef Bitmap");
 								msg = new JSONObject();
 								msg.put(Consts.KEY_ERROR, false);
 								msg.put(Consts.KEY_SIDE, side);
 								String filepath = MADN3SController.saveBitmapAsPng(bmp, side);
 								msg.put(Consts.KEY_FILE_PATH, filepath);
-								
+
 								pictureBridge.callback(msg.toString());
 								start = 0;
 								read.set(false);
@@ -199,7 +200,7 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
 			 e.printStackTrace();
 		 }
 	}
-	
+
 	private ByteArrayOutputStream getMessage(){
 		try{
         	int byteTemp = 0;
@@ -208,11 +209,11 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
         	bao.reset();
         	InputStream inputStream = mSocket.getInputStream();
         	while(true){
-        		while (inputStream.available() == 0 && threshold < 3000) { 
+        		while (inputStream.available() == 0 && threshold < 3000) {
                     Thread.sleep(1);
                     threshold++;
                 }
-        		
+
         		if(threshold < 3000){
         			threshold = 0;
         			byteTemp = inputStream.read();

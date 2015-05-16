@@ -4,8 +4,6 @@ import static org.madn3s.camera.Consts.*;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.Vector;
 
@@ -15,6 +13,7 @@ import org.madn3s.camera.Consts;
 import org.madn3s.camera.MADN3SCamera;
 import org.madn3s.camera.MainActivity;
 import org.madn3s.camera.R;
+import org.opencv.core.Mat;
 
 import java.io.File;
 
@@ -31,12 +30,12 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.widget.Toast;
 
 
 public class BraveheartMidgetService extends IntentService {
@@ -178,6 +177,13 @@ public class BraveheartMidgetService extends IntentService {
 						} else {
 							Log.d(tag, "Calibration result not present on msg");
 						}
+                    } else if(action.equalsIgnoreCase(Consts.ACTION_RECEIVE_CALIBRATION_RESULT)){
+                        Log.d(tag, "ACTION_RECEIVE_CALIBRATION_RESULT");
+                        if(msg.has(Consts.KEY_CALIBRATION_RESULT)){
+                            applyCalibration(msg.getString(Consts.KEY_CALIBRATION_RESULT));
+                        } else {
+                            Log.d(tag, "Calibration result not present on msg");
+                        }
 					} else if(action.equalsIgnoreCase(Consts.ACTION_EXIT_APP)){
 						Log.d(tag, "ACTION_EXIT_APP");
 						Log.d(tag, "onHandleIntent: action: " + Consts.ACTION_EXIT_APP);
@@ -225,25 +231,12 @@ public class BraveheartMidgetService extends IntentService {
 	}
 
 	private void calibrate() throws JSONException {
-		Intent intent = new Intent(Consts.ORG_MADN3S_ACTION_CALIBRATE);
-		List<ResolveInfo> activitiesCapableOfHandlingIntent = getPackageManager()
-				.queryIntentActivities(intent, 0);
-		Log.d(tag, "Apps that can handle the intent: " + activitiesCapableOfHandlingIntent.size() + ". ");
-		for(ResolveInfo info: activitiesCapableOfHandlingIntent){
-			String name = info.activityInfo.packageName;
-			Log.d(tag, (name != null && !name.isEmpty()? name: "null") + ".");
-		}
-
-		if(activitiesCapableOfHandlingIntent.size() > 0){
-			Log.d(tag, "starting activity for result");
-			MADN3SCamera.hasInvokedCalibration = true;
-			mActivity.startActivityForResult(intent, 0);
-		} else {
-			Log.e(tag, "No Activities capable of handling intent for Action: \"" + intent.getAction() + "\"");
-		}
+        mActivity.setCaptureMode(true);
+        Toast.makeText(getBaseContext(), "You may start the calibration process now"
+                , Toast.LENGTH_LONG).show();
 	}
 
-	private void sendCalibrationResult(String calibrationStr) throws JSONException{
+	private void sendCalibrationResult(String calibrationStr) throws JSONException {
 		Log.d(tag, "calibrationStr: " + calibrationStr);
 		try {
 			result = new JSONObject(calibrationStr);
@@ -264,6 +257,19 @@ public class BraveheartMidgetService extends IntentService {
 			sendResult();
 		}
 	}
+
+    private void applyCalibration(String calibrationStr) throws JSONException {
+        Log.d(tag, "applyCalibration. calibrationStr: " + calibrationStr);
+        MADN3SCamera.saveJsonToExternal(calibrationStr, "calibration-result");
+        JSONObject calibPayload = new JSONObject(calibrationStr);
+        String cameraMatrixStr = calibPayload.getJSONObject(side).getString(Consts.KEY_CALIB_CAMERA_MATRIX);
+        String distCoeffsStr = calibPayload.getJSONObject(side).getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS);
+        Log.d(tag, "Obteniendo calib_camera_matrix:" + cameraMatrixStr);
+
+        Mat cameraMatrix = MADN3SCamera.getMatFromString(cameraMatrixStr);
+        Mat distCoeffs = MADN3SCamera.getMatFromString(distCoeffsStr);
+        mActivity.setCalibrationValues(cameraMatrix, distCoeffs);
+    }
 
 	private void sendResult() {
 		Log.d(tag, "mSocketWeakReference == null: " + (mSocketWeakReference == null));
@@ -286,11 +292,12 @@ public class BraveheartMidgetService extends IntentService {
 		if (projectMediaStorageDir.exists()){
 			String[] files = projectMediaStorageDir.list();
 			if(files != null){
-				for (int i = 0; i < files.length; i++) {
-					Log.d(tag, "Cleaning " + files[i]);
-		            new File(projectMediaStorageDir, files[i]).delete();
-		        }
+                for (String file : files) {
+                    //noinspection ResultOfMethodCallIgnored
+                    new File(projectMediaStorageDir, file).delete();
+                }
 			}
+            //noinspection ResultOfMethodCallIgnored
 			projectMediaStorageDir.delete();
         }
 	}
@@ -310,5 +317,4 @@ public class BraveheartMidgetService extends IntentService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(0, mNotification);
     }
-
 }

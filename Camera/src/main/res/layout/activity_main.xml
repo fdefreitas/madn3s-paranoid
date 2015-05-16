@@ -3,20 +3,25 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal">
 
-    <FrameLayout
-        android:id="@+id/camera_frameLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-    
-    <RelativeLayout 
+    <!--<FrameLayout-->
+        <!--android:id="@+id/camera_frameLayout"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_centerHorizontal="true" />-->
+
+    <org.opencv.android.JavaCameraView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/camera_calibration_java_surface_view" />
+
+    <RelativeLayout
         android:id="@+id/working_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:padding="16dp">
-        
+
         <ProgressBar
             android:id="@+id/working_progressBar"
             style="?android:attr/progressBarStyleLarge"
@@ -26,8 +31,8 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
              />
-        
-        <TextView 
+
+        <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_below="@+id/working_progressBar"
@@ -47,7 +52,7 @@
         android:format="%s"
         android:textSize="24sp"
         android:gravity="center_vertical" />
-    
+
     <TextView
         android:id="@+id/configs_text_view"
         android:layout_width="wrap_content"
@@ -66,7 +71,7 @@
         android:padding="8dp"
         android:layout_margin="8dp"
         android:src="@drawable/ic_camera_white"
-        android:background="@drawable/selector_button" 
+        android:background="@drawable/selector_button"
         android:contentDescription="@string/take_test_picture"/>
 
 

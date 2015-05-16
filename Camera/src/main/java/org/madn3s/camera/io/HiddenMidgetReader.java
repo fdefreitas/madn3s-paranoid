@@ -59,7 +59,7 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
 
 				while(MADN3SCamera.isRunning.get()){
 					if(MADN3SCamera.isPictureTaken.get()){
-						Log.d(tag, "Esperando mensaje.");
+//						Log.d(tag, "Esperando mensaje.");
 						message = getMessage();
 						if(message != null && !message.isEmpty()){
 							Log.d(tag, "Mensaje Recibido: " + message);

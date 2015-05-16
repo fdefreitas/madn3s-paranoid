@@ -3,13 +3,19 @@ package org.madn3s.camera;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
@@ -25,6 +31,8 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import static org.madn3s.camera.Consts.*;
+
 /**
  * Created by inaki on 3/4/14.
  */
@@ -35,6 +43,8 @@ public class MADN3SCamera extends Application {
 	public static boolean isOpenCvLoaded = false;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
+    public static final int MEDIA_TYPE_JSON = 3;
+    public static final int MEDIA_TYPE_VTU = 4;
 
     public static final String defaultJSONObjectString = "{}";
 	public static final String defaultJSONArrayString = "[]";
@@ -82,8 +92,72 @@ public class MADN3SCamera extends Application {
     	return appDirectory;
     }
 
+    public static String saveJsonToExternal(String output, String fileName) throws JSONException {
+        try {
+            String projectName = MADN3SCamera.sharedPrefsGetString(KEY_PROJECT_NAME);
+            File calibrationFile = getOutputMediaFile(MEDIA_TYPE_JSON, projectName, fileName);
+            Log.i(TAG, "saveJsonToExternal. filepath: " + calibrationFile.getAbsolutePath());
+            FileOutputStream fos = new FileOutputStream(calibrationFile);
+            fos.write(output.getBytes());
+            fos.flush();
+            fos.close();
+            return calibrationFile.getAbsolutePath();
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "saveJsonToExternal. " + fileName + " FileNotFoundException", e);
+        } catch (IOException e) {
+            Log.e(TAG, "saveJsonToExternal. " + fileName + " IOException", e);
+        }
+
+        return null;
+    }
+
     public static Uri getOutputMediaFileUri(int type){
         return Uri.fromFile(getOutputMediaFile(type));
+    }
+
+    public static Uri getOutputMediaFileUri(int type, String projectName, String position){
+        return Uri.fromFile(getOutputMediaFile(type, projectName, position));
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static File getOutputMediaFile(int type, String name){
+        return getOutputMediaFile(type, sharedPrefsGetString(KEY_PROJECT_NAME), name);
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static File getOutputMediaFile(int type, String projectName, String name){
+        Log.d(TAG, "getOutputMediaFile. projectName: " + projectName + " name: " + name);
+        File mediaStorageDir = new File(getAppDirectory(), projectName);
+
+        if (!mediaStorageDir.exists()){
+            if (! mediaStorageDir.mkdirs()){
+                Log.d(TAG, "getOutputMediaFile. failed to create directory");
+                return null;
+            }
+        }
+
+        if(name == null){
+            name = "";
+        }
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String filename;
+        String iteration = String.valueOf(sharedPrefsGetInt(KEY_ITERATION));
+        File mediaFile;
+
+        if (type == MEDIA_TYPE_IMAGE){
+            filename = "IMG_" + iteration + "_" + name + "_" + timeStamp + Consts.IMAGE_EXT;
+        } else if(type == MEDIA_TYPE_JSON){
+            filename = name + "_" + timeStamp + Consts.JSON_EXT;
+        } else if(type == MEDIA_TYPE_VTU){
+            filename = name + "_" + timeStamp + Consts.VTU_EXT;
+        } else {
+            return null;
+        }
+
+        mediaFile = new File(mediaStorageDir.getPath(), filename);
+
+        return mediaFile;
     }
 
     public static Uri getOutputMediaFileUri(int type, String projectName, String position, int iteration){
@@ -274,4 +348,43 @@ public class MADN3SCamera extends Application {
 	public static Float sharedPrefsGetFloat(String key){
 		return sharedPreferences.getFloat(key, 0);
 	}
+
+    /**
+     * Crea un Mat desde un String
+     * @param str Matriz en forma de String
+     * @return Instancia de Mat con valores en Matriz recibida como String
+     */
+    public static Mat getMatFromString(String str){
+//		str = "[672.2618351846742, 0, 359.5; 0, 672.2618351846742, 239.5; 0, 0, 1]";
+        int rows = 0;
+        int cols = 0;
+        double[] data;
+        String[] colsStr = null;
+        String rowStr = "";
+        String colStr = "";
+        str = str.replaceAll("^\\[|\\]$", "");
+        String[] rowsStr = str.split(";");
+        rows = rowsStr.length;
+        //Por sacar cls
+        rowStr = rowsStr[0];
+        cols = rowStr.split(",").length;
+        data = new double[rows*cols];
+
+        for(int row = 0; row < rowsStr.length; ++row){
+            rowStr = rowsStr[row];
+            colsStr = rowStr.split(",");
+            cols = colsStr.length;
+//			Log.d(tag, "row[" + row + "]: " + rowStr);
+            for(int col = 0; col < colsStr.length; ++col){
+                colStr = colsStr[col];
+                data[row*cols+col] = Double.valueOf(colStr);
+//				Log.d(tag, "row[" + row + "]col[" + col + "]: " + colStr);
+            }
+        }
+        int type = CvType.CV_64F;
+        Mat mat = new Mat(rows, cols, type);
+        mat.put(0, 0, data);
+//		Log.d(tag, "getMatFromString. Result Mat: " + mat.dump());
+        return mat;
+    }
 }

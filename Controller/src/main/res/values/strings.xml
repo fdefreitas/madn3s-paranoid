@@ -11,7 +11,7 @@
     <string name="action_settings">Settings</string>
     <string name="example_lower">1</string>
     <string name="example_total">6</string>
-    
+
     <string name="description_arrow_front">Front Arrow</string>
     <string name="description_arrow_left">Left Arrow</string>
     <string name="description_arrow_back">Back Arrow</string>
@@ -36,34 +36,34 @@
     <string name="next">Next</string>
     <string name="error_connect_failed">Connection Failed</string>
     <string name="error_connect_lost">Connection Lost</string>
-    
+
     <string name="calibration">Calibration</string>
     <string name="nxt_action">Sending Signal to NXT</string>
     <string name="right_camera_action">Sending Signal to Camera1</string>
     <string name="left_camera_action">Sending Signal to Camera2</string>
     <string name="scan_progress">Scan progress&#8230; </string>
-    
+
     <string name="step1">Step 1</string>
     <string name="step2">Step 2</string>
     <string name="step3">Step 3</string>
-    
+
     <string name="project_name">Project Name</string>
     <string name="save">Save</string>
     <string name="generate">Generate Model</string>
     <string name="view">View Model</string>
-    
+
     <string name="scanner">Scanner</string>
     <string name="remote_control">R/C</string>
     <string name="model_gallery">Gallery</string>
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
-    
+
     <string name="text_selected_file">Selected file</string>
     <string name="text_no_file_selected">No file has been selected</string>
     <string name="text_file_name">filename</string>
     <string name="text_no_files">No files or directories</string>
-    
-    
+
+
     <string name="general">General</string>
     <string name="settings_points">Points</string>
     <string name="settings_speed">Speed</string>
@@ -92,12 +92,15 @@
     <string name="settings_edge_detection_sobel_d_x">dx</string>
     <string name="settings_edge_detection_sobel_d_y">dy</string>
     <string name="settings_clean_images">Clean Images</string>
-    
+
     <string name="x">X</string>
     <string name="y">Y</string>
     <string name="parenthesis_open">(</string>
     <string name="parenthesis_close">)</string>
     <string name="comma">,</string>
     <string name="slash">/</string>
-    
+
+    <string name="calibrating">Calibrating...</string>
+    <string name="please_wait">Please, wait</string>
+
 </resources>

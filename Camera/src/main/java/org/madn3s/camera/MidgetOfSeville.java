@@ -16,6 +16,7 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import android.graphics.Bitmap;
@@ -30,39 +31,41 @@ public class MidgetOfSeville {
 	private static final String tag = MidgetOfSeville.class.getSimpleName();
 	private static final Scalar ZERO_SCALAR = new Scalar(0);
 	private int iterCount = 1;
+    private Mat map1;
+    private Mat map2;
 
 	public JSONObject shapeUp(Bitmap imgBitmap, JSONObject config) throws JSONException {
 		Log.d(tag, "shapeUp.");
 		String savePath;
 		int height = imgBitmap.getHeight();
 		int width = imgBitmap.getWidth();
-		
+
 		Mat imgMat = new Mat(height, width, CvType.CV_8UC3);
 		Utils.bitmapToMat(imgBitmap, imgMat);
 		Imgproc.cvtColor(imgMat, imgMat, Imgproc.COLOR_RGBA2RGB);
 //		Log.d(tag, "imgMat after cvtColor:" + imgMat.toString());
-		
+
 		Mat maskMat = new Mat(height, width, CvType.CV_8UC3, ZERO_SCALAR);
 //		Log.d(tag, "mask: " + maskMat.toString());
-		
-	    double x1 = width / 4;  
-	    double y1 = 0;  
+
+	    double x1 = width / 4;
+	    double y1 = 0;
 	    double x2 =  x1 * 3;
-	    double y2 = height;  
-	    double iCannyLowerThreshold = 35;  
-	    double iCannyUpperThreshold = 75;  
+	    double y2 = height;
+	    double iCannyLowerThreshold = 35;
+	    double iCannyUpperThreshold = 75;
 	    String edgeDetectionsAlgorithm = "canny";
 	    int maxCorners = 50;
 	    double qualityLevel = 0.01;
 	    double minDistance = 30;
-	    
+
 	    int ddepth = 0;
         int dx = 0;
         int dy = 0;
-        
+
         double r = 255, g = 0, b = 0;
         int radius = 10;
-		
+
 		if (config != null) {
 			//grabCut
 			if (config.has("grab_cut")) {
@@ -80,7 +83,7 @@ public class MidgetOfSeville {
 					iterCount = grabCut.getInt("iterations");
 				}
 			}
-			
+
 			//goodFeaturesToTrack
 			if (config.has("good_features")) {
 				JSONObject goodFeaturesToTrack = config.getJSONObject("good_features");
@@ -94,7 +97,7 @@ public class MidgetOfSeville {
 					minDistance = config.getInt("min_distance");
 				}
 			}
-			
+
 			//edge detection
 			if (config.has("edge_detection")) {
 				JSONObject edgeDetection = config.getJSONObject("edge_detection");
@@ -124,7 +127,7 @@ public class MidgetOfSeville {
 					}
 				}
 			}
-			
+
 			//extras
 			if (config.has("extras")) {
 				JSONObject extras = config.getJSONObject("extras");
@@ -145,31 +148,39 @@ public class MidgetOfSeville {
 	        	}
 			}
 		}
-		
+
 		Point p1 = new Point(x1, y1);
 		Point p2 = new Point(x2, y2);
-		
+
 		Rect rect = new Rect(p1, p2);
 //		Log.d(tag, "rect: " + rect.toString());
-		
+
 		Mat bgdModel = new Mat();
 		Mat fgdModel = new Mat();
-		
+
 		Log.d(tag, "shapeUp. grabcut. begin");
-		
+
 		Imgproc.grabCut(imgMat, maskMat, rect, bgdModel, fgdModel, iterCount, Imgproc.GC_INIT_WITH_RECT);
-		
+
 		Log.d(tag, "shapeUp. grabcut. done");
-	
+
 		Core.compare(maskMat, new Scalar(Imgproc.GC_PR_FGD), maskMat, Core.CMP_EQ);
-		
+
+        Mat tempMask = new Mat();
+        maskMat.copyTo(tempMask);
+
+        Imgproc.remap(tempMask, maskMat, map1, map2, Imgproc.INTER_CUBIC);
+
+        maskMat.copyTo(tempMask);
+        //Smooth a maskMat
+        Imgproc.GaussianBlur(tempMask, maskMat, new Size(3,3), 0);
+
 		Mat foregroundMat = new Mat(imgMat.size(), CvType.CV_8UC3, new Scalar(255, 255, 255));
-		
 		imgMat.copyTo(foregroundMat, maskMat);
-		
+
 	    String edgeAlgString = "";
 	    Mat edgifiedMat = new Mat(height, width, CvType.CV_8UC3, ZERO_SCALAR);
-	    
+
 	    if (edgeDetectionsAlgorithm.equalsIgnoreCase("Canny")) {
 			edgeAlgString = "Canny";
         	Imgproc.Canny(maskMat, edgifiedMat, iCannyLowerThreshold, iCannyUpperThreshold);
@@ -179,23 +190,23 @@ public class MidgetOfSeville {
 		} else {
 			edgeAlgString = "Canny";
         	Imgproc.Canny(maskMat, edgifiedMat, iCannyLowerThreshold, iCannyUpperThreshold);
-		} 
-	    
+		}
+
 //	    Log.d(tag, edgeAlgString + " done,moving on");
-	    
+
 	    MatOfPoint cornersMop = new MatOfPoint();
-	    
-		Imgproc.goodFeaturesToTrack(edgifiedMat, cornersMop, maxCorners, qualityLevel, minDistance);  
-        
+
+		Imgproc.goodFeaturesToTrack(edgifiedMat, cornersMop, maxCorners, qualityLevel, minDistance);
+
 //		Log.d(tag, "goodFeatures done,moving on");
-	              
-	    List<Point> corners = cornersMop.toList();  
+
+	    List<Point> corners = cornersMop.toList();
 	    Scalar color =  new Scalar(r, g, b);
-	              
+
 //	    Log.d(tag, "starting point printing for");
 	    Mat goodFeaturesHighlight = new Mat(imgMat.size(), CvType.CV_8UC3, new Scalar(255, 255, 255));
 	    foregroundMat.copyTo(goodFeaturesHighlight);
-	    
+
 	    JSONObject actual;
 	    JSONArray pointsJsonArray = new JSONArray();
 	    for (Point point : corners){
@@ -204,45 +215,45 @@ public class MidgetOfSeville {
 	    	actual.put("y", point.y);
 	    	pointsJsonArray.put(actual);
 			Core.circle(goodFeaturesHighlight, point, radius, color);
-        }  
-	  
+        }
+
 //	    Log.d(tag, "finished point printing, point count: " + pointsJsonArray.length());
-		
+
 //	    Log.d(tag, "result " + result.toString(1));
-	    
+
 		Bitmap maskBitmap = Bitmap.createBitmap(maskMat.cols(), maskMat.rows(), Bitmap.Config.RGB_565);
 		Utils.matToBitmap(maskMat, maskBitmap);
 		savePath = MADN3SCamera.saveBitmapAsJpeg(maskBitmap, "mask");
 //		Log.d(tag, "mask saved to " + savePath);
-		
+
 		Bitmap edgeBitmap = Bitmap.createBitmap(edgifiedMat.cols(), edgifiedMat.rows(), Bitmap.Config.RGB_565);
 		Utils.matToBitmap(edgifiedMat, edgeBitmap);
 		savePath = MADN3SCamera.saveBitmapAsJpeg(edgeBitmap, edgeAlgString);
 //		Log.d(tag, edgeAlgString + " saved to " + savePath);
-		
+
 		Bitmap goodFeaturesBitmap = Bitmap.createBitmap(goodFeaturesHighlight.cols(), goodFeaturesHighlight.rows(), Bitmap.Config.RGB_565);
 		Utils.matToBitmap(goodFeaturesHighlight, goodFeaturesBitmap);
 		savePath = MADN3SCamera.saveBitmapAsJpeg(goodFeaturesBitmap, "good_features");
 		Log.d(tag, "goodFeatures saved to " + savePath);
-		
+
 		Bitmap fgdBitmap = Bitmap.createBitmap(foregroundMat.cols(), foregroundMat.rows(), Bitmap.Config.RGB_565);
 		Utils.matToBitmap(foregroundMat, fgdBitmap);
 		savePath = MADN3SCamera.saveBitmapAsJpeg(fgdBitmap, "fgd");
 		Log.d(tag, "foreground saved to " + savePath);
-		
+
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		fgdBitmap.compress(Consts.BITMAP_COMPRESS_FORMAT, Consts.COMPRESSION_QUALITY, baos);
 		byte[] bytes = baos.toByteArray();
-		
+
 		bytes = Base64.encode(bytes, Base64.DEFAULT);
 		String md5Hex = new String(MADN3SCamera.getMD5EncryptedString(bytes));
 		Log.d(tag, "shapeUp. MD5 : " + md5Hex);
-		
+
 		JSONObject resultJsonObject = new JSONObject();
 		resultJsonObject.put(KEY_MD5, md5Hex);
 		resultJsonObject.put(KEY_FILE_PATH, savePath);
 		resultJsonObject.put(KEY_POINTS, pointsJsonArray);
-		
+
 		imgMat.release();
 		maskMat.release();
 		fgdModel.release();
@@ -250,26 +261,26 @@ public class MidgetOfSeville {
 		foregroundMat.release();
 		edgifiedMat.release();
 		cornersMop.release();
-		
+
 		imgBitmap.recycle();
 		maskBitmap.recycle();
 		fgdBitmap.recycle();
 		edgeBitmap.recycle();
-		
+
 		Log.d(tag, "shapeUp. done");
 		return resultJsonObject;
 	}
-	
+
 	public JSONObject shapeUp(String filePath) throws JSONException{
-		Bitmap imgBitmap = loadBitmap(filePath);		
+		Bitmap imgBitmap = loadBitmap(filePath);
 		return shapeUp(imgBitmap, null);
 	}
-	
+
 	public JSONObject shapeUp(String filePath, JSONObject configs) throws JSONException{
 		Bitmap imgBitmap = loadBitmap(filePath);
 		return shapeUp(imgBitmap, configs);
 	}
-	
+
 	private Bitmap loadBitmap(String filePath){
 		Log.d(tag, "loadBitmap. filePath desde MidgetOfSeville: " + filePath);
 		Options options = new Options();
@@ -279,4 +290,20 @@ public class MidgetOfSeville {
 		Log.d(tag, "imgBitmap config: " + imgBitmap.getConfig().toString() + " hasAlpha: " + imgBitmap.hasAlpha());
 		return imgBitmap;
 	}
+
+    public Mat getMap1() {
+        return map1;
+    }
+
+    public void setMap1(Mat map1) {
+        this.map1 = map1;
+    }
+
+    public Mat getMap2() {
+        return map2;
+    }
+
+    public void setMap2(Mat map2) {
+        this.map2 = map2;
+    }
 }
