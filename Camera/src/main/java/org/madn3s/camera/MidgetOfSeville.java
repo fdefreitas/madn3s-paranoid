@@ -34,19 +34,29 @@ public class MidgetOfSeville {
     private Mat map1;
     private Mat map2;
 
-	public JSONObject shapeUp(Bitmap imgBitmap, JSONObject config) throws JSONException {
-		Log.d(tag, "shapeUp.");
-		String savePath;
-		int height = imgBitmap.getHeight();
-		int width = imgBitmap.getWidth();
+    public JSONObject shapeUp(Bitmap imgBitmap, JSONObject config) throws JSONException {
+        int height = imgBitmap.getHeight();
+        int width = imgBitmap.getWidth();
 
-		Mat imgMat = new Mat(height, width, CvType.CV_8UC3);
-		Utils.bitmapToMat(imgBitmap, imgMat);
+        Mat imgMat = new Mat(height, width, CvType.CV_8UC3);
+        Utils.bitmapToMat(imgBitmap, imgMat);
+        return shapeUp(imgMat, config);
+    }
+
+    public JSONObject shapeUp(String filePath, JSONObject configs) throws JSONException{
+        Bitmap imgBitmap = loadBitmap(filePath);
+        return shapeUp(imgBitmap, configs);
+    }
+
+	public JSONObject shapeUp(Mat imgMat, JSONObject config) throws JSONException {
+		Log.d(tag, "shapeUp.");
+        String savePath;
+        int height = imgMat.rows();
+        int width = imgMat.cols();
+
 		Imgproc.cvtColor(imgMat, imgMat, Imgproc.COLOR_RGBA2RGB);
-//		Log.d(tag, "imgMat after cvtColor:" + imgMat.toString());
 
 		Mat maskMat = new Mat(height, width, CvType.CV_8UC3, ZERO_SCALAR);
-//		Log.d(tag, "mask: " + maskMat.toString());
 
 	    double x1 = width / 4;
 	    double y1 = 0;
@@ -262,23 +272,12 @@ public class MidgetOfSeville {
 		edgifiedMat.release();
 		cornersMop.release();
 
-		imgBitmap.recycle();
 		maskBitmap.recycle();
 		fgdBitmap.recycle();
 		edgeBitmap.recycle();
 
 		Log.d(tag, "shapeUp. done");
 		return resultJsonObject;
-	}
-
-	public JSONObject shapeUp(String filePath) throws JSONException{
-		Bitmap imgBitmap = loadBitmap(filePath);
-		return shapeUp(imgBitmap, null);
-	}
-
-	public JSONObject shapeUp(String filePath, JSONObject configs) throws JSONException{
-		Bitmap imgBitmap = loadBitmap(filePath);
-		return shapeUp(imgBitmap, configs);
 	}
 
 	private Bitmap loadBitmap(String filePath){

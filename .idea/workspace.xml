@@ -21,32 +21,9 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: org.madn3s.camera" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01d3b7cb-771b-4106-8f1c-961fc16fc58e" name="Default" comment="- Muchos cambios desde reunión con tutores&#10;- codigo nativo cableado para una iteración">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/CalibrationResult.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/OnCameraFrameRender.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/nameToDefineAsyncTask.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/libs/armeabi/libMadn3sNative.so" afterPath="$PROJECT_DIR$/Controller/src/main/libs/armeabi/libMadn3sNative.so" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/libs/armeabi-v7a/libMadn3sNative.so" afterPath="$PROJECT_DIR$/Controller/src/main/libs/armeabi-v7a/libMadn3sNative.so" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/libMadn3sNative.so" afterPath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/libMadn3sNative.so" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/libMadn3sNative.so" afterPath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/libMadn3sNative.so" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/io/BraveHeartMidgetService.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/io/BraveHeartMidgetService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/io/BraveheartMidgetService.java" afterPath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/io/BraveheartMidgetService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/CameraCalibrator.java" afterPath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/CameraCalibrator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/Consts.java" afterPath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/Consts.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/Consts.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/Consts.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/io/HiddenMidgetReader.java" afterPath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/io/HiddenMidgetReader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/io/HiddenMidgetReader.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/io/HiddenMidgetReader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MADN3SCamera.java" afterPath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MADN3SCamera.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MADN3SController.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MADN3SController.java" />
+    <list default="true" id="01d3b7cb-771b-4106-8f1c-961fc16fc58e" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MainActivity.java" afterPath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MainActivity.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MainActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MidgetOfSeville.java" afterPath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MidgetOfSeville.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MidgetOfSeville.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MidgetOfSeville.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/ScannerFragment.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/ScannerFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Camera/src/main/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/Camera/src/main/res/layout/activity_main.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Camera/src/main/res/menu/main.xml" afterPath="$PROJECT_DIR$/Camera/src/main/res/menu/main.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Camera/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/Camera/src/main/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/Controller/src/main/res/values/strings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="MADN3SCamera.iws" />
@@ -73,76 +50,34 @@
       <file leaf-file-name="BraveheartMidgetService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/io/BraveheartMidgetService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3803" max-vertical-offset="5166">
-              <caret line="270" column="65" selection-start-line="263" selection-start-column="8" selection-end-line="270" selection-end-column="65" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="3938" max-vertical-offset="5166">
+              <caret line="266" column="38" selection-start-line="266" selection-start-column="38" selection-end-line="266" selection-end-column="38" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainActivity.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="MainActivity.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="9626" max-vertical-offset="10152">
-              <caret line="551" column="16" selection-start-line="551" selection-start-column="16" selection-end-line="551" selection-end-column="16" />
+            <state vertical-scroll-proportion="-14.128015" vertical-offset="9505" max-vertical-offset="10044">
+              <caret line="112" column="0" selection-start-line="112" selection-start-column="0" selection-end-line="112" selection-end-column="0" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#3180#14053#0" expanded="true" />
-                <element signature="e#14048#14049#0" expanded="true" />
-                <element signature="e#16714#16715#0" expanded="true" />
-                <element signature="e#16753#16754#0" expanded="true" />
-                <element signature="e#16783#16784#0" expanded="true" />
-                <element signature="e#16821#16822#0" expanded="true" />
-                <element signature="e#20403#20891#0" expanded="true" />
-                <element signature="e#20571#20669#0" expanded="true" />
-                <element signature="e#20661#20662#0" expanded="true" />
-                <element signature="e#20886#20887#0" expanded="true" />
-                <element signature="e#20937#21788#0" expanded="true" />
-                <element signature="e#21783#21784#0" expanded="true" />
-                <element signature="e#23316#23317#0" expanded="true" />
-                <element signature="e#23365#23366#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BraveHeartMidgetService.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/io/BraveHeartMidgetService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2777" max-vertical-offset="8532">
-              <caret line="176" column="43" selection-start-line="176" selection-start-column="43" selection-end-line="176" selection-end-column="43" />
-              <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#21193#21411#0" expanded="true" />
+                <element signature="e#21406#21407#0" expanded="true" />
+                <element signature="e#23147#23148#0" expanded="true" />
+                <element signature="e#23196#23197#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="MidgetOfSeville.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MidgetOfSeville.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6840">
-              <caret line="394" column="0" selection-start-line="394" selection-start-column="0" selection-end-line="394" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MidgetOfSeville.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MidgetOfSeville.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.34980989" vertical-offset="2462" max-vertical-offset="5238">
-              <caret line="171" column="74" selection-start-line="171" selection-start-column="74" selection-end-line="171" selection-end-column="74" />
-              <folding>
-                <element signature="e#9896#9897#0" expanded="true" />
-                <element signature="e#9923#9924#0" expanded="true" />
-                <element signature="e#9960#9961#0" expanded="true" />
-                <element signature="e#9992#9993#0" expanded="true" />
-                <element signature="e#10020#10021#0" expanded="true" />
-                <element signature="e#10047#10048#0" expanded="true" />
-                <element signature="e#10084#10085#0" expanded="true" />
-                <element signature="e#10116#10117#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="108" max-vertical-offset="5076">
+              <caret line="250" column="16" selection-start-line="250" selection-start-column="8" selection-end-line="250" selection-end-column="16" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -2316,9 +2251,9 @@
         <option value="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MADN3SCamera.java" />
         <option value="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/CameraCalibrator.java" />
         <option value="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/io/BraveheartMidgetService.java" />
-        <option value="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MainActivity.java" />
         <option value="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MidgetOfSeville.java" />
         <option value="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MidgetOfSeville.java" />
+        <option value="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MainActivity.java" />
       </list>
     </option>
   </component>
@@ -2354,7 +2289,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -2441,6 +2375,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="AndroidView">
         <subPane>
@@ -2701,7 +2636,11 @@
       <created>1431214397647</created>
       <updated>1431214397647</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="- Cambios para transmitir Camera Matrix calculada en Controller de vuelta a Camera&#10;- Agregado Smooth a imágen antes de GrabCut">
+      <created>1431811399900</created>
+      <updated>1431811399900</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2712,14 +2651,12 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3270869" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4283217" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32692307" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3986014" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3986014" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32867134" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32027256" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41433567" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2733,9 +2670,11 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32692307" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32027256" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -2743,11 +2682,11 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
+      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2764,8 +2703,8 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32867134" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
@@ -2791,7 +2730,8 @@
     <MESSAGE value="Pipeline de Scan funcional de nuevo" />
     <MESSAGE value="- Muchos cambios desde reunión con tutores&#10;- codigo nativo cableado para una iteración" />
     <MESSAGE value="- Solucionadas explosiones de ICP, ya se genera un mesh pero sin triangulacion" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Solucionadas explosiones de ICP, ya se genera un mesh pero sin triangulacion" />
+    <MESSAGE value="- Cambios para transmitir Camera Matrix calculada en Controller de vuelta a Camera&#10;- Agregado Smooth a imágen antes de GrabCut" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Cambios para transmitir Camera Matrix calculada en Controller de vuelta a Camera&#10;- Agregado Smooth a imágen antes de GrabCut" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -3026,14 +2966,14 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Camera/src/main/res/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="1512">
           <caret line="20" column="36" selection-start-line="20" selection-start-column="36" selection-end-line="20" selection-end-column="36" />
           <folding />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/nameToDefineAsyncTask.java">
@@ -3055,7 +2995,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.35171103" vertical-offset="841" max-vertical-offset="6372">
           <caret line="107" column="57" selection-start-line="107" selection-start-column="57" selection-end-line="107" selection-end-column="57" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3079,7 +3018,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3745247" vertical-offset="2485" max-vertical-offset="3870">
           <caret line="175" column="71" selection-start-line="175" selection-start-column="71" selection-end-line="175" selection-end-column="71" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3087,7 +3025,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="540" max-vertical-offset="1836">
           <caret line="62" column="47" selection-start-line="62" selection-start-column="47" selection-end-line="62" selection-end-column="47" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3111,7 +3048,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.8973384" vertical-offset="6836" max-vertical-offset="11142">
           <caret line="501" column="5" selection-start-line="464" selection-start-column="4" selection-end-line="501" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3131,7 +3067,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.36734694" vertical-offset="270" max-vertical-offset="846">
           <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3147,6 +3082,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="486" max-vertical-offset="4428">
           <caret line="53" column="43" selection-start-line="53" selection-start-column="43" selection-end-line="53" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MidgetOfSeville.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="3.8403041" vertical-offset="4604" max-vertical-offset="6840">
+          <caret line="394" column="0" selection-start-line="394" selection-start-column="0" selection-end-line="394" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -3155,65 +3097,35 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2777" max-vertical-offset="8532">
           <caret line="176" column="43" selection-start-line="176" selection-start-column="43" selection-end-line="176" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/io/BraveheartMidgetService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3803" max-vertical-offset="5166">
-          <caret line="270" column="65" selection-start-line="263" selection-start-column="8" selection-end-line="270" selection-end-column="65" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="9626" max-vertical-offset="10152">
-          <caret line="551" column="16" selection-start-line="551" selection-start-column="16" selection-end-line="551" selection-end-column="16" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3180#14053#0" expanded="true" />
-            <element signature="e#14048#14049#0" expanded="true" />
-            <element signature="e#16714#16715#0" expanded="true" />
-            <element signature="e#16753#16754#0" expanded="true" />
-            <element signature="e#16783#16784#0" expanded="true" />
-            <element signature="e#16821#16822#0" expanded="true" />
-            <element signature="e#20403#20891#0" expanded="true" />
-            <element signature="e#20571#20669#0" expanded="true" />
-            <element signature="e#20661#20662#0" expanded="true" />
-            <element signature="e#20886#20887#0" expanded="true" />
-            <element signature="e#20937#21788#0" expanded="true" />
-            <element signature="e#21783#21784#0" expanded="true" />
-            <element signature="e#23316#23317#0" expanded="true" />
-            <element signature="e#23365#23366#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MidgetOfSeville.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6840">
-          <caret line="394" column="0" selection-start-line="394" selection-start-column="0" selection-end-line="394" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="3938" max-vertical-offset="5166">
+          <caret line="266" column="38" selection-start-line="266" selection-start-column="38" selection-end-line="266" selection-end-column="38" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MidgetOfSeville.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.34980989" vertical-offset="2462" max-vertical-offset="5238">
-          <caret line="171" column="74" selection-start-line="171" selection-start-column="74" selection-end-line="171" selection-end-column="74" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="108" max-vertical-offset="5076">
+          <caret line="250" column="16" selection-start-line="250" selection-start-column="8" selection-end-line="250" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-14.128015" vertical-offset="9505" max-vertical-offset="10044">
+          <caret line="112" column="0" selection-start-line="112" selection-start-column="0" selection-end-line="112" selection-end-column="0" />
           <folding>
-            <element signature="e#9896#9897#0" expanded="true" />
-            <element signature="e#9923#9924#0" expanded="true" />
-            <element signature="e#9960#9961#0" expanded="true" />
-            <element signature="e#9992#9993#0" expanded="true" />
-            <element signature="e#10020#10021#0" expanded="true" />
-            <element signature="e#10047#10048#0" expanded="true" />
-            <element signature="e#10084#10085#0" expanded="true" />
-            <element signature="e#10116#10117#0" expanded="true" />
+            <element signature="e#21193#21411#0" expanded="true" />
+            <element signature="e#21406#21407#0" expanded="true" />
+            <element signature="e#23147#23148#0" expanded="true" />
+            <element signature="e#23196#23197#0" expanded="true" />
           </folding>
         </state>
       </provider>

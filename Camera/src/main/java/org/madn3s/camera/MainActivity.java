@@ -43,7 +43,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.madn3s.camera.Consts.*;
 
-public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCameraViewListener2, View.OnTouchListener {
+public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCameraViewListener2,
+        View.OnTouchListener {
 
     private CameraBridgeViewBase mOpenCvCameraView;
 
@@ -57,6 +58,7 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
     private ImageView takePictureImageView;
     private Chronometer elapsedChronometer;
     private MainActivity mActivity;
+    private MidgetOfSeville figaro;
 
     public static AtomicBoolean isCapturing;
 
@@ -77,8 +79,8 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
 		mActivity = this;
 		mContext = this;
 		BraveheartMidgetService.mActivity = this;
+        figaro = new MidgetOfSeville();
         isCapturing = new AtomicBoolean(false);
-
 
 		setDiscoverableBt();
 		setUpBridges();
@@ -102,14 +104,18 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
 //                            Toast.LENGTH_SHORT).show();
 //                    return;
 //                }
-
-//                mOnCameraFrameRender = new OnCameraFrameRender(new PreviewFrameRender(mCalibrator.mWidth, mCalibrator.mHeight));
+//                mOnCameraFrameRender = new OnCameraFrameRender(
+//                        new PreviewFrameRender(mCalibrator.mWidth, mCalibrator.mHeight)
+//                );
 
                 try {
                     JSONObject calibPayloadCalib = new JSONObject("{\"right\":{\"calib_map_2\":\"[-2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15]\",\"calib_map_1\":\"[8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14]\",\"calib_camera_matrix\":\"[1.0469388e-38, 0, 0;\\n  5.7453237e-44, 1.4012985e-45, 9.9950187e-12;\\n  2.1826625e-41, 1.4012985e-45, 0]\",\"calib_distortion_coefficients\":\"[0.04181658698748777;\\n  0.5143468128821382;\\n  0;\\n  0;\\n  -4.353305195069944]\"},\"calibration\":true,\"left\":{\"calib_map_2\":\"[2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22]\",\"calib_map_1\":\"[-4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20]\",\"calib_camera_matrix\":\"[48.562515, 2.4662853e-43, 0;\\n  1.4012985e-45, 0, 1.4012985e-45;\\n  6.1657132e-44, 0, 1.4587517e-42]\",\"calib_distortion_coefficients\":\"[0.114933779657224;\\n  -0.1920176879641323;\\n  0;\\n  0;\\n  -1.469845531523524]\"}}");
+
                     String side = "right";
-                    String cameraMatrixStr = calibPayloadCalib.getJSONObject(side).getString(Consts.KEY_CALIB_CAMERA_MATRIX);
-                    String distCoeffsStr = calibPayloadCalib.getJSONObject(side).getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS);
+                    String cameraMatrixStr = calibPayloadCalib.getJSONObject(side)
+                            .getString(Consts.KEY_CALIB_CAMERA_MATRIX);
+                    String distCoeffsStr = calibPayloadCalib.getJSONObject(side)
+                            .getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS);
                     Log.d(tag, "Obteniendo calib_camera_matrix:" + cameraMatrixStr);
 
                     Mat cameraMatrix = MADN3SCamera.getMatFromString(cameraMatrixStr);
@@ -440,27 +446,15 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
 			}
 		};
 
+        /**
+         * Punto de entrada desde el Service
+         */
 		BraveheartMidgetService.cameraCallback = new UniversalComms() {
 			@Override
 			public void callback(Object msg) {
-//				config = (JSONObject) msg;
-//				Log.d(tag, "takePhoto. config == null? " + (config == null));
-//				Log.d(tag, "takePhoto. mPctureCallback == null? " + (mPictureCallback == null));
-//				Log.d(tag, "takePhoto. mContext == null? " + (mContext == null));
-//				if(mCamera != null){
-//					Log.d(tag, "takePhoto. mCamera != null. calling TakePicture()");
-//		    		mCamera.takePicture(null, null, mPictureCallback);
-//		    	} else {
-//		    		Log.d(tag, "takePhoto. mCamera == null.");
-		    		result = new JSONObject();
-		    		try {
-//		    			//TODO revisar por que int y no bool
-						result.put(Consts.KEY_ERROR, 1);
-//						Log.d(tag, "takePhoto. result: " + result.toString(1));
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-//		    	}
+                isCapturing.set(true);
+				config = (JSONObject) msg;
+				Log.d(tag, "takePhoto. config == null? " + (config == null));
 			}
 		};
 	}
@@ -502,11 +496,17 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
     //Metodos de CvCameraViewListener2
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
-//        if(isCapturing.get()){
-            return mOnCameraFrameRender.render(inputFrame);
-//        } else {
-//            return inputFrame.rgba();
-//        }
+        Mat result = mOnCameraFrameRender.render(inputFrame);
+        if(isCapturing.get()){
+            try {
+                figaro.shapeUp(result, config);
+            } catch (JSONException e) {
+                Log.e(tag, "Couldn't execute MidgetOfSeville.shapeUp to Camera Frame");
+                e.printStackTrace();
+            }
+        }
+
+        return result;
     }
 
     @Override
@@ -544,7 +544,6 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         Log.d(tag, "onTouch invoked");
-
         mCalibrator.addCorners();
         return false;
     }
