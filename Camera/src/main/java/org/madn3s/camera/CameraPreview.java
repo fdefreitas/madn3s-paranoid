@@ -112,7 +112,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             p.set(CAMERA_PARAM_ORIENTATION, CAMERA_ORIENTATION_PORTRAIT);
             mCamera.setParameters(p);
         }else{
-            Log.d(MADN3SCamera.TAG, "Landscape " 
+            Log.d(MADN3SCamera.TAG, "Landscape "
             		+ (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE));
             mCamera.getParameters().set(CAMERA_PARAM_ORIENTATION, CAMERA_ORIENTATION_LANDSCAPE);
             mCamera.getParameters().setRotation(0);
@@ -129,11 +129,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     /**
-     * Returns optimal PreviewSize by iterating available sizes from 
+     * Returns optimal PreviewSize by iterating available sizes from
      * camera hardware
      */
     private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int width, int heigth) {
-        
+
     	final double ASPECT_TOLERANCE = 0.1;
         double targetRatio = (double)(heigth / width);
 
@@ -169,7 +169,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 //        Log.d(MADN3SCamera.TAG, "optimalSize " + (optimalSize==null?"no":"yes"));
         return optimalSize;
     }
-    
+
     public Camera getmCamera() {
 		return mCamera;
 	}

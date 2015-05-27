@@ -49,7 +49,6 @@ public class MADN3SCamera extends Application {
     public static final String defaultJSONObjectString = "{}";
 	public static final String defaultJSONArrayString = "[]";
 
-    public static String projectName;
     public static String position;
     public static int iteration;
     private static File appDirectory;
@@ -94,7 +93,7 @@ public class MADN3SCamera extends Application {
 
     public static String saveJsonToExternal(String output, String fileName) throws JSONException {
         try {
-            String projectName = MADN3SCamera.sharedPrefsGetString(KEY_PROJECT_NAME);
+            String projectName = sharedPrefsGetString(KEY_PROJECT_NAME);
             File calibrationFile = getOutputMediaFile(MEDIA_TYPE_JSON, projectName, fileName);
             Log.i(TAG, "saveJsonToExternal. filepath: " + calibrationFile.getAbsolutePath());
             FileOutputStream fos = new FileOutputStream(calibrationFile);
@@ -166,7 +165,7 @@ public class MADN3SCamera extends Application {
 
     @SuppressLint("SimpleDateFormat")
 	public static File getOutputMediaFile(int type){
-    	return getOutputMediaFile(type, projectName, position, iteration);
+    	return getOutputMediaFile(type, sharedPrefsGetString(KEY_PROJECT_NAME), position, iteration);
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -205,7 +204,7 @@ public class MADN3SCamera extends Application {
     public static String saveBitmapAsJpeg(Bitmap bitmap, String position, int iteration){
     	FileOutputStream out;
         try {
-            final File imgFile = getOutputMediaFile(MEDIA_TYPE_IMAGE, projectName, position, iteration);
+            final File imgFile = getOutputMediaFile(MEDIA_TYPE_IMAGE, sharedPrefsGetString(KEY_PROJECT_NAME), position, iteration);
 
             out = new FileOutputStream(imgFile.getAbsoluteFile());
             bitmap.compress(Consts.BITMAP_COMPRESS_FORMAT, Consts.COMPRESSION_QUALITY, out);
@@ -354,14 +353,14 @@ public class MADN3SCamera extends Application {
      * @param str Matriz en forma de String
      * @return Instancia de Mat con valores en Matriz recibida como String
      */
-    public static Mat getMatFromString(String str){
+    public static Mat getMatFromString(String str) throws NumberFormatException{
 //		str = "[672.2618351846742, 0, 359.5; 0, 672.2618351846742, 239.5; 0, 0, 1]";
-        int rows = 0;
-        int cols = 0;
+        int rows;
+        int cols;
         double[] data;
-        String[] colsStr = null;
-        String rowStr = "";
-        String colStr = "";
+        String[] colsStr;
+        String rowStr;
+        String colStr;
         str = str.replaceAll("^\\[|\\]$", "");
         String[] rowsStr = str.split(";");
         rows = rowsStr.length;

@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -28,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.madn3s.camera.io.BraveheartMidgetService;
@@ -61,6 +63,7 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
     private MidgetOfSeville figaro;
 
     public static AtomicBoolean isCapturing;
+    public static AtomicBoolean isCalibrating;
 
     private CameraCalibrator mCalibrator;
     private OnCameraFrameRender mOnCameraFrameRender;
@@ -79,8 +82,9 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
 		mActivity = this;
 		mContext = this;
 		BraveheartMidgetService.mActivity = this;
-        figaro = new MidgetOfSeville();
+        figaro = MidgetOfSeville.getInstance();
         isCapturing = new AtomicBoolean(false);
+        isCalibrating = new AtomicBoolean(false);
 
 		setDiscoverableBt();
 		setUpBridges();
@@ -99,138 +103,7 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
 		takePictureImageView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//                if (mCalibrator.getCornersBufferSize() < 2) {
-//                    Toast.makeText(mActivity, mActivity.getString(R.string.more_samples),
-//                            Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                mOnCameraFrameRender = new OnCameraFrameRender(
-//                        new PreviewFrameRender(mCalibrator.mWidth, mCalibrator.mHeight)
-//                );
-
-                try {
-                    JSONObject calibPayloadCalib = new JSONObject("{\"right\":{\"calib_map_2\":\"[-2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15]\",\"calib_map_1\":\"[8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14]\",\"calib_camera_matrix\":\"[1.0469388e-38, 0, 0;\\n  5.7453237e-44, 1.4012985e-45, 9.9950187e-12;\\n  2.1826625e-41, 1.4012985e-45, 0]\",\"calib_distortion_coefficients\":\"[0.04181658698748777;\\n  0.5143468128821382;\\n  0;\\n  0;\\n  -4.353305195069944]\"},\"calibration\":true,\"left\":{\"calib_map_2\":\"[2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22]\",\"calib_map_1\":\"[-4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20]\",\"calib_camera_matrix\":\"[48.562515, 2.4662853e-43, 0;\\n  1.4012985e-45, 0, 1.4012985e-45;\\n  6.1657132e-44, 0, 1.4587517e-42]\",\"calib_distortion_coefficients\":\"[0.114933779657224;\\n  -0.1920176879641323;\\n  0;\\n  0;\\n  -1.469845531523524]\"}}");
-
-                    String side = "right";
-                    String cameraMatrixStr = calibPayloadCalib.getJSONObject(side)
-                            .getString(Consts.KEY_CALIB_CAMERA_MATRIX);
-                    String distCoeffsStr = calibPayloadCalib.getJSONObject(side)
-                            .getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS);
-                    Log.d(tag, "Obteniendo calib_camera_matrix:" + cameraMatrixStr);
-
-                    Mat cameraMatrix = MADN3SCamera.getMatFromString(cameraMatrixStr);
-                    Mat distCoeffs = MADN3SCamera.getMatFromString(distCoeffsStr);
-                    mActivity.setCalibrationValues(cameraMatrix, distCoeffs);
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-
-//                try {
-//                    new AsyncTask<Void, Void, Bundle>() {
-//
-//                        @Override
-//                        protected void onPreExecute() {
-//                            setWorking();
-//                            resetChron();
-//                            startChron();
-//
-//                            isCapturing.set(false);
-//                            takePictureImageView.setEnabled(false);
-//
-//                            calibrationProgress = new ProgressDialog(mActivity);
-//                            calibrationProgress.setTitle(mActivity.getString(R.string.calibrating));
-//                            calibrationProgress.setMessage(mActivity.getString(R.string.please_wait));
-//                            calibrationProgress.setCancelable(false);
-//                            calibrationProgress.setIndeterminate(true);
-//                            calibrationProgress.show();
-//                            playSound("Calibration", "Starting");
-//
-//                        }
-//
-//                        @Override
-//                        protected Bundle doInBackground(Void... params) {
-//                            Bundle result = null;
-//                            try {
-//                                result = mCalibrator.calibrate();
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-//
-//                            return result;
-//                        }
-//
-//                        @Override
-//                        protected void onPostExecute(Bundle result) {
-//                            playSound("Calibration", "Post Calibration");
-//                            try {
-//                                Process process = new ProcessBuilder()
-//                                        .command("logcat", "-c")
-//                                        .redirectErrorStream(true)
-//                                        .start();
-//                                process.destroy();
-//                            } catch (Exception e){
-//                                e.printStackTrace();
-//                            }
-//
-//                            calibrationProgress.dismiss();
-//                            mCalibrator.clearCorners();
-//                            stopChron();
-//                            showElapsedTime("processing image");
-//
-//                            String resultMessage = (mCalibrator.isCalibrated()) ?
-//                                    mActivity.getString(R.string.calibration_successful)
-//                                            + " " + mCalibrator.getAvgReprojectionError() :
-//                                    mActivity.getString(R.string.calibration_unsuccessful);
-//                            (Toast.makeText(MainActivity.this, resultMessage, Toast.LENGTH_LONG)).show();
-//
-//                            JSONObject resultForIntent = new JSONObject();
-//                            JSONObject calibPayload = new JSONObject();
-//
-//                            /* Se guarda el resultado de la calibración en SharedPrefs */
-//                            if (mCalibrator.isCalibrated()) {
-//                                CalibrationResult.save(MainActivity.this,
-//                                        mCalibrator.getCameraMatrix(), mCalibrator.getDistortionCoefficients());
-//                            }
-//                            /* Fin - Se guarda el resultado de la calibración en SharedPrefs */
-//
-//                            boolean sending = true;
-//                            if(sending) {
-//                                try {
-//                                    Log.i(tag, "Result: ");
-//                                    Log.i(tag, "Calibration Coefficients: " + result.getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS));
-//                                    Log.i(tag, "Camera Matrix: " + result.getString(Consts.KEY_CALIB_CAMERA_MATRIX));
-//                                    Log.i(tag, "Image Points: " + result.getString(Consts.KEY_CALIB_IMAGE_POINTS));
-//
-//                                    /* Set Calib Payload */
-//                                    calibPayload.put(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS, result.getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS));
-//                                    calibPayload.put(Consts.KEY_CALIB_CAMERA_MATRIX, result.getString(Consts.KEY_CALIB_CAMERA_MATRIX));
-//                                    calibPayload.put(Consts.KEY_CALIB_IMAGE_POINTS, result.getString(Consts.KEY_CALIB_IMAGE_POINTS));
-//                                    calibPayload.put(Consts.KEY_ACTION, Consts.ACTION_CALIBRATION_RESULT);
-//                                    /* End - Set Calib Payload */
-//
-//                                    resultForIntent.put(Consts.KEY_ACTION, Consts.ACTION_SEND_CALIBRATION_RESULT);
-//                                    resultForIntent.put(Consts.KEY_CALIBRATION_RESULT, calibPayload.toString());
-//
-//                                    Intent williamWallaceIntent = new Intent(getBaseContext(), BraveheartMidgetService.class);
-//                                    williamWallaceIntent.putExtra(Consts.EXTRA_CALLBACK_MSG, resultForIntent.toString());
-//                                    startService(williamWallaceIntent);
-//
-//                                    Log.i(tag, "Result Ok");
-//                                } catch (Exception e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//
-//                            playSound("Calibration", "Result Ok");
-//
-//                            unsetWorking();
-//                        }
-//
-//                    }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//                } catch (Exception e) {
-//                    playSound("Calibration", "Result Ok");
-//                    Log.e(tag, "Exception instantiating CameraCalibrator. ", e);
-//                }
+                onButtonClick();
 			}
 		});
 
@@ -496,17 +369,74 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
     //Metodos de CvCameraViewListener2
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
-        Mat result = mOnCameraFrameRender.render(inputFrame);
+        Mat resultMat = mOnCameraFrameRender.render(inputFrame);
+        JSONObject result = new JSONObject();
+        Log.d(tag, "width: " + resultMat.cols() + " height: " + resultMat.rows());
         if(isCapturing.get()){
-            try {
-                figaro.shapeUp(result, config);
-            } catch (JSONException e) {
-                Log.e(tag, "Couldn't execute MidgetOfSeville.shapeUp to Camera Frame");
-                e.printStackTrace();
+            if(isCalibrating.get()){
+                isCalibrating.set(false);
+                setCaptureMode(false);
+            } else {
+                isCapturing.set(false);
+                processFrameCallback(resultMat, result);
             }
         }
 
-        return result;
+        return resultMat;
+    }
+
+    private void processFrameCallback(final Mat resultMat, final JSONObject result) {
+        new AsyncTask<Void, Void, JSONObject>() {
+
+            @Override
+            protected void onPreExecute() {
+//                setWorking();
+//                resetChron();
+//                startChron();
+            }
+
+            @Override
+            protected JSONObject doInBackground(Void... params) {
+                try {
+                    JSONObject resultJsonObject = figaro.shapeUp(resultMat, config);
+                    JSONArray pointsJson = resultJsonObject.getJSONArray(KEY_POINTS);
+
+                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.app_name)
+                            , MODE_PRIVATE);
+                    SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+                    sharedPreferencesEditor.putString(KEY_FILE_PATH, resultJsonObject.getString(KEY_FILE_PATH));
+                    sharedPreferencesEditor.apply();
+
+                    if(pointsJson != null && pointsJson.length() > 0){
+                        result.put(KEY_MD5, resultJsonObject.get(KEY_MD5));
+                        result.put(Consts.KEY_ERROR, false);
+                        result.put(Consts.KEY_POINTS, pointsJson);
+                        Log.d(tag, "pointsJson: " + pointsJson.toString(1));
+                    } else {
+                        result.put(Consts.KEY_ERROR, true);
+                    }
+                    Log.d(tag, "mPictureCallback. result: " + result.toString(1));
+                } catch (JSONException e) {
+                    Log.e(tag, "Couldn't execute MidgetOfSeville.shapeUp to Camera Frame");
+                    e.printStackTrace();
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(JSONObject jsonObject) {
+//                stopChron();
+//                showElapsedTime("Processing Image");
+
+                if(result != null){
+                    Intent williamWallaceIntent = new Intent(mContext, BraveheartMidgetService.class);
+                    williamWallaceIntent.putExtra(Consts.EXTRA_RESULT, result.toString());
+                    startService(williamWallaceIntent);
+                }
+//                unsetWorking();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -521,7 +451,8 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
             mWidth = width;
             mHeight = height;
             mCalibrator = new CameraCalibrator(mWidth, mHeight);
-            if (CalibrationResult.tryLoad(this, mCalibrator.getCameraMatrix(), mCalibrator.getDistortionCoefficients())) {
+            if (CalibrationResult.tryLoad(this, mCalibrator.getCameraMatrix(),
+                    mCalibrator.getDistortionCoefficients())) {
                 mCalibrator.setCalibrated();
             }
 
@@ -530,8 +461,8 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
     }
 
     public void setCaptureMode(boolean calibrate){
-        isCapturing.set(true);
         if(calibrate) {
+            isCalibrating.set(true);
             mOnCameraFrameRender = new OnCameraFrameRender(new CalibrationFrameRender(mCalibrator));
             takePictureImageView.setEnabled(true);
         } else {
@@ -548,10 +479,153 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
         return false;
     }
 
-    public void setCalibrationValues(Mat cameraMatrix, Mat distCoeffs){
-        mCalibrator.setCameraMatrix(cameraMatrix);
-        mCalibrator.setDistortionCoefficients(distCoeffs);
-        setCaptureMode(false);
+//    public void setCalibrationValues(Mat cameraMatrix, Mat distCoeffs){
+//        mCalibrator.setCameraMatrix(cameraMatrix);
+//        mCalibrator.setDistortionCoefficients(distCoeffs);
+//        setCaptureMode(false);
+//    }
+
+    private void onButtonClick() {
+//        dummyCalibration();
+
+        try {
+            new AsyncTask<Void, Void, Bundle>() {
+
+                @Override
+                protected void onPreExecute() {
+                    setWorking();
+                    resetChron();
+                    startChron();
+
+                    // Warning si no hay suficientes puntos
+                    if (mCalibrator.getCornersBufferSize() < 2) {
+                        Toast.makeText(mActivity, mActivity.getString(R.string.more_samples),
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // Cambiar FrameRender a Preview
+                    mOnCameraFrameRender = new OnCameraFrameRender(
+                            new PreviewFrameRender(mCalibrator.mWidth, mCalibrator.mHeight)
+                    );
+
+                    // TODO mover a setCaptureMode
+                    isCapturing.set(false);
+                    isCalibrating.set(false);
+                    takePictureImageView.setEnabled(false);
+
+                    calibrationProgress = new ProgressDialog(mActivity);
+                    calibrationProgress.setTitle(mActivity.getString(R.string.calibrating));
+                    calibrationProgress.setMessage(mActivity.getString(R.string.please_wait));
+                    calibrationProgress.setCancelable(false);
+                    calibrationProgress.setIndeterminate(true);
+                    calibrationProgress.show();
+                    playSound("Calibration", "Starting");
+
+                }
+
+                @Override
+                protected Bundle doInBackground(Void... params) {
+                    Bundle result = null;
+                    try {
+                        result = mCalibrator.calibrate();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    return result;
+                }
+
+                @Override
+                protected void onPostExecute(Bundle result) {
+                    playSound("Calibration", "Post Calibration");
+                    try {
+                        Process process = new ProcessBuilder()
+                                .command("logcat", "-c")
+                                .redirectErrorStream(true)
+                                .start();
+                        process.destroy();
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                    calibrationProgress.dismiss();
+                    mCalibrator.clearCorners();
+                    stopChron();
+                    showElapsedTime("processing image");
+
+                    String resultMessage = (mCalibrator.isCalibrated()) ?
+                            mActivity.getString(R.string.calibration_successful)
+                                    + " " + mCalibrator.getAvgReprojectionError() :
+                            mActivity.getString(R.string.calibration_unsuccessful);
+                    (Toast.makeText(MainActivity.this, resultMessage, Toast.LENGTH_LONG)).show();
+
+                    JSONObject resultForIntent = new JSONObject();
+                    JSONObject calibPayload = new JSONObject();
+
+                    /* Se guarda el resultado de la calibración en SharedPrefs */
+                    if (mCalibrator.isCalibrated()) {
+                        CalibrationResult.save(MainActivity.this,
+                                mCalibrator.getCameraMatrix(), mCalibrator.getDistortionCoefficients());
+                    }
+                    /* Fin - Se guarda el resultado de la calibración en SharedPrefs */
+
+                    try {
+                        Log.i(tag, "Result: ");
+                        Log.i(tag, "Calibration Coefficients: " + result.getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS));
+                        Log.i(tag, "Camera Matrix: " + result.getString(Consts.KEY_CALIB_CAMERA_MATRIX));
+                        Log.i(tag, "Image Points: " + result.getString(Consts.KEY_CALIB_IMAGE_POINTS));
+
+                        /* Set Calib Payload */
+                        calibPayload.put(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS, result.getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS));
+                        calibPayload.put(Consts.KEY_CALIB_CAMERA_MATRIX, result.getString(Consts.KEY_CALIB_CAMERA_MATRIX));
+                        calibPayload.put(Consts.KEY_CALIB_IMAGE_POINTS, result.getString(Consts.KEY_CALIB_IMAGE_POINTS));
+                        calibPayload.put(Consts.KEY_ACTION, Consts.ACTION_CALIBRATION_RESULT);
+                        /* End - Set Calib Payload */
+
+                        resultForIntent.put(Consts.KEY_ACTION, Consts.ACTION_SEND_CALIBRATION_RESULT);
+                        resultForIntent.put(Consts.KEY_CALIBRATION_RESULT, calibPayload.toString());
+
+                        Intent williamWallaceIntent = new Intent(getBaseContext(), BraveheartMidgetService.class);
+                        williamWallaceIntent.putExtra(Consts.EXTRA_CALLBACK_MSG, resultForIntent.toString());
+                        startService(williamWallaceIntent);
+
+                        Log.i(tag, "Result Ok");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    playSound("Calibration", "Result Ok");
+
+                    unsetWorking();
+                }
+
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } catch (Exception e) {
+            playSound("Calibration", "Result Ok");
+            Log.e(tag, "Exception instantiating CameraCalibrator. ", e);
+        }
+    }
+
+    private void dummyCalibration() {
+        try {
+            JSONObject calibPayloadCalib = new JSONObject("{\"right\":{\"calib_map_2\":\"[-2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15]\",\"calib_map_1\":\"[8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14]\",\"calib_camera_matrix\":\"[1.0469388e-38, 0, 0;\\n  5.7453237e-44, 1.4012985e-45, 9.9950187e-12;\\n  2.1826625e-41, 1.4012985e-45, 0]\",\"calib_distortion_coefficients\":\"[0.04181658698748777;\\n  0.5143468128821382;\\n  0;\\n  0;\\n  -4.353305195069944]\"},\"calibration\":true,\"left\":{\"calib_map_2\":\"[2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22]\",\"calib_map_1\":\"[-4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20]\",\"calib_camera_matrix\":\"[48.562515, 2.4662853e-43, 0;\\n  1.4012985e-45, 0, 1.4012985e-45;\\n  6.1657132e-44, 0, 1.4587517e-42]\",\"calib_distortion_coefficients\":\"[0.114933779657224;\\n  -0.1920176879641323;\\n  0;\\n  0;\\n  -1.469845531523524]\"}}");
+
+            String side = "right";
+            String cameraMatrixStr = calibPayloadCalib.getJSONObject(side)
+                    .getString(Consts.KEY_CALIB_CAMERA_MATRIX);
+            String distCoeffsStr = calibPayloadCalib.getJSONObject(side)
+                    .getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS);
+            Log.d(tag, "Obteniendo calib_camera_matrix:" + cameraMatrixStr);
+
+            Mat cameraMatrix = MADN3SCamera.getMatFromString(cameraMatrixStr);
+            Mat distCoeffs = MADN3SCamera.getMatFromString(distCoeffsStr);
+            // Reemplazado por setCaptureMode
+//        mActivity.setCalibrationValues(cameraMatrix, distCoeffs);
+            mActivity.setCaptureMode(false);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }

@@ -51,7 +51,8 @@
         android:layout_alignTop="@+id/take_picture_imageView"
         android:format="%s"
         android:textSize="24sp"
-        android:gravity="center_vertical" />
+        android:gravity="center_vertical"
+        android:textColor="#FFF"/>
 
     <TextView
         android:id="@+id/configs_text_view"
@@ -60,7 +61,8 @@
         android:layout_toRightOf="@+id/take_picture_imageView"
         android:layout_alignTop="@+id/take_picture_imageView"
         android:layout_centerHorizontal="true"
-        android:text="@string/take_test_picture" />
+        android:text="@string/take_test_picture"
+        android:textColor="#FFF"/>
 
     <ImageView
         android:id="@+id/take_picture_imageView"

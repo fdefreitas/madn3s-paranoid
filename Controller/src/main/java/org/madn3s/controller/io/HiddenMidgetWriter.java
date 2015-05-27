@@ -13,8 +13,8 @@ public class HiddenMidgetWriter extends AsyncTask<Void, Void, Void> {
 	private BluetoothSocket mSocket;
     private Exception e;
     private String msg;
-    
-    
+
+
     public HiddenMidgetWriter(WeakReference<BluetoothSocket> mBluetoothSocketWeakReference, String msg){
     	mSocket = mBluetoothSocketWeakReference.get();
     	this.msg = msg;
@@ -37,10 +37,18 @@ public class HiddenMidgetWriter extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void result){
+        String errorMsg;
         if(e != null){
-        	Log.d(tag, "envie " + msg + " a " + mSocket.getRemoteDevice().getName());
+            errorMsg = "envie " + msg;
+            if(mSocket != null){
+                errorMsg += " a " + mSocket.getRemoteDevice().getName();
+            }
         } else {
-//        	Log.d(tag, "Ocurrio un error enviando " + msg + " a " + mSocket.getRemoteDevice().getName());
+            errorMsg = "Ocurrio un error enviando " + msg;
+            if(mSocket != null){
+                errorMsg += " a " + mSocket.getRemoteDevice().getName();
+            }
         }
+        Log.d(tag, errorMsg);
     }
 }

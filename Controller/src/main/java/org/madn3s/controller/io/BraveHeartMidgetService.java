@@ -193,8 +193,8 @@ public class BraveHeartMidgetService extends IntentService {
 	        json.put(KEY_PROJECT_NAME, projectName);
             boolean sendToLeft = true;
             boolean sendToRight = true;
-            boolean sendIteration = true;
-			sendMessageToCameras(json.toString(), sendToLeft, sendToRight, sendIteration);
+            boolean isCalibration = false;
+			sendMessageToCameras(json.toString(), sendToLeft, sendToRight, isCalibration);
 		} catch (JSONException e){
             Log.e(tag, "Error armando el JSON", e);
         } catch (Exception e){
@@ -208,10 +208,11 @@ public class BraveHeartMidgetService extends IntentService {
 
 			JSONObject msg = new JSONObject(msgString);
 
-            if(!isCalibration) {
-                msg.put(KEY_ITERATION, MADN3SController.sharedPrefsGetInt(KEY_ITERATION));
-            } else {
+            // TODO pilas con KEY cableado
+            if(isCalibration) {
                 msg.put(KEY_ACTION, ACTION_RECEIVE_CALIBRATION_RESULT);
+            } else {
+                msg.put(KEY_ITERATION, MADN3SController.sharedPrefsGetInt(KEY_ITERATION));
             }
 
 			if(right){
@@ -262,6 +263,7 @@ public class BraveHeartMidgetService extends IntentService {
 			JSONObject msg = new JSONObject(msgString);
 			boolean left = false;
 			boolean right = false;
+            boolean isCalibration = false;
 			if(msg.has(KEY_ERROR) && !msg.getBoolean(KEY_ERROR)){
 				int iter = MADN3SController.sharedPrefsGetInt(KEY_ITERATION);
 				JSONObject frame = MADN3SController.sharedPrefsGetJSONObject(FRAME_PREFIX + iter);
@@ -284,7 +286,7 @@ public class BraveHeartMidgetService extends IntentService {
 
 					JSONObject cameraMsg = new JSONObject();
 					cameraMsg.put(KEY_ACTION, ACTION_SEND_PICTURE);
-					sendMessageToCameras(cameraMsg.toString(), left, right, true);
+					sendMessageToCameras(cameraMsg.toString(), left, right, isCalibration);
 				}
 			}
 		} catch (JSONException e) {

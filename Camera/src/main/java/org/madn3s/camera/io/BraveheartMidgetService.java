@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import org.madn3s.camera.Consts;
 import org.madn3s.camera.MADN3SCamera;
 import org.madn3s.camera.MainActivity;
+import org.madn3s.camera.MidgetOfSeville;
 import org.madn3s.camera.R;
 import org.opencv.core.Mat;
 
@@ -144,7 +145,7 @@ public class BraveheartMidgetService extends IntentService {
 						side = msg.getString(KEY_SIDE);
 					}
 					if(msg.has(KEY_PROJECT_NAME)){
-						projectName = msg.getString(KEY_PROJECT_NAME);
+                        MADN3SCamera.sharedPrefsPutString(KEY_PROJECT_NAME, msg.getString(KEY_PROJECT_NAME));
 					}
 					if(config == null){//kind of cheating...
 						config = msg;
@@ -164,9 +165,9 @@ public class BraveheartMidgetService extends IntentService {
 					} else if(action.equalsIgnoreCase(ACTION_END_PROJECT)){
 						Log.d(tag, "ACTION_END_PROJECT");
 						if(msg.has(Consts.KEY_CLEAN) && msg.getBoolean(Consts.VALUE_CLEAN)){
-							cleanTakenPictures(projectName);
+							cleanTakenPictures();
 						}
-						projectName = null;
+                        MADN3SCamera.sharedPrefsPutString(KEY_PROJECT_NAME, null);
 					} else if(action.equalsIgnoreCase(Consts.ACTION_CALIBRATE)){
 						Log.d(tag, "ACTION_CALIBRATE");
 						calibrate();
@@ -232,8 +233,8 @@ public class BraveheartMidgetService extends IntentService {
 
 	private void calibrate() throws JSONException {
         mActivity.setCaptureMode(true);
-        Toast.makeText(getBaseContext(), "You may start the calibration process now"
-                , Toast.LENGTH_LONG).show();
+        Log.i(tag, "Me dijeron que calibrase");
+        playSound("Calibrate Please", "Me dijeron que calibrase");
 	}
 
 	private void sendCalibrationResult(String calibrationStr) throws JSONException {
@@ -258,17 +259,49 @@ public class BraveheartMidgetService extends IntentService {
 		}
 	}
 
-    private void applyCalibration(String calibrationStr) throws JSONException {
-        Log.d(tag, "applyCalibration. calibrationStr: " + calibrationStr);
-        MADN3SCamera.saveJsonToExternal(calibrationStr, "calibration-result");
-        JSONObject calibPayload = new JSONObject(calibrationStr);
-        String cameraMatrixStr = calibPayload.getJSONObject(side).getString(Consts.KEY_CALIB_CAMERA_MATRIX);
-        String distCoeffsStr = calibPayload.getJSONObject(side).getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS);
-        Log.d(tag, "Obteniendo calib_camera_matrix:" + cameraMatrixStr);
+    private void applyCalibration(String calibrationStr){
+        boolean error = false;
+        try {
+            Log.d(tag, "applyCalibration. calibrationStr: " + calibrationStr);
+            MADN3SCamera.saveJsonToExternal(calibrationStr, "calibration-result");
+            JSONObject calibPayload = new JSONObject(calibrationStr);
 
-        Mat cameraMatrix = MADN3SCamera.getMatFromString(cameraMatrixStr);
-        Mat distCoeffs = MADN3SCamera.getMatFromString(distCoeffsStr);
-        mActivity.setCalibrationValues(cameraMatrix, distCoeffs);
+            // Parsear Maps
+            String map1Str = calibPayload.getJSONObject(side).getString(Consts.KEY_CALIB_MAP_1);
+            String map2Str = calibPayload.getJSONObject(side).getString(Consts.KEY_CALIB_MAP_2);
+            Mat map1 = MADN3SCamera.getMatFromString(map1Str);
+            Mat map2 = MADN3SCamera.getMatFromString(map2Str);
+
+            MidgetOfSeville figaro = MidgetOfSeville.getInstance();
+            figaro.setMap1(map1);
+            figaro.setMap2(map2);
+
+            // Setear Camera Matrix y DistCoeffs en MidgetOfSeville
+            String cameraMatrixStr = calibPayload.getJSONObject(side).getString(Consts.KEY_CALIB_CAMERA_MATRIX);
+            String distCoeffsStr = calibPayload.getJSONObject(side).getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS);
+            Mat cameraMatrix = MADN3SCamera.getMatFromString(cameraMatrixStr);
+            Mat distCoeffs = MADN3SCamera.getMatFromString(distCoeffsStr);
+            Log.d(tag, "Obteniendo calib_camera_matrix:" + cameraMatrixStr);
+
+            // Reemplazado por setCaptureMode
+            //        mActivity.setCalibrationValues(cameraMatrix, distCoeffs);
+            mActivity.setCaptureMode(false);
+            // Puesto para que el socket de BT vuelva a escuchar
+            MADN3SCamera.isPictureTaken.set(true);
+
+        } catch (NumberFormatException e) {
+            error = true;
+            Log.e(tag, "Error parsing Mat from String");
+            e.printStackTrace();
+        } catch (JSONException e) {
+            error = true;
+            Log.e(tag, "Error parsing JSON Object from String");
+            e.printStackTrace();
+        } finally {
+            if(error){
+                //TODO notificar al controller que la está cagando loco!
+            }
+        }
     }
 
 	private void sendResult() {
@@ -284,9 +317,9 @@ public class BraveheartMidgetService extends IntentService {
 
 	/**
 	 * Deletes all <code>projectName</code> files and it's folder
-	 * @param projectName - The project's name
 	 */
-	private void cleanTakenPictures(String projectName) {
+	private void cleanTakenPictures() {
+        String projectName = MADN3SCamera.sharedPrefsGetString(KEY_PROJECT_NAME);
 		Log.d(tag, "Cleaning project " + projectName);
 		File projectMediaStorageDir = new File(MADN3SCamera.getAppDirectory(), projectName);
 		if (projectMediaStorageDir.exists()){

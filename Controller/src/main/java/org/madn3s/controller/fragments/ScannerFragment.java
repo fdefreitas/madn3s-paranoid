@@ -359,6 +359,7 @@ public class ScannerFragment extends BaseFragment {
         	MADN3SController.removeKeyFromSharedPreferences(KEY_CALIBRATION);
         	JSONObject json = new JSONObject();
 			json.put(KEY_ACTION, ACTION_CALIBRATE);
+            json.put(KEY_PROJECT_NAME, MADN3SController.sharedPrefsGetString(KEY_PROJECT_NAME));
 			Log.d(tag, "calibrate. sending signal");
 	        bridge.callback(json.toString());
 		} catch (JSONException e) {
