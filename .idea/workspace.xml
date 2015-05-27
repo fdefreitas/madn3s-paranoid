@@ -23,17 +23,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="01d3b7cb-771b-4106-8f1c-961fc16fc58e" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/Midgeteer.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/io/BraveHeartMidgetService.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/io/BraveHeartMidgetService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/io/BraveheartMidgetService.java" afterPath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/io/BraveheartMidgetService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/CameraPreview.java" afterPath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/CameraPreview.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/Consts.java" afterPath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/Consts.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/io/HiddenMidgetWriter.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/io/HiddenMidgetWriter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MADN3SCamera.java" afterPath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MADN3SCamera.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MainActivity.java" afterPath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MidgetOfSeville.java" afterPath="$PROJECT_DIR$/Camera/src/main/java/org/madn3s/camera/MidgetOfSeville.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/ScannerFragment.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/ScannerFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Camera/src/main/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/Camera/src/main/res/layout/activity_main.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="MADN3SCamera.iws" />
@@ -2681,6 +2670,11 @@
       <created>1425790687771</created>
       <updated>1425790687771</updated>
     </task>
+    <task id="LOCAL-00001" summary="Resuelto bug de Calibration">
+      <created>1432766040844</created>
+      <updated>1432766040844</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2760,9 +2754,13 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
+    <MESSAGE value="Resuelto bug de Calibration" />
+    <option name="LAST_COMMIT_MESSAGE" value="Resuelto bug de Calibration" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
