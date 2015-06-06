@@ -17,9 +17,11 @@
 
     <RelativeLayout
         android:id="@+id/working_layout"
+        android:background="@color/steady_grey"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_margin="48dp"
         android:padding="16dp">
 
         <ProgressBar
@@ -38,7 +40,7 @@
           android:layout_below="@+id/working_progressBar"
           android:layout_centerHorizontal="true"
           android:text="@string/working_message"
-          android:textColor="@color/BC"
+          android:textColor="@color/route_66"
           />
 
     </RelativeLayout>

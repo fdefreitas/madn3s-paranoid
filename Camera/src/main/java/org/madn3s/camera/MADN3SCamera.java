@@ -52,10 +52,7 @@ public class MADN3SCamera extends Application {
 	public static final String defaultJSONArrayString = "[]";
 
     public static String position;
-    public static int iteration;
     private static File appDirectory;
-
-    public static CameraPreview mPreview;
 
     public static AtomicBoolean isPictureTaken;
     public static AtomicBoolean isRunning;
@@ -63,8 +60,6 @@ public class MADN3SCamera extends Application {
     private Handler mBluetoothHandler;
     private Handler.Callback mBluetoothHandlerCallback = null;
 	private static Camera mCamera;
-    public static boolean hasInvokedCalibration = false;
-    public static boolean hasReceivedCalibration = false;
 
     public static SharedPreferences sharedPreferences;
 	public static Editor sharedPreferencesEditor;
@@ -151,7 +146,7 @@ public class MADN3SCamera extends Application {
 
     @SuppressLint("SimpleDateFormat")
 	public static File getOutputMediaFile(int type){
-    	return getOutputMediaFile(type, sharedPrefsGetString(KEY_PROJECT_NAME), position, iteration);
+    	return getOutputMediaFile(type, sharedPrefsGetString(KEY_PROJECT_NAME), position, sharedPrefsGetInt(KEY_ITERATION));
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -220,7 +215,7 @@ public class MADN3SCamera extends Application {
     }
 
     public static String saveBitmapAsJpeg(Bitmap bitmap, String position){
-    	return saveBitmapAsJpeg(bitmap, position, iteration);
+    	return saveBitmapAsJpeg(bitmap, position, sharedPrefsGetInt(KEY_ITERATION));
     }
 
     public static String saveBitmapAsJpeg(Bitmap bitmap, String position, int iteration){

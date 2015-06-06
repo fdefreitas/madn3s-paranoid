@@ -136,7 +136,7 @@ public class BraveheartMidgetService extends IntentService {
 					, Consts.EMPTY_JSON_OBJECT_STRING);
 				msg = new JSONObject(jsonString);
 				if(msg.has(KEY_ITERATION)){
-					MADN3SCamera.iteration = msg.getInt(KEY_ITERATION);
+                    MADN3SCamera.sharedPrefsPutInt(KEY_ITERATION, msg.getInt(KEY_ITERATION));
 				}
 				if(msg.has(KEY_ACTION)){
 					String action = msg.getString(KEY_ACTION);

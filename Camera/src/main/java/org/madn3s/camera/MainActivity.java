@@ -97,7 +97,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
         isCalibrating = new AtomicBoolean(true);
         isManual = new AtomicBoolean(true);
 
-        setDiscoverableBt();
+//        setDiscoverableBt();
         setUpBridges();
         loadConfigData();
 
@@ -337,7 +337,6 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         Mat resultMat;
-        JSONObject result;
 
         synchronized (this){
             if (isCapturing.get()) {
@@ -346,9 +345,13 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                 } else {
                     setCaptureMode(false, false);
                     resultMat = undistortionRender.render(inputFrame);
-                    result = new JSONObject();
-                    Mat undistortionResult = resultMat.clone();
-                    processFrameCallback(undistortionResult, result);
+                    final Mat undistortionResult = resultMat.clone();
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            processFrameCallback(undistortionResult);
+                        }
+                    });
                 }
             } else {
                 if(isManual.get()){
@@ -362,14 +365,17 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
         }
     }
 
-    private void processFrameCallback(final Mat resultMat, final JSONObject result) {
+    private void processFrameCallback(final Mat resultMat) {
         new AsyncTask<Void, Void, JSONObject>() {
+
+            JSONObject result;
 
             @Override
             protected void onPreExecute() {
-//                setWorking();
-//                resetChron();
-//                startChron();
+                result = new JSONObject();
+                setWorking();
+                resetChron();
+                startChron();
             }
 
             @Override
@@ -386,14 +392,10 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                         result.put(KEY_MD5, resultJson.get(KEY_MD5));
                         result.put(Consts.KEY_ERROR, false);
                         result.put(Consts.KEY_POINTS, pointsJson);
-                        //TODO prueba de borrar filepath de JSON que se envia a camara
-//                        result.put(KEY_FILE_PATH, resultJson.getString(KEY_FILE_PATH));
                         MADN3SCamera.sharedPrefsPutString(KEY_FILE_PATH, resultJson.getString(KEY_FILE_PATH));
-//                        Log.d(tag, "pointsJson: " + pointsJson.toString(1));
                     } else {
                         result.put(Consts.KEY_ERROR, true);
                     }
-//                    Log.d(tag, "mPictureCallback. result: " + result.toString(1));
                 } catch (JSONException e) {
                     Log.e(tag, "Couldn't execute MidgetOfSeville.shapeUp to Camera Frame");
                     e.printStackTrace();
@@ -405,18 +407,22 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
             @Override
             protected void onPostExecute(JSONObject resultJson) {
                 try {
-//                    stopChron();
-//                    showElapsedTime("Processing Image");
+                    int iteration = MADN3SCamera.sharedPrefsGetInt(KEY_ITERATION);
                     if (!resultJson.getBoolean(KEY_ERROR)) {
-                        Intent williamWallaceIntent = new Intent(mContext, BraveheartMidgetService.class);
-                        williamWallaceIntent.putExtra(Consts.EXTRA_RESULT, resultJson.toString());
-                        startService(williamWallaceIntent);
+                        MADN3SCamera.saveJsonToExternal(resultJson.toString(), "iteration-" + iteration);
+                        MADN3SCamera.sharedPrefsPutInt(KEY_ITERATION, iteration + 1);
+                    } else {
+                        Toast.makeText(mActivity, "Error procesando foto, intenta de nuevo",
+                                Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(tag, "Failure on shapeUp in doInBackground. resultJson null.");
                 } finally {
-//                    unsetWorking();
+                    unsetWorking();
+                    stopChron();
+                    showElapsedTime("Processing Image");
+                    takePictureImageView.setEnabled(true);
                 }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -450,17 +456,6 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
 
         isCalibrating.set(calibrate);
         isCapturing.set(capture);
-
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                if (calibrate) {
-                    takePictureImageView.setEnabled(true);
-                } else {
-                    takePictureImageView.setEnabled(false);
-                }
-            }
-        });
     }
 
     /* Metodos de OnTouchListener */
@@ -627,6 +622,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     }
 
     private void onButtonClick() {
+        setCaptureMode(false, true);
 
     }
 
