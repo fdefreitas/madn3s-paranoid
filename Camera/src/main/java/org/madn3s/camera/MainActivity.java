@@ -8,12 +8,12 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.hardware.Camera;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
@@ -22,8 +22,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -43,17 +43,22 @@ import org.opencv.core.Mat;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.madn3s.camera.Consts.*;
+import static org.madn3s.camera.Consts.KEY_ERROR;
+import static org.madn3s.camera.Consts.KEY_FILE_PATH;
+import static org.madn3s.camera.Consts.KEY_ITERATION;
+import static org.madn3s.camera.Consts.KEY_MD5;
+import static org.madn3s.camera.Consts.KEY_POINTS;
+import static org.madn3s.camera.Consts.KEY_PROJECT_NAME;
+import static org.madn3s.camera.Consts.KEY_SIDE;
 
-public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCameraViewListener2,
+public class MainActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2,
         View.OnTouchListener {
 
     private CameraBridgeViewBase mOpenCvCameraView;
 
-	private static final String tag = MainActivity.class.getSimpleName();
-    private Camera mCamera;
-    private CameraPreview mPreview;
-    private FrameLayout cameraPreviewFrameLayout;
+    private static final String tag = MainActivity.class.getSimpleName();
+    private Button calibrateButton;
+    private Button resetIterButton;
     private Context mContext;
     private TextView configTextView;
     private RelativeLayout workingLayout;
@@ -64,145 +69,107 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
 
     public static AtomicBoolean isCapturing;
     public static AtomicBoolean isCalibrating;
+    public static AtomicBoolean isManual;
 
     private CameraCalibrator mCalibrator;
-    private OnCameraFrameRender mOnCameraFrameRender;
+    private OnCameraFrameRender previewRender;
+    private OnCameraFrameRender calibrationRender;
+    private OnCameraFrameRender undistortionRender;
     private int mWidth;
     private int mHeight;
 
-    public JSONObject config, result;
+    public JSONObject config;
 
     private BaseLoaderCallback mLoaderCallback;
     private ProgressDialog calibrationProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		mActivity = this;
-		mContext = this;
-		BraveheartMidgetService.mActivity = this;
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        mActivity = this;
+        mContext = this;
+        BraveheartMidgetService.mActivity = this;
         figaro = MidgetOfSeville.getInstance();
-        isCapturing = new AtomicBoolean(false);
-        isCalibrating = new AtomicBoolean(false);
 
-		setDiscoverableBt();
-		setUpBridges();
+        //Ambos en true para arrancar listo para calibrar
+        isCapturing = new AtomicBoolean(true);
+        isCalibrating = new AtomicBoolean(true);
+        isManual = new AtomicBoolean(true);
 
-		Intent williamWallaceIntent = new Intent(this, BraveheartMidgetService.class);
-		startService(williamWallaceIntent);
+        setDiscoverableBt();
+        setUpBridges();
+        loadConfigData();
 
-		workingLayout = (RelativeLayout) findViewById(R.id.working_layout);
-		workingLayout.setVisibility(View.GONE);
-		configTextView = (TextView) findViewById(R.id.configs_text_view);
+        Intent williamWallaceIntent = new Intent(this, BraveheartMidgetService.class);
+        startService(williamWallaceIntent);
 
-		elapsedChronometer = (Chronometer) findViewById(R.id.elapsed_chronometer);
-		resetChron();
+        workingLayout = (RelativeLayout) findViewById(R.id.working_layout);
+        workingLayout.setVisibility(View.GONE);
+        configTextView = (TextView) findViewById(R.id.configs_text_view);
 
-		takePictureImageView = (ImageView) findViewById(R.id.take_picture_imageView);
-		takePictureImageView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
+        elapsedChronometer = (Chronometer) findViewById(R.id.elapsed_chronometer);
+        resetChron();
+
+        takePictureImageView = (ImageView) findViewById(R.id.take_picture_imageView);
+        takePictureImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 onButtonClick();
-			}
-		});
+            }
+        });
+
+        calibrateButton = (Button) findViewById(R.id.calib_button);
+        calibrateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCalibrateButtonClick();
+            }
+        });
+
+        resetIterButton = (Button) findViewById(R.id.reset_button);
+        resetIterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetIterations();
+            }
+        });
 
         mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.camera_calibration_java_surface_view);
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
 
-		MADN3SCamera.isPictureTaken = new AtomicBoolean(true);
-		MADN3SCamera.isRunning = new AtomicBoolean(true);
+        MADN3SCamera.isPictureTaken = new AtomicBoolean(true);
+        MADN3SCamera.isRunning = new AtomicBoolean(true);
     }
 
     @Override
-    public void onResume(){
-    	Log.d(tag, "onResume");
+    public void onResume() {
+        Log.d(tag, "onResume");
         super.onResume();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        if(!MADN3SCamera.isOpenCvLoaded) {
-        	OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_5, this, mLoaderCallback);
-        }
-
-        if(MADN3SCamera.hasReceivedCalibration) {
-        	try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-        	startCamera();
-        	MADN3SCamera.hasReceivedCalibration = false;
-        }
-    }
-
-    @Override
-    protected void onPause() {
-    	Log.d(tag, "onPause");
-    	if(MADN3SCamera.hasInvokedCalibration) {
-//    		releaseCamera();
-    		MADN3SCamera.hasInvokedCalibration = false;
-        }
-        super.onPause();
-    }
-
-    /**
-     * Sets up {@link Camera} instance and the {@link CameraPreview} associated with it
-     */
-    protected void startCamera() {
-    	Log.d(tag, "startCamera");
-		mCamera = MADN3SCamera.getCameraInstance();
-		mPreview = new CameraPreview(this, mCamera);
-        startCameraPreview();
-	}
-
-    protected void startCameraPreview(){
-    	if(mCamera != null){
-            cameraPreviewFrameLayout.removeAllViews();
-            cameraPreviewFrameLayout.addView(mPreview);
-        	mCamera.startPreview();
-        }else {
-        	Toast.makeText(this,  "Couldn't start Camera Preview", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * Releases {@link Camera} instance
-     */
-    protected void releaseCamera(){
-    	Log.d(tag, "releaseCamera");
-    	mPreview.getHolder().removeCallback(mPreview);
-    	mCamera = MADN3SCamera.getCameraInstance();
-    	mCamera.setPreviewCallback(null);
-        stopCameraPreview();
-        mCamera.release();
-        mCamera = null;
-    }
-
-    protected void stopCameraPreview(){
-    	if (mCamera != null){
-        	mCamera.stopPreview();
-        } else {
-        	Toast.makeText(this,  "Couldn't stop Camera Preview", Toast.LENGTH_SHORT).show();
+        if (!MADN3SCamera.isOpenCvLoaded) {
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_5, this, mLoaderCallback);
         }
     }
 
     public void showElapsedTime(String msg) {
         long elapsedMillis = SystemClock.elapsedRealtime() - elapsedChronometer.getBase();
-        Toast.makeText(this, (msg == null? "" : msg) + " : " + elapsedMillis,
+        Toast.makeText(this, (msg == null ? "" : msg) + " : " + elapsedMillis,
                 Toast.LENGTH_SHORT).show();
     }
 
-    public void startChron(){
-    	elapsedChronometer.start();
+    public void startChron() {
+        elapsedChronometer.start();
     }
 
-    public void stopChron(){
-    	elapsedChronometer.stop();
+    public void stopChron() {
+        elapsedChronometer.stop();
     }
 
-    public void resetChron(){
-    	elapsedChronometer.setBase(SystemClock.elapsedRealtime());
-    	showElapsedTime("resetChron");
+    public void resetChron() {
+        elapsedChronometer.setBase(SystemClock.elapsedRealtime());
+        showElapsedTime("resetChron");
     }
 
     @Override
@@ -220,9 +187,7 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
 
                 break;
             case R.id.action_toggle_mode:
-                //instanciar new renderer
-                isCapturing.set(!isCapturing.get());
-
+                setCaptureMode(isCalibrating.get(), !isCapturing.get());
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -247,12 +212,12 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
                 Log.d(tag, "switch a calibrate");
                 final Resources res = getResources();
                 if (mCalibrator.getCornersBufferSize() < 2) {
-                    (Toast.makeText(this, res.getString(R.string.more_samples), Toast.LENGTH_SHORT)).show();
                     return true;
                 }
                 Log.d(tag, "vale a calibrate");
 
-                mOnCameraFrameRender = new OnCameraFrameRender(new PreviewFrameRender(mCalibrator.mWidth, mCalibrator.mHeight));
+                mOnCameraFrameRender = new OnCameraFrameRender(
+                    new PreviewFrameRender(mCalibrator.mWidth, mCalibrator.mHeight));
 
                 return true;
 
@@ -262,7 +227,7 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
     }*/
 
     @Override
-    public boolean onPrepareOptionsMenu (Menu menu) {
+    public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 //        menu.findItem(R.id.preview_mode).setEnabled(true);
 //        if (!mCalibrator.isCalibrated())
@@ -273,84 +238,86 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
     /**
      * Relaunch activity with request to set Device discoverable over Bluetooth
      */
-	private void setDiscoverableBt() {
-		Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-		discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, MADN3SCamera.DISCOVERABLE_TIME);
-		startActivity(discoverableIntent);
-	}
+    private void setDiscoverableBt() {
+        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION
+                , MADN3SCamera.DISCOVERABLE_TIME);
+        startActivity(discoverableIntent);
+    }
 
     /**
-	 * Sets up OpenCV Init Callback <code>UniversalComms</code> Bridges and Camera Callbacks
-	 */
+     * Sets up OpenCV Init Callback <code>UniversalComms</code> Bridges and Camera Callbacks
+     */
     private void setUpBridges() {
-    	mLoaderCallback = new BaseLoaderCallback(this) {
+        mLoaderCallback = new BaseLoaderCallback(this) {
             @Override
             public void onManagerConnected(int status) {
                 switch (status) {
-                    case LoaderCallbackInterface.SUCCESS:
-                    {
+                    case LoaderCallbackInterface.SUCCESS: {
                         Log.i(tag, "OpenCV loaded successfully");
                         MADN3SCamera.isOpenCvLoaded = true;
                         mOpenCvCameraView.enableView();
                         mOpenCvCameraView.setOnTouchListener(MainActivity.this);
-                    } break;
-                    default:
-                    {
+                    }
+                    break;
+                    default: {
                         super.onManagerConnected(status);
-                    } break;
+                    }
+                    break;
                 }
             }
         };
 
         //Received Message Callback
-    	HiddenMidgetReader.bridge = new UniversalComms() {
-			@Override
-			public void callback(Object msg) {
-				final String msgFinal = (String) msg;
-				mActivity.getWindow().getDecorView().post(
-					new Runnable() {
-						public void run() {
-							configTextView.setText(msgFinal);
-						}
-					});
-				Intent williamWallaceIntent = new Intent(getBaseContext(), BraveheartMidgetService.class);
-				williamWallaceIntent.putExtra(Consts.EXTRA_CALLBACK_MSG, (String) msg);
-				startService(williamWallaceIntent);
-			}
-		};
+        HiddenMidgetReader.bridge = new UniversalComms() {
+            @Override
+            public void callback(Object msg) {
+                final String msgFinal = (String) msg;
+                mActivity.getWindow().getDecorView().post(
+                        new Runnable() {
+                            public void run() {
+                                configTextView.setText(msgFinal);
+                            }
+                        });
+                Intent williamWallaceIntent = new Intent(getBaseContext()
+                        , BraveheartMidgetService.class);
+                williamWallaceIntent.putExtra(Consts.EXTRA_CALLBACK_MSG, (String) msg);
+                startService(williamWallaceIntent);
+            }
+        };
 
         /**
          * Punto de entrada desde el Service
          */
-		BraveheartMidgetService.cameraCallback = new UniversalComms() {
-			@Override
-			public void callback(Object msg) {
-                isCapturing.set(true);
-				config = (JSONObject) msg;
-				Log.d(tag, "takePhoto. config == null? " + (config == null));
-			}
-		};
-	}
+        BraveheartMidgetService.cameraCallback = new UniversalComms() {
+            @Override
+            public void callback(Object msg) {
+                setCaptureMode(false, true);
+                config = (JSONObject) msg;
+                Log.d(tag, "takePhoto. config == null? " + (config == null));
+            }
+        };
+    }
 
-	/**
-	 * Updates layout to reflect the application is working on processing the picture
-	 */
-	private void setWorking(){
-		takePictureImageView.setClickable(false);
-		takePictureImageView.setEnabled(false);
-		workingLayout.setVisibility(View.VISIBLE);
-	}
+    /**
+     * Updates layout to reflect the application is working on processing the picture
+     */
+    private void setWorking() {
+        takePictureImageView.setClickable(false);
+        takePictureImageView.setEnabled(false);
+        workingLayout.setVisibility(View.VISIBLE);
+    }
 
-	/**
-	 * Updates layout to reflect the application is done working on processing the picture
-	 */
-	private void unsetWorking(){
-		takePictureImageView.setClickable(true);
-		takePictureImageView.setEnabled(true);
-		workingLayout.setVisibility(View.GONE);
-	}
+    /**
+     * Updates layout to reflect the application is done working on processing the picture
+     */
+    private void unsetWorking() {
+        takePictureImageView.setClickable(true);
+        takePictureImageView.setEnabled(true);
+        workingLayout.setVisibility(View.GONE);
+    }
 
-    private void playSound(String title, String msg){
+    private void playSound(String title, String msg) {
         Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         Notification mNotification = new Notification.Builder(this)
@@ -369,20 +336,30 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
     //Metodos de CvCameraViewListener2
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
-        Mat resultMat = mOnCameraFrameRender.render(inputFrame);
-        JSONObject result = new JSONObject();
-        Log.d(tag, "width: " + resultMat.cols() + " height: " + resultMat.rows());
-        if(isCapturing.get()){
-            if(isCalibrating.get()){
-                isCalibrating.set(false);
-                setCaptureMode(false);
-            } else {
-                isCapturing.set(false);
-                processFrameCallback(resultMat, result);
-            }
-        }
+        Mat resultMat;
+        JSONObject result;
 
-        return resultMat;
+        synchronized (this){
+            if (isCapturing.get()) {
+                if (isCalibrating.get()) {
+                    resultMat = calibrationRender.render(inputFrame);
+                } else {
+                    setCaptureMode(false, false);
+                    resultMat = undistortionRender.render(inputFrame);
+                    result = new JSONObject();
+                    Mat undistortionResult = resultMat.clone();
+                    processFrameCallback(undistortionResult, result);
+                }
+            } else {
+                if(isManual.get()){
+                    resultMat = undistortionRender.render(inputFrame);
+                } else {
+                    resultMat = previewRender.render(inputFrame);
+                }
+            }
+
+            return resultMat;
+        }
     }
 
     private void processFrameCallback(final Mat resultMat, final JSONObject result) {
@@ -398,24 +375,25 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
             @Override
             protected JSONObject doInBackground(Void... params) {
                 try {
-                    JSONObject resultJsonObject = figaro.shapeUp(resultMat, config);
-                    JSONArray pointsJson = resultJsonObject.getJSONArray(KEY_POINTS);
+                    JSONArray pointsJson = null;
+                    JSONObject resultJson = figaro.shapeUp(resultMat, config);
 
-                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.app_name)
-                            , MODE_PRIVATE);
-                    SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                    sharedPreferencesEditor.putString(KEY_FILE_PATH, resultJsonObject.getString(KEY_FILE_PATH));
-                    sharedPreferencesEditor.apply();
+                    if (resultJson != null && resultJson.has(KEY_POINTS)) {
+                        pointsJson = resultJson.getJSONArray(KEY_POINTS);
+                    }
 
-                    if(pointsJson != null && pointsJson.length() > 0){
-                        result.put(KEY_MD5, resultJsonObject.get(KEY_MD5));
+                    if (pointsJson != null && pointsJson.length() > 0) {
+                        result.put(KEY_MD5, resultJson.get(KEY_MD5));
                         result.put(Consts.KEY_ERROR, false);
                         result.put(Consts.KEY_POINTS, pointsJson);
-                        Log.d(tag, "pointsJson: " + pointsJson.toString(1));
+                        //TODO prueba de borrar filepath de JSON que se envia a camara
+//                        result.put(KEY_FILE_PATH, resultJson.getString(KEY_FILE_PATH));
+                        MADN3SCamera.sharedPrefsPutString(KEY_FILE_PATH, resultJson.getString(KEY_FILE_PATH));
+//                        Log.d(tag, "pointsJson: " + pointsJson.toString(1));
                     } else {
                         result.put(Consts.KEY_ERROR, true);
                     }
-                    Log.d(tag, "mPictureCallback. result: " + result.toString(1));
+//                    Log.d(tag, "mPictureCallback. result: " + result.toString(1));
                 } catch (JSONException e) {
                     Log.e(tag, "Couldn't execute MidgetOfSeville.shapeUp to Camera Frame");
                     e.printStackTrace();
@@ -425,16 +403,21 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
             }
 
             @Override
-            protected void onPostExecute(JSONObject jsonObject) {
-//                stopChron();
-//                showElapsedTime("Processing Image");
-
-                if(result != null){
-                    Intent williamWallaceIntent = new Intent(mContext, BraveheartMidgetService.class);
-                    williamWallaceIntent.putExtra(Consts.EXTRA_RESULT, result.toString());
-                    startService(williamWallaceIntent);
+            protected void onPostExecute(JSONObject resultJson) {
+                try {
+//                    stopChron();
+//                    showElapsedTime("Processing Image");
+                    if (!resultJson.getBoolean(KEY_ERROR)) {
+                        Intent williamWallaceIntent = new Intent(mContext, BraveheartMidgetService.class);
+                        williamWallaceIntent.putExtra(Consts.EXTRA_RESULT, resultJson.toString());
+                        startService(williamWallaceIntent);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(tag, "Failure on shapeUp in doInBackground. resultJson null.");
+                } finally {
+//                    unsetWorking();
                 }
-//                unsetWorking();
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -454,41 +437,54 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
             if (CalibrationResult.tryLoad(this, mCalibrator.getCameraMatrix(),
                     mCalibrator.getDistortionCoefficients())) {
                 mCalibrator.setCalibrated();
+                setCaptureMode(false, true);
             }
 
-            mOnCameraFrameRender = new OnCameraFrameRender(new CalibrationFrameRender(mCalibrator));
+            previewRender = new OnCameraFrameRender(new PreviewFrameRender(mCalibrator.mWidth, mCalibrator.mHeight));
+            calibrationRender = new OnCameraFrameRender(new CalibrationFrameRender(mCalibrator));
+            undistortionRender = new OnCameraFrameRender(new UndistortionFrameRender(mCalibrator));
         }
     }
 
-    public void setCaptureMode(boolean calibrate){
-        if(calibrate) {
-            isCalibrating.set(true);
-            mOnCameraFrameRender = new OnCameraFrameRender(new CalibrationFrameRender(mCalibrator));
-            takePictureImageView.setEnabled(true);
-        } else {
-            mOnCameraFrameRender = new OnCameraFrameRender(new UndistortionFrameRender(mCalibrator));
-        }
+    public void setCaptureMode(final boolean calibrate, final boolean capture) {
+
+        isCalibrating.set(calibrate);
+        isCapturing.set(capture);
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if (calibrate) {
+                    takePictureImageView.setEnabled(true);
+                } else {
+                    takePictureImageView.setEnabled(false);
+                }
+            }
+        });
     }
 
     /* Metodos de OnTouchListener */
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Log.d(tag, "onTouch invoked");
         mCalibrator.addCorners();
         return false;
     }
 
-//    public void setCalibrationValues(Mat cameraMatrix, Mat distCoeffs){
-//        mCalibrator.setCameraMatrix(cameraMatrix);
-//        mCalibrator.setDistortionCoefficients(distCoeffs);
-//        setCaptureMode(false);
-//    }
+    private void onCalibrateButtonClick(){
+        calibrateCamera();
+    }
 
-    private void onButtonClick() {
-//        dummyCalibration();
-
+    private void calibrateCamera() {
         try {
+
+            // Warning si no hay suficientes puntos
+            if (mCalibrator.getCornersBufferSize() < 2) {
+                Toast.makeText(mActivity, mActivity.getString(R.string.more_samples),
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             new AsyncTask<Void, Void, Bundle>() {
 
                 @Override
@@ -497,22 +493,7 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
                     resetChron();
                     startChron();
 
-                    // Warning si no hay suficientes puntos
-                    if (mCalibrator.getCornersBufferSize() < 2) {
-                        Toast.makeText(mActivity, mActivity.getString(R.string.more_samples),
-                                Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    // Cambiar FrameRender a Preview
-                    mOnCameraFrameRender = new OnCameraFrameRender(
-                            new PreviewFrameRender(mCalibrator.mWidth, mCalibrator.mHeight)
-                    );
-
-                    // TODO mover a setCaptureMode
-                    isCapturing.set(false);
-                    isCalibrating.set(false);
-                    takePictureImageView.setEnabled(false);
+                    setCaptureMode(false, false);
 
                     calibrationProgress = new ProgressDialog(mActivity);
                     calibrationProgress.setTitle(mActivity.getString(R.string.calibrating));
@@ -520,7 +501,6 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
                     calibrationProgress.setCancelable(false);
                     calibrationProgress.setIndeterminate(true);
                     calibrationProgress.show();
-                    playSound("Calibration", "Starting");
 
                 }
 
@@ -538,21 +518,10 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
 
                 @Override
                 protected void onPostExecute(Bundle result) {
-                    playSound("Calibration", "Post Calibration");
-                    try {
-                        Process process = new ProcessBuilder()
-                                .command("logcat", "-c")
-                                .redirectErrorStream(true)
-                                .start();
-                        process.destroy();
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
-
                     calibrationProgress.dismiss();
                     mCalibrator.clearCorners();
                     stopChron();
-                    showElapsedTime("processing image");
+                    showElapsedTime("calibration");
 
                     String resultMessage = (mCalibrator.isCalibrated()) ?
                             mActivity.getString(R.string.calibration_successful)
@@ -560,72 +529,105 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
                             mActivity.getString(R.string.calibration_unsuccessful);
                     (Toast.makeText(MainActivity.this, resultMessage, Toast.LENGTH_LONG)).show();
 
-                    JSONObject resultForIntent = new JSONObject();
                     JSONObject calibPayload = new JSONObject();
 
-                    /* Se guarda el resultado de la calibración en SharedPrefs */
                     if (mCalibrator.isCalibrated()) {
                         CalibrationResult.save(MainActivity.this,
                                 mCalibrator.getCameraMatrix(), mCalibrator.getDistortionCoefficients());
                     }
-                    /* Fin - Se guarda el resultado de la calibración en SharedPrefs */
 
                     try {
                         Log.i(tag, "Result: ");
-                        Log.i(tag, "Calibration Coefficients: " + result.getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS));
-                        Log.i(tag, "Camera Matrix: " + result.getString(Consts.KEY_CALIB_CAMERA_MATRIX));
-                        Log.i(tag, "Image Points: " + result.getString(Consts.KEY_CALIB_IMAGE_POINTS));
+                        Log.i(tag, "Calibration Coefficients: "
+                                + result.getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS));
+                        Log.i(tag, "Camera Matrix: "
+                                + result.getString(Consts.KEY_CALIB_CAMERA_MATRIX));
 
-                        /* Set Calib Payload */
-                        calibPayload.put(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS, result.getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS));
-                        calibPayload.put(Consts.KEY_CALIB_CAMERA_MATRIX, result.getString(Consts.KEY_CALIB_CAMERA_MATRIX));
-                        calibPayload.put(Consts.KEY_CALIB_IMAGE_POINTS, result.getString(Consts.KEY_CALIB_IMAGE_POINTS));
-                        calibPayload.put(Consts.KEY_ACTION, Consts.ACTION_CALIBRATION_RESULT);
-                        /* End - Set Calib Payload */
+                        calibPayload.put(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS,
+                                result.getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS));
+                        calibPayload.put(Consts.KEY_CALIB_CAMERA_MATRIX,
+                                result.getString(Consts.KEY_CALIB_CAMERA_MATRIX));
+                        calibPayload.put(Consts.KEY_CALIB_IMAGE_POINTS,
+                                result.getString(Consts.KEY_CALIB_IMAGE_POINTS));
+                        calibPayload.put(Consts.KEY_ACTION,
+                                Consts.ACTION_CALIBRATION_RESULT);
 
-                        resultForIntent.put(Consts.KEY_ACTION, Consts.ACTION_SEND_CALIBRATION_RESULT);
-                        resultForIntent.put(Consts.KEY_CALIBRATION_RESULT, calibPayload.toString());
-
-                        Intent williamWallaceIntent = new Intent(getBaseContext(), BraveheartMidgetService.class);
-                        williamWallaceIntent.putExtra(Consts.EXTRA_CALLBACK_MSG, resultForIntent.toString());
-                        startService(williamWallaceIntent);
+                        MADN3SCamera.saveJsonToExternal(calibPayload.toString(1), "camera-calibration");
 
                         Log.i(tag, "Result Ok");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-                    playSound("Calibration", "Result Ok");
-
                     unsetWorking();
                 }
 
             }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } catch (Exception e) {
-            playSound("Calibration", "Result Ok");
             Log.e(tag, "Exception instantiating CameraCalibrator. ", e);
         }
     }
 
-    private void dummyCalibration() {
+    private void loadConfigData(){
+        String filename = "config.json";
+        JSONObject configJson;
+
+        MADN3SCamera.sharedPrefsPutString(KEY_PROJECT_NAME, "graduation");
+
         try {
-            JSONObject calibPayloadCalib = new JSONObject("{\"right\":{\"calib_map_2\":\"[-2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15;\\n  -2.8307974e+15, -2.8308148e+15, -2.8308323e+15, -2.8308497e+15]\",\"calib_map_1\":\"[8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14;\\n  8.041172e+14, 8.0412176e+14, 8.0412633e+14, 8.0413096e+14]\",\"calib_camera_matrix\":\"[1.0469388e-38, 0, 0;\\n  5.7453237e-44, 1.4012985e-45, 9.9950187e-12;\\n  2.1826625e-41, 1.4012985e-45, 0]\",\"calib_distortion_coefficients\":\"[0.04181658698748777;\\n  0.5143468128821382;\\n  0;\\n  0;\\n  -4.353305195069944]\"},\"calibration\":true,\"left\":{\"calib_map_2\":\"[2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22;\\n  2.2027946e+22, 2.2027946e+22, 2.2027946e+22, 2.2027946e+22]\",\"calib_map_1\":\"[-4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20;\\n  -4.1828909e+20, -4.1828909e+20, -4.1828909e+20, -4.1828909e+20]\",\"calib_camera_matrix\":\"[48.562515, 2.4662853e-43, 0;\\n  1.4012985e-45, 0, 1.4012985e-45;\\n  6.1657132e-44, 0, 1.4587517e-42]\",\"calib_distortion_coefficients\":\"[0.114933779657224;\\n  -0.1920176879641323;\\n  0;\\n  0;\\n  -1.469845531523524]\"}}");
-
-            String side = "right";
-            String cameraMatrixStr = calibPayloadCalib.getJSONObject(side)
-                    .getString(Consts.KEY_CALIB_CAMERA_MATRIX);
-            String distCoeffsStr = calibPayloadCalib.getJSONObject(side)
-                    .getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS);
-            Log.d(tag, "Obteniendo calib_camera_matrix:" + cameraMatrixStr);
-
-            Mat cameraMatrix = MADN3SCamera.getMatFromString(cameraMatrixStr);
-            Mat distCoeffs = MADN3SCamera.getMatFromString(distCoeffsStr);
-            // Reemplazado por setCaptureMode
-//        mActivity.setCalibrationValues(cameraMatrix, distCoeffs);
-            mActivity.setCaptureMode(false);
-        } catch (Exception e){
+            configJson = MADN3SCamera.getInputJson(filename);
+            if(configJson.has(KEY_SIDE)){
+                MADN3SCamera.sharedPrefsPutString(KEY_SIDE, configJson.getString(KEY_SIDE));
+            }
+        } catch (JSONException e){
+            Log.e(tag, "Error Parsing config JSONObject");
             e.printStackTrace();
         }
+
+        loadCalibration();
+    }
+    /**
+     * Carga datos de calibración estereo de existir el archivo. Ya {@link CalibrationResult} se encarga de
+     * cargar los datos de calibración de la cámara desde SharedPreferences en <code>tryLoad</code>
+     */
+    private void loadCalibration(){
+        try {
+
+            String filename = "calibration-stereo.json";
+            String side = MADN3SCamera.sharedPrefsGetString(KEY_SIDE);
+            JSONObject calibJson = MADN3SCamera.getInputJson(filename);
+
+            // Parsear Maps
+            String map1Str = calibJson.getJSONObject(side).getString(Consts.KEY_CALIB_MAP_1);
+            String map2Str = calibJson.getJSONObject(side).getString(Consts.KEY_CALIB_MAP_2);
+            Mat map1 = MADN3SCamera.getMatFromString(map1Str);
+            Mat map2 = MADN3SCamera.getMatFromString(map2Str);
+
+            MidgetOfSeville figaro = MidgetOfSeville.getInstance();
+            figaro.setMap1(map1);
+            figaro.setMap2(map2);
+
+//            // Setear Camera Matrix y DistCoeffs en MidgetOfSeville
+//            String cameraMatrixStr = calibJson.getJSONObject(side).getString(Consts.KEY_CALIB_CAMERA_MATRIX);
+//            String distCoeffsStr = calibJson.getJSONObject(side).getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS);
+//            Mat cameraMatrix = MADN3SCamera.getMatFromString(cameraMatrixStr);
+//            Mat distCoeffs = MADN3SCamera.getMatFromString(distCoeffsStr);
+//            Log.d(tag, "Obteniendo calib_camera_matrix:" + cameraMatrixStr);
+
+        } catch (JSONException e){
+            Log.e(tag, "Couldn't load calibration JSON");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Returns <code>KEY_ITERATION</code> value on {@link android.content.SharedPreferences } to <code>0</code>
+     */
+    private void resetIterations(){
+        MADN3SCamera.sharedPrefsPutInt(KEY_ITERATION, 0);
+    }
+
+    private void onButtonClick() {
+
     }
 
 }

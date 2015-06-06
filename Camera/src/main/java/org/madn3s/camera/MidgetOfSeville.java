@@ -61,22 +61,26 @@ public class MidgetOfSeville {
 	public JSONObject shapeUp(Mat imgMat, JSONObject config) throws JSONException {
 		Log.d(tag, "shapeUp.");
         String savePath;
+        Log.d(tag, "imgMat size before resize: w:" + (imgMat.cols()) + " h:" + (imgMat.rows()));
         Imgproc.resize(imgMat, imgMat, new Size(486, 648));
+        Log.d(tag, "imgMat size after resize: w:" + (imgMat.cols()) + " h:" + (imgMat.rows()));
+
         int height = imgMat.rows();
         int width = imgMat.cols();
+        Log.d(tag, "width:" + width + " height:" + height);
 
 		Imgproc.cvtColor(imgMat, imgMat, Imgproc.COLOR_RGBA2RGB);
+        Log.d(tag, "imgMat size after cvtColor: w:" + (imgMat.cols()) + " h:" + (imgMat.rows()));
 
-        Log.d(tag, "shapeUp. imgMat type:" + imgMat.type());
-        Log.d(tag, "shapeUp. imgMat channels:" + imgMat.channels());
-
-        Bitmap renderFrameBitmap = Bitmap.createBitmap(imgMat.cols(), imgMat.rows(), Bitmap.Config.RGB_565);
-        Utils.matToBitmap(imgMat, renderFrameBitmap);
+        Bitmap renderFrameBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        Mat renderMat = new Mat();
+        imgMat.copyTo(renderMat);
+        Utils.matToBitmap(renderMat, renderFrameBitmap);
         savePath = MADN3SCamera.saveBitmapAsJpeg(renderFrameBitmap, "rendered-frame");
+        renderMat.release();
+        Log.d(tag, "imgMat size after saveBitmap: w:" + (imgMat.cols()) + " h:" + (imgMat.rows()));
 
 		Mat maskMat = new Mat(height, width, CvType.CV_8UC1, ZERO_SCALAR);
-        Log.d(tag, "shapeUp. maskMat type:" + maskMat.type());
-        Log.d(tag, "shapeUp. maskMat channels:" + maskMat.channels());
 
 	    double x1 = width / 4;
 	    double y1 = 0;
@@ -191,30 +195,33 @@ public class MidgetOfSeville {
 
         try {
 
+            Log.d(tag, "imgMat size before grabcut: w:" + (imgMat.cols()) + " h:" + (imgMat.rows()));
             Log.d(tag, "shapeUp. grabcut. begin");
 
             Imgproc.grabCut(imgMat, maskMat, rect, bgdModel, fgdModel, iterCount, Imgproc.GC_INIT_WITH_RECT);
 
             Log.d(tag, "shapeUp. grabcut. done");
+            Log.d(tag, "imgMat size after grabcut: w:" + (imgMat.cols()) + " h:" + (imgMat.rows()));
 
             Core.compare(maskMat, new Scalar(Imgproc.GC_PR_FGD), maskMat, Core.CMP_EQ);
 
-            Mat tempMask = new Mat();
-            maskMat.copyTo(tempMask);
-
+//            Mat tempMask = new Mat();
+//            maskMat.copyTo(tempMask);
 //            Imgproc.remap(tempMask, maskMat, map1, map2, Imgproc.INTER_CUBIC);
-            Log.d(tag, "tempMask null?: " + (tempMask == null) );
-            Log.d(tag, "maskMat null?: " + (maskMat == null) );
+//            Log.d(tag, "tempMask null?: " + (tempMask == null) );
             Log.d(tag, "map1 null?: " + (map1 == null) );
             Log.d(tag, "map2 null?: " + (map2 == null) );
+
+            Log.d(tag, "maskMat null?: " + (maskMat == null) );
+            Log.d(tag, "maskMat size: w:" + (maskMat.size().width) + " h:" + (maskMat.size().height));
 //            maskMat.copyTo(tempMask);
             //Smooth a maskMat
 //            Imgproc.GaussianBlur(tempMask, maskMat, new Size(3, 3), 0);
 
-            Mat foregroundMat = new Mat(imgMat.size(), CvType.CV_8UC3, new Scalar(255, 255, 255));
+            Mat foregroundMat = new Mat(height, width, CvType.CV_8UC3, new Scalar(255, 255, 255));
             imgMat.copyTo(foregroundMat, maskMat);
 
-            String edgeAlgString = "";
+            String edgeAlgString;
             Mat edgifiedMat = new Mat(height, width, CvType.CV_8UC3, ZERO_SCALAR);
 
             if (edgeDetectionsAlgorithm.equalsIgnoreCase("Canny")) {
@@ -282,7 +289,7 @@ public class MidgetOfSeville {
             byte[] bytes = baos.toByteArray();
 
             bytes = Base64.encode(bytes, Base64.DEFAULT);
-            String md5Hex = new String(MADN3SCamera.getMD5EncryptedString(bytes));
+            String md5Hex = MADN3SCamera.getMD5EncryptedString(bytes);
             Log.d(tag, "shapeUp. MD5 : " + md5Hex);
 
             JSONObject resultJsonObject = new JSONObject();

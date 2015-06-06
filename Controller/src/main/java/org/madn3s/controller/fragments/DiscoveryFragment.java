@@ -136,123 +136,26 @@ public class DiscoveryFragment extends BaseFragment {
 		testsButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new AsyncTask<Void, Void, JSONArray>() {
-
-					@Override
-					protected JSONArray doInBackground(Void... params) {
-
-						int points = MADN3SController.sharedPrefsGetInt(KEY_POINTS);
-						JSONArray framesJson = new JSONArray();
-						for(int i = 0; i < points; i++){
-							JSONObject frame = MADN3SController.sharedPrefsGetJSONObject(FRAME_PREFIX + i);
-							framesJson.put(frame);
-						}
-
-						try {
-							Log.d(tag, "Saving the complete framesJson to External. ");
-							MADN3SController.saveJsonToExternal(framesJson.toString(1), "frames");
-						} catch (JSONException e) {
-							Log.d(tag, "Couldn't save the complete framesJson to External. ", e);
-						}
-
-                        JSONArray pyrlkResultsJsonArr = new JSONArray();
-                        JSONArray result = null;
-                        JSONArray previous = null;
-                        ArrayList<JSONObject> pointsList = new ArrayList<JSONObject>();
-                        JSONObject source;
-                        JSONObject target;
-                        int minLength = 2000;
-
-                        Mat icpMatrix = new Mat(4, 4, CvType.CV_64F);
-
-                        String icpResult = null;
-                        String filepath = MADN3SController.getAppDirectory().getAbsolutePath()
-                                + "/" + MADN3SController.sharedPrefsGetString(KEY_PROJECT_NAME) + "/";
-                        Log.d(tag, "filepath: " + filepath);
-
-						try {
-
-							for(int frameIndex = 0; frameIndex < points; ++frameIndex){
-								result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(frameIndex));
-
-                                if(frameIndex > 0){
-                                    if(result.length() > 0) {
-                                        icpResult = Madn3sNative.doIcp(result.toString(), previous.toString(),
-                                                filepath, frameIndex, true, 40, 0.001, 15, true);
-                                        Log.d(tag, "icpResult:" + icpResult);
-                                        icpMatrix = MADN3SController.getMatFromString(icpResult);
-                                        previous = MADN3SController.applyTransform(icpMatrix, result, pointsList);
-                                    }
-                                } else {
-                                    previous = result;
-                                    JSONObject point;
-                                    /* Agregar los puntos del inicial al acumulado de puntos*/
-                                    for(int i = 0; i<result.length(); ++i){
-                                        point = result.getJSONObject(i);
-                                        pointsList.add(point);
-                                    }
-                                }
-							}
-
-                            JSONArray meshResultJson = new JSONArray();
-                            for(JSONObject point:pointsList){
-                                meshResultJson.put(point);
-                            }
-
-                            Log.e(tag, "meshResult length: " + meshResultJson.length());
-                            Madn3sNative.saveVtp(meshResultJson.toString(), filepath, "final_mesh");
-
-                            MADN3SController.saveJsonToExternal(pyrlkResultsJsonArr.toString(1), "frames-after-pyr");
-
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
-
-						return pyrlkResultsJsonArr;
-					}
-
-				}.execute();
-
-//				Imprime los puntos
-//				try {
-//					JSONObject calibrationJson = MADN3SController.sharedPrefsGetJSONObject(Consts.KEY_CALIBRATION);
-//					JSONObject left = calibrationJson.getJSONObject(Consts.SIDE_LEFT);
-//					JSONObject right = calibrationJson.getJSONObject(Consts.SIDE_RIGHT);
-//
-//
-//					JSONArray leftArr = new JSONArray(left.getString(Consts.KEY_CALIB_IMAGE_POINTS));
-//					left.put(Consts.KEY_CALIB_IMAGE_POINTS, "--Moved for testing--");
-//					Log.d(tag, "calibration. left: " + left.toString(1));
-//					for(int i = 0; i < leftArr.length(); ++i){
-//						Log.d(tag, "[" + i + "]" + leftArr.get(i));
-//					}
-//
-//					JSONArray rightArr = new JSONArray(right.getString(Consts.KEY_CALIB_IMAGE_POINTS));
-//					right.put(Consts.KEY_CALIB_IMAGE_POINTS, "--Moved for testing--");
-//					Log.d(tag, "calibration. right: " + right.toString(1));
-//					for(int i = 0; i < rightArr.length(); ++i){
-//						Log.d(tag, "[" + i + "]" + rightArr.get(i));
-//					}
-//
-//				} catch (JSONException e) {
-//					e.printStackTrace();
-//				}
-//				Fin imprime los puntos
-//
-//				try {
-//					pointsJson.put(KEY_NAME, MADN3SController.sharedPrefsGetString(KEY_PROJECT_NAME));
-//					pointsJson.put(KEY_PICTURES, framesJson);
-//					Log.d(tag, "generateModelButton.OnClick. pointsJson: " + pointsJson.toString(1));
-//					KiwiNative.doProcess(pointsJson.toString());
-//				} catch (JSONException e) {
-//					e.printStackTrace();
-//					Log.e(tag, "generateModelButton.OnClick. Error composing points JSONObject");
-//				}
-			}
+                tests();
+            }
 		});
 	}
 
-	@Override
+    private void tests() {
+        new AsyncTask<Void, Void, JSONArray>() {
+
+            @Override
+            protected JSONArray doInBackground(Void... params) {
+
+                Madn3sNative.doDelaunay("/storage/0/Pictures/MADN3SController/scumbag-robin/final_mesh_ascii.vtp", 1);
+
+                return null;
+            }
+
+        }.execute();
+    }
+
+    @Override
 	public void onDestroy(){
 		super.onDestroy();
 		if(getActivity() != null) {

@@ -1,8 +1,10 @@
 package org.madn3s.camera;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -110,17 +112,75 @@ public class MADN3SCamera extends Application {
         return null;
     }
 
-    public static Uri getOutputMediaFileUri(int type){
-        return Uri.fromFile(getOutputMediaFile(type));
+    public static JSONObject getInputJson(String filename){
+        return getInputJson(sharedPrefsGetString(KEY_PROJECT_NAME), filename);
     }
 
-    public static Uri getOutputMediaFileUri(int type, String projectName, String position){
-        return Uri.fromFile(getOutputMediaFile(type, projectName, position));
+    public static JSONObject getInputJson(String projectName, String filename){
+        String inputString;
+        File inputFile = getInputMediaFile(projectName, filename);
+
+        try{
+            if(inputFile.exists()){
+                BufferedReader inputReader = new BufferedReader(new FileReader(inputFile));
+                inputString = inputReader.readLine();
+                return new JSONObject(inputString);
+            } else {
+                Log.e(TAG, filename + " doesn't exists");
+            }
+        } catch (IOException e){
+            Log.e(TAG, "Error Reading config JSONObject");
+            e.printStackTrace();
+        } catch (JSONException e){
+            Log.e(TAG, "Error Parsing config JSONObject");
+            e.printStackTrace();
+        }
+
+        return new JSONObject();
+    }
+
+    public static File getInputMediaFile(String filename){
+        return getInputMediaFile(sharedPrefsGetString(KEY_PROJECT_NAME), filename);
+    }
+
+    public static File getInputMediaFile(String projectName, String filename){
+        File projectDirectory = new File(getAppDirectory(), projectName);
+        return new File(projectDirectory.getPath(), filename);
+    }
+
+
+    @SuppressLint("SimpleDateFormat")
+	public static File getOutputMediaFile(int type){
+    	return getOutputMediaFile(type, sharedPrefsGetString(KEY_PROJECT_NAME), position, iteration);
     }
 
     @SuppressLint("SimpleDateFormat")
-    public static File getOutputMediaFile(int type, String name){
-        return getOutputMediaFile(type, sharedPrefsGetString(KEY_PROJECT_NAME), name);
+	public static File getOutputMediaFile(int type, String projectName, String position, int iteration){
+        File mediaStorageDir = new File(getAppDirectory(), projectName);
+
+        if (! mediaStorageDir.exists()){
+            if (! mediaStorageDir.mkdirs()){
+                Log.d(TAG, "failed to create directory");
+                return null;
+            }
+        }
+
+        if(position == null){
+        	position = "";
+        }
+
+        String filename;
+        File mediaFile;
+
+        if (type == MEDIA_TYPE_IMAGE){
+            filename = "IMG_" + position + "_" + iteration + Consts.IMAGE_EXT;
+        } else {
+            return null;
+        }
+
+        mediaFile = new File(mediaStorageDir.getPath(), filename);
+
+        return mediaFile;
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -150,44 +210,6 @@ public class MADN3SCamera extends Application {
             filename = name + "_" + timeStamp + Consts.JSON_EXT;
         } else if(type == MEDIA_TYPE_VTU){
             filename = name + "_" + timeStamp + Consts.VTU_EXT;
-        } else {
-            return null;
-        }
-
-        mediaFile = new File(mediaStorageDir.getPath(), filename);
-
-        return mediaFile;
-    }
-
-    public static Uri getOutputMediaFileUri(int type, String projectName, String position, int iteration){
-        return Uri.fromFile(getOutputMediaFile(type, projectName, position, iteration));
-    }
-
-    @SuppressLint("SimpleDateFormat")
-	public static File getOutputMediaFile(int type){
-    	return getOutputMediaFile(type, sharedPrefsGetString(KEY_PROJECT_NAME), position, iteration);
-    }
-
-    @SuppressLint("SimpleDateFormat")
-	public static File getOutputMediaFile(int type, String projectName, String position, int iteration){
-        File mediaStorageDir = new File(getAppDirectory(), projectName);
-
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
-                Log.d(TAG, "failed to create directory");
-                return null;
-            }
-        }
-
-        if(position == null){
-        	position = "";
-        }
-
-        String filename;
-        File mediaFile;
-
-        if (type == MEDIA_TYPE_IMAGE){
-            filename = "IMG_" + position + "_" + iteration + Consts.IMAGE_EXT;
         } else {
             return null;
         }

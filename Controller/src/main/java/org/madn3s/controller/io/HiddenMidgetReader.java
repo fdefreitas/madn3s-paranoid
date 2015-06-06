@@ -147,7 +147,7 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
 							Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length
 									, Consts.bitmapFactoryOptions);
 							message = new String(bytes);
-							String md5Hex = new String(MADN3SController.getMD5EncryptedString(bytes));
+							String md5Hex = MADN3SController.getMD5EncryptedString(bytes);
 							Log.d(tag, "device: " + mSocket.getRemoteDevice().getName()
 									+ " side: " + side
 									+ " iter: " + MADN3SController.sharedPrefsGetInt(Consts.KEY_ITERATION)
@@ -157,22 +157,30 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
 								Log.d(tag, "instanceof String");
 								Log.d(tag, "Received String: " + message);
 
-								if(message != null && !message.isEmpty()){
+								if(!message.isEmpty()){
 									msg = new JSONObject(message);
 									String action = null;
+
+                                    /* Seccion para imprimir */
+                                    JSONObject displayJson = new JSONObject(msg.toString());
+                                    if(displayJson.has(Consts.KEY_POINTS)) {
+                                        displayJson.put(Consts.KEY_POINTS, "Removed for displaying purporses");
+                                    }
+                                    /* Fin Seccion para imprimir*/
+
 									if(msg.has(Consts.KEY_ACTION)){
 										action = msg.getString(Consts.KEY_ACTION);
 										 if(action.equalsIgnoreCase(Consts.ACTION_EXIT_APP)){
 											break;
 										}
 									} else {
-										Log.d(tag, "Message Received with no action: " + msg.toString(1));
+										Log.d(tag, "Message Received with no action: " + displayJson.toString(1));
 									}
 									msg.put(Consts.KEY_CAMERA, mSocket.getRemoteDevice().getName());
 									msg.put(Consts.KEY_SIDE, side);
 									msg.put(Consts.KEY_TIME, System.currentTimeMillis() - start);
 									if(action != null && action.equalsIgnoreCase(Consts.ACTION_CALIBRATION_RESULT)){
-                                        Log.d(tag, "HiddenMidgetReader. ACTION_CALIBRATION_RESULT. " + message);
+                                        Log.d(tag, "HiddenMidgetReader. ACTION_CALIBRATION_RESULT. " + displayJson.toString());
 										calibrationBridge.callback(msg.toString());
 									} else {
 										bridge.callback(msg.toString());
@@ -181,7 +189,7 @@ public class HiddenMidgetReader extends HandlerThread implements Callback {
 									read.set(false);
 								}
 							} else {
-								Log.d(tag, "instancef Bitmap");
+								Log.d(tag, "instanceof Bitmap");
 								msg = new JSONObject();
 								msg.put(Consts.KEY_ERROR, false);
 								msg.put(Consts.KEY_SIDE, side);

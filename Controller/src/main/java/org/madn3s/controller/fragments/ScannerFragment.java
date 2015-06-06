@@ -3,6 +3,7 @@ package org.madn3s.controller.fragments;
 import static org.madn3s.controller.Consts.*;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +19,9 @@ import org.madn3s.controller.io.UniversalComms;
 import org.madn3s.controller.models.ScanStepViewHolder;
 import org.madn3s.controller.models.StatusViewHolder;
 import org.madn3s.controller.viewer.opengl.ModelDisplayActivity;
+import org.madn3s.controller.vtk.Madn3sNative;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -26,6 +30,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -271,63 +276,141 @@ public class ScannerFragment extends BaseFragment {
     }
 
     private void generate() {
-        int points = MADN3SController.sharedPrefsGetInt(KEY_POINTS);
-        JSONArray framesJson = MADN3SController.sharedPrefsGetJSONArray(Consts.KEY_FRAMES);
-        JSONArray framePointsJsonArr = new JSONArray();
-        JSONArray result;
-        try {
-            for(int f = 0; f < points; ++f){
-                result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(f));
-                if(result != null){
-                    int length = framePointsJsonArr.length();
-                    for(int i = 0; i < result.length(); ++i){
-                        framePointsJsonArr.put(i + length, result.get(i));
+        // TODO comentado. codigo viejo
+//        int points = MADN3SController.sharedPrefsGetInt(KEY_POINTS);
+//        JSONArray framesJson = MADN3SController.sharedPrefsGetJSONArray(Consts.KEY_FRAMES);
+//        JSONArray framePointsJsonArr = new JSONArray();
+//        JSONArray result;
+//        try {
+//            for(int f = 0; f < points; ++f){
+//                result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(f));
+//                if(result != null){
+//                    int length = framePointsJsonArr.length();
+//                    for(int i = 0; i < result.length(); ++i){
+//                        framePointsJsonArr.put(i + length, result.get(i));
+//                    }
+//                } else {
+//                    Log.e(tag, "generateModel. onClick. Couldn't calculateOpticalFlow. result null");
+//                }
+//            }
+//
+//        //Traido de ScannerFragment#Test
+//
+//        String pointsJsonPath = MADN3SController.saveJsonToExternal(framePointsJsonArr.toString(1), "3d-points");
+//        result = new JSONArray();
+//        StringBuffer vtkFileBuffer = new StringBuffer();
+//        int vtkFileBufferLines = 0;
+//
+//        points = MADN3SController.sharedPrefsGetInt(KEY_POINTS);
+//        framesJson = new JSONArray();
+//        for(int i = 0; i < points; i++){
+//        JSONObject frame = MADN3SController.sharedPrefsGetJSONObject(FRAME_PREFIX + i);
+//        framesJson.put(frame);
+//        }
+//
+//        try {
+//            Log.d(tag, "Saving the complete framesJson to External. ");
+//            MADN3SController.saveJsonToExternal(framesJson.toString(1), "frames");
+//            } catch (JSONException e) {
+//            Log.d(tag, "Couldn't save the complete framesJson to External. ", e);
+//            }
+//
+//            String[] pyrlksResults = new String[points];
+//
+//            for(int frameIndex = 0; frameIndex < points; ++frameIndex){
+//                result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(frameIndex));
+//                if(result != null){
+//                    pyrlksResults[frameIndex] = result.toString();
+//                } else {
+//                    Log.e(tag, "result null");
+//                }
+//            }
+//
+//            String vtkFilePath = MADN3SController.createVtpFromPoints(vtkFileBuffer.toString(), vtkFileBufferLines, "vtkData");
+//            Log.d(tag, "vtkFilePath: " + vtkFilePath);
+////            Madn3sNative.doIcp(pyrlksResults, MADN3SController.getAppDirectory().getAbsolutePath(), true, 40, 0.001, 15, true);
+//            //                            Madn3sNative.doDelaunay("khgks", 0.6);
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+
+        new AsyncTask<Void, Void, JSONArray>() {
+
+            @Override
+            protected JSONArray doInBackground(Void... params) {
+
+                int points = MADN3SController.sharedPrefsGetInt(KEY_POINTS);
+                JSONArray framesJson = new JSONArray();
+                for(int i = 0; i < points; i++){
+                    JSONObject frame = MADN3SController.sharedPrefsGetJSONObject(FRAME_PREFIX + i);
+                    framesJson.put(frame);
+                }
+
+                try {
+                    Log.d(tag, "Saving the complete framesJson to External. ");
+                    MADN3SController.saveJsonToExternal(framesJson.toString(1), "frames");
+                } catch (JSONException e) {
+                    Log.d(tag, "Couldn't save the complete framesJson to External. ", e);
+                }
+
+                JSONArray pyrlkResultsJsonArr = new JSONArray();
+                JSONArray result = null;
+                JSONArray previous = null;
+                ArrayList<JSONObject> pointsList = new ArrayList<JSONObject>();
+                JSONObject source;
+                JSONObject target;
+                int minLength = 2000;
+
+                Mat icpMatrix = new Mat(4, 4, CvType.CV_64F);
+
+                String icpResult = null;
+                String filepath = MADN3SController.getAppDirectory().getAbsolutePath()
+                        + "/" + MADN3SController.sharedPrefsGetString(KEY_PROJECT_NAME) + "/";
+                Log.d(tag, "filepath: " + filepath);
+
+                try {
+
+                    for(int frameIndex = 0; frameIndex < points; ++frameIndex){
+                        result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(frameIndex));
+
+                        if(frameIndex > 0){
+                            if(result.length() > 0) {
+                                icpResult = Madn3sNative.doIcp(result.toString(), previous.toString(),
+                                        filepath, frameIndex, true, 40, 0.001, 15, true);
+                                Log.d(tag, "icpResult:" + icpResult);
+                                icpMatrix = MADN3SController.getMatFromString(icpResult);
+                                previous = MADN3SController.applyTransform(icpMatrix, result, pointsList);
+                            }
+                        } else {
+                            previous = result;
+                            JSONObject point;
+                                    /* Agregar los puntos del inicial al acumulado de puntos*/
+                            for(int i = 0; i<result.length(); ++i){
+                                point = result.getJSONObject(i);
+                                pointsList.add(point);
+                            }
+                        }
                     }
-                } else {
-                    Log.e(tag, "generateModel. onClick. Couldn't calculateOpticalFlow. result null");
+
+                    JSONArray meshResultJson = new JSONArray();
+                    for(JSONObject point:pointsList){
+                        meshResultJson.put(point);
+                    }
+
+                    Log.e(tag, "meshResult length: " + meshResultJson.length());
+                    Madn3sNative.saveVtp(meshResultJson.toString(), filepath, "final_mesh");
+
+                    MADN3SController.saveJsonToExternal(pyrlkResultsJsonArr.toString(1), "frames-after-pyr");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+
+                return pyrlkResultsJsonArr;
             }
 
-        //Traido de ScannerFragment#Test
-
-        String pointsJsonPath = MADN3SController.saveJsonToExternal(framePointsJsonArr.toString(1), "3d-points");
-        result = new JSONArray();
-        StringBuffer vtkFileBuffer = new StringBuffer();
-        int vtkFileBufferLines = 0;
-
-        points = MADN3SController.sharedPrefsGetInt(KEY_POINTS);
-        framesJson = new JSONArray();
-        for(int i = 0; i < points; i++){
-        JSONObject frame = MADN3SController.sharedPrefsGetJSONObject(FRAME_PREFIX + i);
-        framesJson.put(frame);
-        }
-
-        try {
-            Log.d(tag, "Saving the complete framesJson to External. ");
-            MADN3SController.saveJsonToExternal(framesJson.toString(1), "frames");
-            } catch (JSONException e) {
-            Log.d(tag, "Couldn't save the complete framesJson to External. ", e);
-            }
-
-            String[] pyrlksResults = new String[points];
-
-            for(int frameIndex = 0; frameIndex < points; ++frameIndex){
-                result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(frameIndex));
-                if(result != null){
-                    pyrlksResults[frameIndex] = result.toString();
-                } else {
-                    Log.e(tag, "result null");
-                }
-            }
-
-            String vtkFilePath = MADN3SController.createVtpFromPoints(vtkFileBuffer.toString(), vtkFileBufferLines, "vtkData");
-            Log.d(tag, "vtkFilePath: " + vtkFilePath);
-//            Madn3sNative.doIcp(pyrlksResults, MADN3SController.getAppDirectory().getAbsolutePath(), true, 40, 0.001, 15, true);
-            //                            Madn3sNative.doDelaunay("khgks", 0.6);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        }.execute();
     }
 
 	@SuppressLint("SimpleDateFormat")

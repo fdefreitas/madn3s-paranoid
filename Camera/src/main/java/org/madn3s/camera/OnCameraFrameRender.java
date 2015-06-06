@@ -1,19 +1,12 @@
 package org.madn3s.camera;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
-import org.opencv.core.Range;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-
-import android.content.res.Resources;
 
 abstract class FrameRender {
     protected CameraCalibrator mCalibrator;
@@ -41,6 +34,13 @@ class PreviewFrameRender extends FrameRender {
     	Core.transpose(mRgba, mRgbaT);
         Imgproc.resize(mRgbaT, mRgbaF, mRgbaF.size(), 0,0, 0);
         Core.flip(mRgbaF, mRgba, 1 );
+
+        double pX = mRgba.cols() / 3 * 2;
+        double pY = mRgba.rows() * 0.1;
+
+        Core.putText(mRgba, "Preview", new Point(pX , pY)
+                , Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 0));
+
         return mRgba;
     }
 }

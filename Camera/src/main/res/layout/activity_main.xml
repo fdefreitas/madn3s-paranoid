@@ -47,22 +47,33 @@
         android:id="@+id/elapsed_chronometer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/take_picture_imageView"
-        android:layout_alignTop="@+id/take_picture_imageView"
         android:format="%s"
         android:textSize="24sp"
         android:gravity="center_vertical"
-        android:textColor="#FFF"/>
+        android:textColor="#FFF"
+        android:layout_above="@+id/take_picture_imageView"
+        android:layout_centerHorizontal="true"
+        />
 
     <TextView
         android:id="@+id/configs_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/take_picture_imageView"
-        android:layout_alignTop="@+id/take_picture_imageView"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="16dp"
         android:text="@string/take_test_picture"
         android:textColor="#FFF"/>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/calibrate"
+        android:id="@+id/calib_button"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="16dp"
+        android:layout_alignTop="@id/take_picture_imageView"/>
 
     <ImageView
         android:id="@+id/take_picture_imageView"
@@ -76,5 +87,14 @@
         android:background="@drawable/selector_button"
         android:contentDescription="@string/take_test_picture"/>
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reset"
+        android:id="@+id/reset_button"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:layout_alignTop="@id/take_picture_imageView"/>
 
 </RelativeLayout>

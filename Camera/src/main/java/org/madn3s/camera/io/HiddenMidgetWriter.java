@@ -26,7 +26,8 @@ public class HiddenMidgetWriter extends AsyncTask<Void, Void, Void> {
 	private MainActivity mActivity;
     private Exception e;
     private byte[] msg;
-    
+    private String md5HexBase64;
+
     public HiddenMidgetWriter(WeakReference<BluetoothSocket> mBluetoothSocketWeakReference, Object msg){
     	mSocket = mBluetoothSocketWeakReference.get();
     	if(msg instanceof String){
@@ -38,18 +39,17 @@ public class HiddenMidgetWriter extends AsyncTask<Void, Void, Void> {
     		((Bitmap) msg).compress(Consts.BITMAP_COMPRESS_FORMAT, Consts.COMPRESSION_QUALITY, baos);
     		this.msg = baos.toByteArray();
     	}
-    	
+
     	this.msg = Base64.encode(this.msg, Base64.DEFAULT);
-    	String md5HexBase64 = new String(MADN3SCamera.getMD5EncryptedString(this.msg));
-		Log.d(tag, "MD5 Base64: " + md5HexBase64);
+    	md5HexBase64 = MADN3SCamera.getMD5EncryptedString(this.msg);
     }
-    
+
     @Override
 	protected void onPreExecute() {
     	if(mActivity != null){
-    		new Handler(Looper.getMainLooper()).post(new Runnable() {             
+    		new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
-                public void run() { 
+                public void run() {
                 	mActivity.resetChron();
             		mActivity.startChron();
                 }
@@ -75,24 +75,24 @@ public class HiddenMidgetWriter extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result){
     	if(mActivity != null){
-    		new Handler(Looper.getMainLooper()).post(new Runnable() {             
+    		new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
-                public void run() { 
+                public void run() {
                 	mActivity.stopChron();
             		mActivity.showElapsedTime("sending picture");
                 }
               });
     	}
-    	
+
         if(e == null){
-        	Log.d(tag, "Mensaje: " + msg.toString() + " enviado a " + mSocket.getRemoteDevice().getName());
+        	Log.d(tag, "Mensaje (MD5 Base64): " + md5HexBase64 + " enviado a " + mSocket.getRemoteDevice().getName());
         } else {
-        	Log.d(tag, "Ocurrio un error enviando mensaje: " + msg + " a " + mSocket.getRemoteDevice().getName());
+        	Log.d(tag, "Ocurrio un error enviando mensaje: a " + mSocket.getRemoteDevice().getName());
         }
     }
 
 	public void setmActivity(MainActivity mActivity) {
 		this.mActivity = mActivity;
 	}
-    
+
 }

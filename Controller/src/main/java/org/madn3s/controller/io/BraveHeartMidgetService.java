@@ -96,17 +96,17 @@ public class BraveHeartMidgetService extends IntentService {
 		String jsonString;
 		if(intent.hasExtra(EXTRA_CALLBACK_MSG)){
 			Log.d(tag, "EXTRA_CALLBACK_MSG");
-            playSound("EXTRA_CALLBACK_MSG", "EXTRA_CALLBACK_MSG");
+//            playSound("EXTRA_CALLBACK_MSG", "EXTRA_CALLBACK_MSG");
 			jsonString = intent.getExtras().getString(EXTRA_CALLBACK_MSG);
 			processCameraAnswer(jsonString);
 		} else if(intent.hasExtra(EXTRA_CALLBACK_PICTURE)){
 			Log.d(tag, "EXTRA_CALLBACK_PICTURE");
-            playSound("EXTRA_CALLBACK_PICTURE", "EXTRA_CALLBACK_PICTURE");
+//            playSound("EXTRA_CALLBACK_PICTURE", "EXTRA_CALLBACK_PICTURE");
 			jsonString = intent.getExtras().getString(EXTRA_CALLBACK_PICTURE);
 			processCameraPicture(jsonString);
 		} else if(intent.hasExtra(EXTRA_CALLBACK_SEND)){
 			Log.d(tag, "EXTRA_CALLBACK_SEND");
-            playSound("EXTRA_CALLBACK_SEND", "EXTRA_CALLBACK_SEND");
+//            playSound("EXTRA_CALLBACK_SEND", "EXTRA_CALLBACK_SEND");
 			jsonString = intent.getExtras().getString(EXTRA_CALLBACK_SEND);
             boolean isCalibration = false;
             try{
@@ -121,12 +121,12 @@ public class BraveHeartMidgetService extends IntentService {
 
 		} else if(intent.hasExtra(EXTRA_CALLBACK_NXT_MESSAGE)){
 			Log.d(tag, "EXTRA_CALLBACK_NXT_MESSAGE");
-            playSound("EXTRA_CALLBACK_NXT_MESSAGE", "EXTRA_CALLBACK_NXT_MESSAGE");
+//            playSound("EXTRA_CALLBACK_NXT_MESSAGE", "EXTRA_CALLBACK_NXT_MESSAGE");
 			jsonString = intent.getExtras().getString(EXTRA_CALLBACK_NXT_MESSAGE);
 			processNxtMessage(jsonString);
 		} else if(intent.hasExtra(EXTRA_CALLBACK_CALIBRATION_RESULT)){
 			Log.d(tag, "EXTRA_CALLBACK_CALIBRATION_RESULT");
-            playSound("EXTRA_CALLBACK_CALIBRATION_RESULT", "EXTRA_CALLBACK_CALIBRATION_RESULT");
+//            playSound("EXTRA_CALLBACK_CALIBRATION_RESULT", "EXTRA_CALLBACK_CALIBRATION_RESULT");
 			jsonString = intent.getExtras().getString(EXTRA_CALLBACK_CALIBRATION_RESULT);
 
             new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -296,11 +296,13 @@ public class BraveHeartMidgetService extends IntentService {
 
 	private void processCameraPicture(String jsonString){
 		Log.d(tag, "processCameraPicture.");
+		Log.d(tag, "processCameraPicture. msg: " + jsonString);
 		try {
 			JSONObject msg = new JSONObject(jsonString);
-			if(msg.has(KEY_ERROR) && !msg.getBoolean(KEY_ERROR)){
+			if(!msg.getBoolean(KEY_ERROR)){
 				int iter = MADN3SController.sharedPrefsGetInt(KEY_ITERATION);
 				JSONObject frame = MADN3SController.sharedPrefsGetJSONObject(FRAME_PREFIX + iter);
+                Log.d(tag, "frame[" + iter + "]:" + frame.toString());
 				if(msg.has(KEY_SIDE)){
 					int device = 1;
 					String side = msg.getString(KEY_SIDE);

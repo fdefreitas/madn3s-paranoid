@@ -86,10 +86,10 @@ public class CameraCalibrator {
         Log.d(TAG, String.format("Average re-projection error: %f", mRms));
         Log.d(TAG, "Camera matrix: " + mCameraMatrix.dump());
         Log.d(TAG, "Distortion coefficients: " + mDistortionCoefficients.dump());
-        Log.d(TAG, "ObjectPoints: " + objectPoints.size());
-        for(Mat objectPoint : objectPoints){
-            Log.d(TAG, "ObjectPoint: " + objectPoint.dump());
-        }
+//        Log.d(TAG, "ObjectPoints: " + objectPoints.size());
+//        for(Mat objectPoint : objectPoints){
+//            Log.d(TAG, "ObjectPoint: " + objectPoint.dump());
+//        }
 
         Bundle bundle = new Bundle();
         bundle.putString(KEY_CALIB_DISTORTION_COEFFICIENTS, mDistortionCoefficients.dump());
@@ -99,8 +99,8 @@ public class CameraCalibrator {
         for(int i = 0; i < mCornersBuffer.size(); ++i){
             imagePoint = mCornersBuffer.get(i);
             imagePointsArray.put(imagePoint.dump());
-            Log.d(TAG, " imagePoints(" + i + ")[" + imagePoint.rows() + "][" + imagePoint.cols() + "] = "
-                    + imagePoint.dump());
+//            Log.d(TAG, " imagePoints(" + i + ")[" + imagePoint.rows() + "][" + imagePoint.cols() + "] = "
+//                    + imagePoint.dump());
         }
         bundle.putString(KEY_CALIB_IMAGE_POINTS, imagePointsArray.toString());
 

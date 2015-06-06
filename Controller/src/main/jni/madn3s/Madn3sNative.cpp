@@ -61,7 +61,12 @@ namespace madn3s {
             , bool ascii, std::string pathStr){
 
             vtkSmartPointer<vtkCleanPolyData> cleaner = vtkSmartPointer<vtkCleanPolyData>::New();
-            vtkSmartPointer<vtkDelaunay3D> delaunay3D = vtkSmartPointer<vtkDelaunay3D>::New();
+            cleaner->SetInputConnection (reader->GetOutputPort());
+
+            vtkSmartPointer<vtkDelaunay3D> delaunay3D =
+            vtkSmartPointer<vtkDelaunay3D>::New();
+            delaunay3D->SetInputConnection (reader->GetOutputPort());
+            delaunay3D->SetAlpha(1.0);
 
             return true;
 
@@ -217,6 +222,20 @@ namespace madn3s {
 
         return filenameStr;
     }
+
+    std::vtkSmartPointer<vtkPolyData> loadVtp( std::string projectPathStr){
+        vtkSmartPointer<vtkPolyData> data = vtkSmartPointer<vtkPolyData>::New();
+
+        vtkSmartPointer<vtkXMLPolyDataReader> reader = vtkSmartPointer<vtkXMLPolyDataReader>::New();
+        reader->SetFileName(filenameStr.c_str());
+        reader->Update();
+
+        data->ShallowCopy(reader->GetOutput());
+
+        return data;
+    }
+
+
 };
 
 //----------------------------------------------------------------------------
@@ -289,6 +308,15 @@ JNIEXPORT jboolean JNICALL Java_org_madn3s_controller_vtk_Madn3sNative_doDelauna
     , jobject obj, jstring icpFilePath, jdouble alpha){
 
     LOGI("doIcp JNI. doDelaunay with p0 and p1");
+
+    const char *pathPointer = env->GetStringUTFChars(icpFilePath, NULL);
+    std::string pathStr = pathPointer;
+
+    vtkSmartPointer<vtkPolyData> data = loadVtp(pathStr);
+
+
+    //doDelaunay(vtkSmartPointer<vtkPolyData> source, vtkSmartPointer<vtkPolyData> target, int iterations
+      //          , bool ascii, std::string pathStr);
 
     return false;
 }
