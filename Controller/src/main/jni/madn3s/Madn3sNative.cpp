@@ -15,6 +15,7 @@
 #include <vtkIterativeClosestPointTransform.h>
 #include <vtkSmartPointer.h>
 #include <vtkXMLPolyDataReader.h>
+#include <vtkXMLDataSetWriter.h>
 #include <vtkAlgorithmOutput.h>
 #include <vtkVersion.h>
 #include <vtkTransform.h>
@@ -55,21 +56,24 @@ namespace madn3s {
     std::string saveVtp(vtkSmartPointer<vtkPolyData> data, std::string projectPathStr, std::string fileName, bool ascii);
     std::string vtkMatrixToJson(vtkSmartPointer<vtkMatrix4x4> matrix);
     std::string jsonToVTK(const std::string& data, const std::string& projectPathStr, const std::string fileName, const bool& ascii, const bool& debug);
+    vtkSmartPointer<vtkPolyData> loadVtp( std::string projectPathStr);
 
 //----------------------------------------------------------------------------
-    bool doDelaunay(vtkSmartPointer<vtkPolyData> source, vtkSmartPointer<vtkPolyData> target, int iterations
-            , bool ascii, std::string pathStr){
-
-            vtkSmartPointer<vtkCleanPolyData> cleaner = vtkSmartPointer<vtkCleanPolyData>::New();
-            cleaner->SetInputConnection (reader->GetOutputPort());
-
-            vtkSmartPointer<vtkDelaunay3D> delaunay3D =
-            vtkSmartPointer<vtkDelaunay3D>::New();
+    bool doDelaunay(std::string sourceStr, double alpha, std::string targetStr){
+            vtkSmartPointer<vtkXMLPolyDataReader> reader = vtkSmartPointer<vtkXMLPolyDataReader>::New();
+            reader->SetFileName(sourceStr.c_str());
+            reader->Update();
+            vtkSmartPointer<vtkCleanPolyData> cleanPolyData = vtkSmartPointer<vtkCleanPolyData>::New();
+            cleanPolyData->SetInputConnection(reader->GetOutputPort());
+            cleanPolyData->Update();
+            vtkSmartPointer<vtkDelaunay3D> delaunay3D = vtkSmartPointer<vtkDelaunay3D>::New();
             delaunay3D->SetInputConnection (reader->GetOutputPort());
-            delaunay3D->SetAlpha(1.0);
-
+            delaunay3D->SetAlpha(alpha);
+            vtkSmartPointer<vtkXMLDataSetWriter> writer = vtkSmartPointer<vtkXMLDataSetWriter>::New();
+            writer->SetFileName(targetStr.c_str());
+            writer->SetInputConnection ( delaunay3D->GetOutputPort() );
+            writer->Write();
             return true;
-
     }
 
     /**
@@ -223,11 +227,11 @@ namespace madn3s {
         return filenameStr;
     }
 
-    std::vtkSmartPointer<vtkPolyData> loadVtp( std::string projectPathStr){
+    vtkSmartPointer<vtkPolyData> loadVtp( std::string projectPathStr){
         vtkSmartPointer<vtkPolyData> data = vtkSmartPointer<vtkPolyData>::New();
 
         vtkSmartPointer<vtkXMLPolyDataReader> reader = vtkSmartPointer<vtkXMLPolyDataReader>::New();
-        reader->SetFileName(filenameStr.c_str());
+        reader->SetFileName(projectPathStr.c_str());
         reader->Update();
 
         data->ShallowCopy(reader->GetOutput());
@@ -306,18 +310,12 @@ JNIEXPORT jstring JNICALL Java_org_madn3s_controller_vtk_Madn3sNative_doIcp(JNIE
 
 JNIEXPORT jboolean JNICALL Java_org_madn3s_controller_vtk_Madn3sNative_doDelaunay(JNIEnv * env
     , jobject obj, jstring icpFilePath, jdouble alpha){
-
     LOGI("doIcp JNI. doDelaunay with p0 and p1");
-
+    const double mAlpha = alpha;
     const char *pathPointer = env->GetStringUTFChars(icpFilePath, NULL);
     std::string pathStr = pathPointer;
-
-    vtkSmartPointer<vtkPolyData> data = loadVtp(pathStr);
-
-
-    //doDelaunay(vtkSmartPointer<vtkPolyData> source, vtkSmartPointer<vtkPolyData> target, int iterations
-      //          , bool ascii, std::string pathStr);
-
+//    vtkSmartPointer<vtkPolyData> data = madn3s::loadVtp(pathStr);
+    madn3s::doDelaunay(pathStr, mAlpha, pathStr);
     return false;
 }
 
