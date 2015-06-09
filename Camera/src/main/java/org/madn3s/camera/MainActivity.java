@@ -14,7 +14,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,9 +22,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +32,7 @@ import org.json.JSONObject;
 import org.madn3s.camera.io.BraveheartMidgetService;
 import org.madn3s.camera.io.HiddenMidgetReader;
 import org.madn3s.camera.io.UniversalComms;
+import org.madn3s.camera.utils.Chron;
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
@@ -54,16 +52,15 @@ import static org.madn3s.camera.Consts.KEY_SIDE;
 public class MainActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2,
         View.OnTouchListener {
 
+    public static final int DIALOG_CALIBRATING = 0;
+    public static final int DIALOG_PROCESSING = 1;
+
     private CameraBridgeViewBase mOpenCvCameraView;
+    public Chron chron;
 
     private static final String tag = MainActivity.class.getSimpleName();
-    private Button calibrateButton;
-    private Button resetIterButton;
-    private Context mContext;
     private TextView configTextView;
-    private RelativeLayout workingLayout;
     private ImageView takePictureImageView;
-    private Chronometer elapsedChronometer;
     private MainActivity mActivity;
     private MidgetOfSeville figaro;
 
@@ -81,14 +78,13 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     public JSONObject config;
 
     private BaseLoaderCallback mLoaderCallback;
-    private ProgressDialog calibrationProgress;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mActivity = this;
-        mContext = this;
         BraveheartMidgetService.mActivity = this;
         figaro = MidgetOfSeville.getInstance();
 
@@ -97,19 +93,19 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
         isCalibrating = new AtomicBoolean(true);
         isManual = new AtomicBoolean(true);
 
+        MADN3SCamera.isPictureTaken = new AtomicBoolean(true);
+        MADN3SCamera.isRunning = new AtomicBoolean(true);
+
 //        setDiscoverableBt();
         setUpBridges();
         loadConfigData();
 
+        chron = new Chron(this);
+
         Intent williamWallaceIntent = new Intent(this, BraveheartMidgetService.class);
         startService(williamWallaceIntent);
 
-        workingLayout = (RelativeLayout) findViewById(R.id.working_layout);
-        workingLayout.setVisibility(View.GONE);
         configTextView = (TextView) findViewById(R.id.configs_text_view);
-
-        elapsedChronometer = (Chronometer) findViewById(R.id.elapsed_chronometer);
-        resetChron();
 
         takePictureImageView = (ImageView) findViewById(R.id.take_picture_imageView);
         takePictureImageView.setOnClickListener(new View.OnClickListener() {
@@ -119,7 +115,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
             }
         });
 
-        calibrateButton = (Button) findViewById(R.id.calib_button);
+        Button calibrateButton = (Button) findViewById(R.id.calib_button);
         calibrateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +123,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
             }
         });
 
-        resetIterButton = (Button) findViewById(R.id.reset_button);
+        Button resetIterButton = (Button) findViewById(R.id.reset_button);
         resetIterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,38 +134,15 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
         mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.camera_calibration_java_surface_view);
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
-
-        MADN3SCamera.isPictureTaken = new AtomicBoolean(true);
-        MADN3SCamera.isRunning = new AtomicBoolean(true);
     }
 
     @Override
     public void onResume() {
-        Log.d(tag, "onResume");
         super.onResume();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         if (!MADN3SCamera.isOpenCvLoaded) {
             OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_5, this, mLoaderCallback);
         }
-    }
-
-    public void showElapsedTime(String msg) {
-        long elapsedMillis = SystemClock.elapsedRealtime() - elapsedChronometer.getBase();
-        Toast.makeText(this, (msg == null ? "" : msg) + " : " + elapsedMillis,
-                Toast.LENGTH_SHORT).show();
-    }
-
-    public void startChron() {
-        elapsedChronometer.start();
-    }
-
-    public void stopChron() {
-        elapsedChronometer.stop();
-    }
-
-    public void resetChron() {
-        elapsedChronometer.setBase(SystemClock.elapsedRealtime());
-        showElapsedTime("resetChron");
     }
 
     @Override
@@ -301,11 +274,27 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
 
     /**
      * Updates layout to reflect the application is working on processing the picture
+     * @param mode Dialog mode, Calibrating or Processing
      */
-    private void setWorking() {
+    private void setWorking(int mode) {
         takePictureImageView.setClickable(false);
         takePictureImageView.setEnabled(false);
-        workingLayout.setVisibility(View.VISIBLE);
+
+        progressDialog = new ProgressDialog(mActivity);
+
+        switch(mode){
+            case DIALOG_CALIBRATING:
+                progressDialog.setTitle(mActivity.getString(R.string.calibrating));
+                break;
+            case DIALOG_PROCESSING:
+                progressDialog.setTitle(mActivity.getString(R.string.processing));
+                break;
+        }
+
+        progressDialog.setMessage(mActivity.getString(R.string.please_wait));
+        progressDialog.setCancelable(false);
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
     }
 
     /**
@@ -314,7 +303,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     private void unsetWorking() {
         takePictureImageView.setClickable(true);
         takePictureImageView.setEnabled(true);
-        workingLayout.setVisibility(View.GONE);
+        progressDialog.dismiss();
     }
 
     private void playSound(String title, String msg) {
@@ -368,18 +357,16 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     private void processFrameCallback(final Mat resultMat) {
         new AsyncTask<Void, Void, JSONObject>() {
 
-            JSONObject result;
-
             @Override
             protected void onPreExecute() {
-                result = new JSONObject();
-                setWorking();
-                resetChron();
-                startChron();
+                setWorking(DIALOG_PROCESSING);
+                chron.restartChron();
             }
 
             @Override
             protected JSONObject doInBackground(Void... params) {
+                JSONObject result = new JSONObject();
+
                 try {
                     JSONArray pointsJson = null;
                     JSONObject resultJson = figaro.shapeUp(resultMat, config);
@@ -399,6 +386,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                 } catch (JSONException e) {
                     Log.e(tag, "Couldn't execute MidgetOfSeville.shapeUp to Camera Frame");
                     e.printStackTrace();
+                    result = new JSONObject();
                 }
 
                 return result;
@@ -420,8 +408,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                     Log.e(tag, "Failure on shapeUp in doInBackground. resultJson null.");
                 } finally {
                     unsetWorking();
-                    stopChron();
-                    showElapsedTime("Processing Image");
+                    chron.stopChron("Processing Image");
                     takePictureImageView.setEnabled(true);
                 }
             }
@@ -453,7 +440,6 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     }
 
     public void setCaptureMode(final boolean calibrate, final boolean capture) {
-
         isCalibrating.set(calibrate);
         isCapturing.set(capture);
     }
@@ -484,19 +470,9 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
 
                 @Override
                 protected void onPreExecute() {
-                    setWorking();
-                    resetChron();
-                    startChron();
-
+                    setWorking(DIALOG_CALIBRATING);
+                    chron.restartChron();
                     setCaptureMode(false, false);
-
-                    calibrationProgress = new ProgressDialog(mActivity);
-                    calibrationProgress.setTitle(mActivity.getString(R.string.calibrating));
-                    calibrationProgress.setMessage(mActivity.getString(R.string.please_wait));
-                    calibrationProgress.setCancelable(false);
-                    calibrationProgress.setIndeterminate(true);
-                    calibrationProgress.show();
-
                 }
 
                 @Override
@@ -513,10 +489,8 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
 
                 @Override
                 protected void onPostExecute(Bundle result) {
-                    calibrationProgress.dismiss();
                     mCalibrator.clearCorners();
-                    stopChron();
-                    showElapsedTime("calibration");
+                    chron.stopChron("calibration");
 
                     String resultMessage = (mCalibrator.isCalibrated()) ?
                             mActivity.getString(R.string.calibration_successful)

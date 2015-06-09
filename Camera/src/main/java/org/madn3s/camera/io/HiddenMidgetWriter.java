@@ -50,8 +50,8 @@ public class HiddenMidgetWriter extends AsyncTask<Void, Void, Void> {
     		new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                	mActivity.resetChron();
-            		mActivity.startChron();
+                	mActivity.chron.resetChron();
+            		mActivity.chron.startChron();
                 }
               });
     	}
@@ -78,8 +78,7 @@ public class HiddenMidgetWriter extends AsyncTask<Void, Void, Void> {
     		new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                	mActivity.stopChron();
-            		mActivity.showElapsedTime("sending picture");
+                	mActivity.chron.stopChron("sending picture");
                 }
               });
     	}

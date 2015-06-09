@@ -3,47 +3,10 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal">
 
-    <!--<FrameLayout-->
-        <!--android:id="@+id/camera_frameLayout"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_centerHorizontal="true" />-->
-
     <org.opencv.android.JavaCameraView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/camera_calibration_java_surface_view" />
-
-    <RelativeLayout
-        android:id="@+id/working_layout"
-        android:background="@color/steady_grey"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_margin="48dp"
-        android:padding="16dp">
-
-        <ProgressBar
-            android:id="@+id/working_progressBar"
-            style="?android:attr/progressBarStyleLarge"
-            android:indeterminate="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-             />
-
-        <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_below="@+id/working_progressBar"
-          android:layout_centerHorizontal="true"
-          android:text="@string/working_message"
-          android:textColor="@color/route_66"
-          />
-
-    </RelativeLayout>
 
     <Chronometer
         android:id="@+id/elapsed_chronometer"
