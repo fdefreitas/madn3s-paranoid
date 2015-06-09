@@ -440,8 +440,10 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     }
 
     public void setCaptureMode(final boolean calibrate, final boolean capture) {
-        isCalibrating.set(calibrate);
-        isCapturing.set(capture);
+        synchronized (this){
+            isCalibrating.set(calibrate);
+            isCapturing.set(capture);
+        }
     }
 
     /* Metodos de OnTouchListener */
@@ -472,7 +474,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                 protected void onPreExecute() {
                     setWorking(DIALOG_CALIBRATING);
                     chron.restartChron();
-                    setCaptureMode(false, false);
+//                    setCaptureMode(false, false);
                 }
 
                 @Override

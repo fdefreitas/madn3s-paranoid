@@ -61,7 +61,7 @@ public class DiscoveryFragment extends BaseFragment {
 	private Button connectButton;
 	private Button scanButton;
 	private NewDevicesAdapter nxtNewDevicesAdapter, cameraNewDevicesAdapter ;
-	private PairedDevicesAdapter nxtPairedDevicesAdapter, cameraPairedDevicesAdapter;
+    private PairedDevicesAdapter cameraPairedDevicesAdapter;
 	private boolean isNxtSelected;
 	private int cams;
 	private DiscoveryFragment mFragment;
@@ -139,6 +139,13 @@ public class DiscoveryFragment extends BaseFragment {
                 tests();
             }
 		});
+        Button calibrateButton = (Button) getView().findViewById(R.id.calibrate_button);
+        calibrateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calibrate();
+            }
+        });
 	}
 
     private void tests() {
@@ -146,13 +153,50 @@ public class DiscoveryFragment extends BaseFragment {
 
             @Override
             protected JSONArray doInBackground(Void... params) {
-
                 Madn3sNative.doDelaunay("/storage/0/Pictures/MADN3SController/scumbag-robin/final_mesh_ascii.vtp", 1);
-
                 return null;
             }
 
         }.execute();
+    }
+
+    private void calibrate(){
+        Log.d(tag, "Starting calibration");
+
+        String filenameRight = "camera-calibration-right.json";
+        String filenameLeft = "camera-calibration-left.json";
+        JSONObject rightJson;
+        JSONObject leftJson;
+
+        MADN3SController.sharedPrefsPutString(KEY_PROJECT_NAME, "graduation");
+
+        rightJson = MADN3SController.getInputJson(filenameRight);
+        leftJson = MADN3SController.getInputJson(filenameLeft);
+
+        if(rightJson != null && leftJson != null) {
+            try {
+                Log.d(tag, "Loading calibration from SharedPreferences");
+                JSONObject calibrationJson = MADN3SController.sharedPrefsGetJSONObject(KEY_CALIBRATION);
+
+                calibrationJson.put(SIDE_LEFT, leftJson);
+                calibrationJson.put(SIDE_RIGHT, rightJson);
+
+                Log.d(tag, "Saving calibration to SharedPreferences");
+                MADN3SController.sharedPrefsPutJSONObject(KEY_CALIBRATION, calibrationJson);
+
+                Log.d(tag, "Running Stereo Calibration");
+                JSONObject stereoCalibrationJson = MidgetOfSeville.doStereoCalibration();
+                Log.d(tag, "Finished Stereo Calibration. Saving result");
+                String resultPath = MADN3SController.saveJsonToExternal(stereoCalibrationJson.toString(),
+                        "stereo-calibration-result.json");
+                Log.d(tag, "Calibration result saved to: " + resultPath);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.d(tag, "Both sides of calibration not present");
+        }
     }
 
     @Override
@@ -251,8 +295,8 @@ public class DiscoveryFragment extends BaseFragment {
 
 		try {
 
-			nxtPairedDevicesAdapter = new PairedDevicesAdapter(getPairedToyDevices()
-					, getActivity().getBaseContext());
+            PairedDevicesAdapter nxtPairedDevicesAdapter = new PairedDevicesAdapter(getPairedToyDevices()
+                    , getActivity().getBaseContext());
 			nxtPairedDevicesListView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 			nxtPairedDevicesListView.setAdapter(nxtPairedDevicesAdapter);
 			nxtPairedDevicesListView.setOnItemClickListener(onDeviceAdapterClickListener);

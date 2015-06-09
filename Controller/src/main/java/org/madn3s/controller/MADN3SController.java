@@ -1,8 +1,10 @@
 package org.madn3s.controller;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.math.BigInteger;
@@ -539,6 +541,42 @@ public class MADN3SController extends Application {
 	 */
 	public static File getAppDirectory(){
     	return appDirectory;
+    }
+
+    public static JSONObject getInputJson(String filename){
+        return getInputJson(sharedPrefsGetString(KEY_PROJECT_NAME), filename);
+    }
+
+    public static JSONObject getInputJson(String projectName, String filename){
+        String inputString;
+        File inputFile = getInputMediaFile(projectName, filename);
+
+        try{
+            if(inputFile.exists()){
+                BufferedReader inputReader = new BufferedReader(new FileReader(inputFile));
+                inputString = inputReader.readLine();
+                return new JSONObject(inputString);
+            } else {
+                Log.e(tag, filename + " doesn't exists");
+            }
+        } catch (IOException e){
+            Log.e(tag, "Error Reading config JSONObject");
+            e.printStackTrace();
+        } catch (JSONException e){
+            Log.e(tag, "Error Parsing config JSONObject");
+            e.printStackTrace();
+        }
+
+        return new JSONObject();
+    }
+
+    public static File getInputMediaFile(String projectName, String filename){
+        File projectDirectory = new File(getAppDirectory(), projectName);
+        return new File(projectDirectory.getPath(), filename);
+    }
+
+    public static File getInputMediaFile(String filename){
+        return getInputMediaFile(sharedPrefsGetString(KEY_PROJECT_NAME), filename);
     }
 
     public static Uri getOutputMediaFileUri(int type, String position){

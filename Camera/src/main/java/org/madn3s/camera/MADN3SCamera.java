@@ -134,15 +134,14 @@ public class MADN3SCamera extends Application {
         return new JSONObject();
     }
 
-    public static File getInputMediaFile(String filename){
-        return getInputMediaFile(sharedPrefsGetString(KEY_PROJECT_NAME), filename);
-    }
-
     public static File getInputMediaFile(String projectName, String filename){
         File projectDirectory = new File(getAppDirectory(), projectName);
         return new File(projectDirectory.getPath(), filename);
     }
 
+    public static File getInputMediaFile(String filename){
+        return getInputMediaFile(sharedPrefsGetString(KEY_PROJECT_NAME), filename);
+    }
 
     @SuppressLint("SimpleDateFormat")
 	public static File getOutputMediaFile(int type){

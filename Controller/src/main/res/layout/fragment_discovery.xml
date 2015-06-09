@@ -18,7 +18,7 @@
         android:layout_toLeftOf="@+id/button_separator"
         android:layout_alignTop="@+id/button_separator"
         android:text="@string/scan" />
-    
+
     <View
         android:id="@+id/button_separator"
         android:layout_width="0dp"
@@ -34,13 +34,32 @@
         android:layout_toRightOf="@+id/button_separator"
         android:layout_alignTop="@+id/button_separator"
         android:text="@string/connect" />
-    
+
+    <Button
+        android:id="@+id/calibrate_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/button_separator2"
+        android:layout_alignTop="@+id/button_separator2"
+        android:text="@string/calibrate" />
+
+    <View
+        android:id="@+id/button_separator2"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:layout_below="@id/button_separator"
+        android:layout_centerHorizontal="true" />
+
     <Button
         android:id="@+id/tests_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/connect_button"
-        android:text="Big Ass Titties!!!" />
+        android:layout_toRightOf="@+id/button_separator2"
+        android:layout_alignTop="@+id/button_separator2"
+        android:text="Run Test" />
 
     <ProgressBar
         android:id="@+id/discovery_progressBar"
