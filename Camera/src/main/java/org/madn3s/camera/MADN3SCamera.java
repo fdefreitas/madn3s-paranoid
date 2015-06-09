@@ -88,10 +88,10 @@ public class MADN3SCamera extends Application {
     	return appDirectory;
     }
 
-    public static String saveJsonToExternal(String output, String fileName) throws JSONException {
+    public static String saveJsonToExternal(String output, String fileName, boolean withTimestamp, boolean withIteration) throws JSONException {
         try {
             String projectName = sharedPrefsGetString(KEY_PROJECT_NAME);
-            File calibrationFile = getOutputMediaFile(MEDIA_TYPE_JSON, projectName, fileName);
+            File calibrationFile = getOutputMediaFile(MEDIA_TYPE_JSON, projectName, fileName, withTimestamp, withIteration);
             Log.i(TAG, "saveJsonToExternal. filepath: " + calibrationFile.getAbsolutePath());
             FileOutputStream fos = new FileOutputStream(calibrationFile);
             fos.write(output.getBytes());
@@ -136,49 +136,26 @@ public class MADN3SCamera extends Application {
 
     public static File getInputMediaFile(String projectName, String filename){
         File projectDirectory = new File(getAppDirectory(), projectName);
-        return new File(projectDirectory.getPath(), filename);
-    }
-
-    public static File getInputMediaFile(String filename){
-        return getInputMediaFile(sharedPrefsGetString(KEY_PROJECT_NAME), filename);
+        File fileResult = new File(projectDirectory.getPath(), filename);
+        Log.d(TAG, "getInputMediaFile.projectName: " + projectName);
+        Log.d(TAG, "getInputMediaFile:" + fileResult.getAbsolutePath());
+        return fileResult;
     }
 
     @SuppressLint("SimpleDateFormat")
 	public static File getOutputMediaFile(int type){
-    	return getOutputMediaFile(type, sharedPrefsGetString(KEY_PROJECT_NAME), position, sharedPrefsGetInt(KEY_ITERATION));
+    	return getOutputMediaFile(type, sharedPrefsGetString(KEY_PROJECT_NAME), position);
     }
 
     @SuppressLint("SimpleDateFormat")
-	public static File getOutputMediaFile(int type, String projectName, String position, int iteration){
-        File mediaStorageDir = new File(getAppDirectory(), projectName);
-
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
-                Log.d(TAG, "failed to create directory");
-                return null;
-            }
-        }
-
-        if(position == null){
-        	position = "";
-        }
-
-        String filename;
-        File mediaFile;
-
-        if (type == MEDIA_TYPE_IMAGE){
-            filename = "IMG_" + position + "_" + iteration + Consts.IMAGE_EXT;
-        } else {
-            return null;
-        }
-
-        mediaFile = new File(mediaStorageDir.getPath(), filename);
-
-        return mediaFile;
+	public static File getOutputMediaFile(int type, String projectName, String name){
+        return getOutputMediaFile(type, projectName, name, false, true);
     }
 
     @SuppressLint("SimpleDateFormat")
-    public static File getOutputMediaFile(int type, String projectName, String name){
+    public static File getOutputMediaFile(int type, String projectName, String name,
+                                          boolean withTimestamp, boolean withIteration){
+
         Log.d(TAG, "getOutputMediaFile. projectName: " + projectName + " name: " + name);
         File mediaStorageDir = new File(getAppDirectory(), projectName);
 
@@ -190,37 +167,39 @@ public class MADN3SCamera extends Application {
         }
 
         if(name == null){
-            name = "";
-        }
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String filename;
-        String iteration = String.valueOf(sharedPrefsGetInt(KEY_ITERATION));
-        File mediaFile;
-
-        if (type == MEDIA_TYPE_IMAGE){
-            filename = "IMG_" + iteration + "_" + name + "_" + timeStamp + Consts.IMAGE_EXT;
-        } else if(type == MEDIA_TYPE_JSON){
-            filename = name + "_" + timeStamp + Consts.JSON_EXT;
-        } else if(type == MEDIA_TYPE_VTU){
-            filename = name + "_" + timeStamp + Consts.VTU_EXT;
-        } else {
             return null;
         }
 
-        mediaFile = new File(mediaStorageDir.getPath(), filename);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String iteration = String.valueOf(sharedPrefsGetInt(KEY_ITERATION));
+        StringBuilder filenameBuilder = new StringBuilder();
+        File mediaFile;
+
+        if (type == MEDIA_TYPE_IMAGE){ filenameBuilder.append("IMG_"); }
+        if(withIteration){ filenameBuilder.append(iteration).append("_"); }
+
+        filenameBuilder.append(name);
+
+        if(withTimestamp){ filenameBuilder.append("_").append(timeStamp); }
+
+        if(type == MEDIA_TYPE_IMAGE){
+            filenameBuilder.append(Consts.IMAGE_EXT);
+        } else if(type == MEDIA_TYPE_JSON) {
+            filenameBuilder.append(Consts.JSON_EXT);
+        } else if(type == MEDIA_TYPE_VTU) {
+            filenameBuilder.append(Consts.VTU_EXT);
+        }
+
+        mediaFile = new File(mediaStorageDir.getPath(), filenameBuilder.toString());
 
         return mediaFile;
     }
 
     public static String saveBitmapAsJpeg(Bitmap bitmap, String position){
-    	return saveBitmapAsJpeg(bitmap, position, sharedPrefsGetInt(KEY_ITERATION));
-    }
-
-    public static String saveBitmapAsJpeg(Bitmap bitmap, String position, int iteration){
     	FileOutputStream out;
         try {
-            final File imgFile = getOutputMediaFile(MEDIA_TYPE_IMAGE, sharedPrefsGetString(KEY_PROJECT_NAME), position, iteration);
+            final File imgFile = getOutputMediaFile(MEDIA_TYPE_IMAGE,
+                    sharedPrefsGetString(KEY_PROJECT_NAME), position, false, true);
 
             out = new FileOutputStream(imgFile.getAbsoluteFile());
             bitmap.compress(Consts.BITMAP_COMPRESS_FORMAT, Consts.COMPRESSION_QUALITY, out);

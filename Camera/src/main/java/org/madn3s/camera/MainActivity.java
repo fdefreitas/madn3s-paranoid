@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -37,10 +38,13 @@ import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
+import org.opencv.android.Utils;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static org.madn3s.camera.Consts.KEY_CALIBRATION_RESULT;
 import static org.madn3s.camera.Consts.KEY_ERROR;
 import static org.madn3s.camera.Consts.KEY_FILE_PATH;
 import static org.madn3s.camera.Consts.KEY_ITERATION;
@@ -89,8 +93,8 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
         figaro = MidgetOfSeville.getInstance();
 
         //Ambos en true para arrancar listo para calibrar
-        isCapturing = new AtomicBoolean(true);
-        isCalibrating = new AtomicBoolean(true);
+        isCapturing = new AtomicBoolean(false);
+        isCalibrating = new AtomicBoolean(false);
         isManual = new AtomicBoolean(true);
 
         MADN3SCamera.isPictureTaken = new AtomicBoolean(true);
@@ -98,7 +102,6 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
 
 //        setDiscoverableBt();
         setUpBridges();
-        loadConfigData();
 
         chron = new Chron(this);
 
@@ -231,6 +234,9 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                         MADN3SCamera.isOpenCvLoaded = true;
                         mOpenCvCameraView.enableView();
                         mOpenCvCameraView.setOnTouchListener(MainActivity.this);
+
+                        /* Load configuration data */
+                        loadConfigData();
                     }
                     break;
                     default: {
@@ -338,7 +344,8 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            processFrameCallback(undistortionResult);
+//                            processFrameCallback(undistortionResult);
+                            capturePhoto(undistortionResult);
                         }
                     });
                 }
@@ -352,6 +359,14 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
 
             return resultMat;
         }
+    }
+
+    private void capturePhoto(final Mat result){
+        Bitmap iterBitmap = Bitmap.createBitmap(result.cols(), result.rows(), Bitmap.Config.RGB_565);
+        String iterStr = String.valueOf(MADN3SCamera.sharedPrefsGetInt(KEY_ITERATION));
+        Utils.matToBitmap(result, iterBitmap);
+        MADN3SCamera.saveBitmapAsJpeg(iterBitmap, MADN3SCamera.sharedPrefsGetString(KEY_SIDE));
+        MADN3SCamera.sharedPrefsPutInt(KEY_ITERATION, MADN3SCamera.sharedPrefsGetInt(KEY_ITERATION) + 1);
     }
 
     private void processFrameCallback(final Mat resultMat) {
@@ -397,7 +412,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                 try {
                     int iteration = MADN3SCamera.sharedPrefsGetInt(KEY_ITERATION);
                     if (!resultJson.getBoolean(KEY_ERROR)) {
-                        MADN3SCamera.saveJsonToExternal(resultJson.toString(), "iteration-" + iteration);
+                        MADN3SCamera.saveJsonToExternal(resultJson.toString(), "iteration-" + iteration, true, true);
                         MADN3SCamera.sharedPrefsPutInt(KEY_ITERATION, iteration + 1);
                     } else {
                         Toast.makeText(mActivity, "Error procesando foto, intenta de nuevo",
@@ -523,7 +538,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                         calibPayload.put(Consts.KEY_ACTION,
                                 Consts.ACTION_CALIBRATION_RESULT);
 
-                        MADN3SCamera.saveJsonToExternal(calibPayload.toString(1), "camera-calibration");
+                        MADN3SCamera.saveJsonToExternal(calibPayload.toString(), "camera-calibration", false, false);
 
                         Log.i(tag, "Result Ok");
                     } catch (Exception e) {
@@ -539,6 +554,9 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     }
 
     private void loadConfigData(){
+        int type = CvType.CV_64F;
+        Mat mat = new Mat();
+
         String filename = "config.json";
         JSONObject configJson;
 
@@ -566,10 +584,13 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
             String filename = "calibration-stereo.json";
             String side = MADN3SCamera.sharedPrefsGetString(KEY_SIDE);
             JSONObject calibJson = MADN3SCamera.getInputJson(filename);
+            calibJson = new JSONObject(calibJson.getString(KEY_CALIBRATION_RESULT));
 
             // Parsear Maps
             String map1Str = calibJson.getJSONObject(side).getString(Consts.KEY_CALIB_MAP_1);
+            Log.d(tag, "map1: " + map1Str);
             String map2Str = calibJson.getJSONObject(side).getString(Consts.KEY_CALIB_MAP_2);
+            Log.d(tag, "map2: " + map2Str);
             Mat map1 = MADN3SCamera.getMatFromString(map1Str);
             Mat map2 = MADN3SCamera.getMatFromString(map2Str);
 
@@ -599,7 +620,6 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
 
     private void onButtonClick() {
         setCaptureMode(false, true);
-
     }
 
 }

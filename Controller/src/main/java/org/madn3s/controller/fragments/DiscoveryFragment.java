@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.madn3s.controller.CameraMidget;
 import org.madn3s.controller.MADN3SController;
 import org.madn3s.controller.MidgetOfSeville;
 import org.madn3s.controller.MADN3SController.Mode;
@@ -153,7 +154,23 @@ public class DiscoveryFragment extends BaseFragment {
 
             @Override
             protected JSONArray doInBackground(Void... params) {
-                Madn3sNative.doDelaunay("/storage/0/Pictures/MADN3SController/scumbag-robin/final_mesh_ascii.vtp", 1);
+                CameraMidget cameraMidget = CameraMidget.getInstance();
+                String template = "IMG_%d_%s.jpg";
+                try {
+                    for (int iter = 0; iter < MADN3SController.sharedPrefsGetInt(KEY_ITERATIONS); ++iter) {
+
+                        cameraMidget.shapeUp(String.format(template, iter, "left"),
+                                MADN3SController.sharedPrefsGetJSONObject(KEY_CONFIG));
+
+                        cameraMidget.shapeUp(String.format(template, iter, "right"),
+                                MADN3SController.sharedPrefsGetJSONObject(KEY_CONFIG));
+
+
+
+                    }
+                } catch (JSONException e){
+                    e.printStackTrace();
+                }
                 return null;
             }
 

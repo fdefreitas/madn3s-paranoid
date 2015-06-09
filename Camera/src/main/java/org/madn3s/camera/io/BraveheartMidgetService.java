@@ -263,7 +263,7 @@ public class BraveheartMidgetService extends IntentService {
         try {
             Log.d(tag, "applyCalibration");
             Log.d(tag, "calibrationStr: " + calibrationStr);
-            MADN3SCamera.saveJsonToExternal(calibrationStr, "calibration-result");
+            MADN3SCamera.saveJsonToExternal(calibrationStr, "calibration-result", false, false);
             JSONObject calibPayload = new JSONObject(calibrationStr);
 
             // Parsear Maps

@@ -579,22 +579,20 @@ public class MADN3SController extends Application {
         return getInputMediaFile(sharedPrefsGetString(KEY_PROJECT_NAME), filename);
     }
 
-    public static Uri getOutputMediaFileUri(int type, String position){
-        return Uri.fromFile(getOutputMediaFile(type, position));
-    }
-
     public static Uri getOutputMediaFileUri(int type, String projectName, String position){
         return Uri.fromFile(getOutputMediaFile(type, projectName, position));
     }
 
     @SuppressLint("SimpleDateFormat")
-	public static File getOutputMediaFile(int type, String name){
-    	return getOutputMediaFile(type, sharedPrefsGetString(KEY_PROJECT_NAME), name);
+    public static File getOutputMediaFile(int type, String projectName, String name){
+        return getOutputMediaFile(type, projectName, name, false, true);
     }
 
     @SuppressLint("SimpleDateFormat")
-	public static File getOutputMediaFile(int type, String projectName, String name){
-    	Log.d(tag, "getOutputMediaFile. projectName: " + projectName + " name: " + name);
+    public static File getOutputMediaFile(int type, String projectName, String name,
+                                          boolean withTimestamp, boolean withIteration){
+
+        Log.d(tag, "getOutputMediaFile. projectName: " + projectName + " name: " + name);
         File mediaStorageDir = new File(getAppDirectory(), projectName);
 
         if (!mediaStorageDir.exists()){
@@ -605,27 +603,54 @@ public class MADN3SController extends Application {
         }
 
         if(name == null){
-        	name = "";
-        }
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String filename;
-        String iteration = String.valueOf(sharedPrefsGetInt(KEY_ITERATION));
-        File mediaFile;
-
-        if (type == MEDIA_TYPE_IMAGE){
-            filename = "IMG_" + iteration + "_" + name + "_" + timeStamp + Consts.IMAGE_EXT;
-        } else if(type == MEDIA_TYPE_JSON){
-        	filename = name + "_" + timeStamp + Consts.JSON_EXT;
-        } else if(type == MEDIA_TYPE_VTU){
-        	filename = name + "_" + timeStamp + Consts.VTU_EXT;
-        } else {
             return null;
         }
 
-        mediaFile = new File(mediaStorageDir.getPath(), filename);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        StringBuilder filenameBuilder = new StringBuilder();
+        String iteration = String.valueOf(sharedPrefsGetInt(KEY_ITERATION));
+        File mediaFile;
+
+        if (type == MEDIA_TYPE_IMAGE){ filenameBuilder.append("IMG_"); }
+        if(withIteration){ filenameBuilder.append(iteration).append("_"); }
+
+        filenameBuilder.append(name);
+
+        if(withTimestamp){ filenameBuilder.append("_").append(timeStamp); }
+        if(type == MEDIA_TYPE_IMAGE){
+            filenameBuilder.append(Consts.IMAGE_EXT);
+        } else if(type == MEDIA_TYPE_JSON) {
+            filenameBuilder.append(Consts.JSON_EXT);
+        } else if(type == MEDIA_TYPE_VTU) {
+            filenameBuilder.append(Consts.VTU_EXT);
+        }
+
+        mediaFile = new File(mediaStorageDir.getPath(), filenameBuilder.toString());
 
         return mediaFile;
+    }
+
+    public static String saveBitmapAsJpeg(Bitmap bitmap, String position){
+        FileOutputStream out;
+        try {
+            final File imgFile = getOutputMediaFile(MEDIA_TYPE_IMAGE, sharedPrefsGetString(KEY_PROJECT_NAME), position, true, true);
+
+            out = new FileOutputStream(imgFile.getAbsoluteFile());
+            bitmap.compress(Consts.BITMAP_COMPRESS_FORMAT, Consts.COMPRESSION_QUALITY, out);
+
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(appContext, imgFile.getName(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            return imgFile.getPath();
+
+        } catch (FileNotFoundException e) {
+            Log.e(position, "saveBitmapAsJpeg: No se pudo guardar el Bitmap", e);
+            return null;
+        }
     }
 
     public static String saveJsonToExternal(String output, String fileName) throws JSONException {
@@ -646,68 +671,6 @@ public class MADN3SController extends Application {
 
 		return null;
 	}
-
-    public static String createVtpFromPoints(String pointsData, int size, String fileName){
-//    	StringBuffer connectivityData = null;
-//    	if(pointsData != null){
-//    		connectivityData = new StringBuffer();
-//    		for(int i = 0; i < size; ++i){
-//    			connectivityData.append(String.format("%02d ", i));
-//    		}
-//    	}
-    	File newxmlfile = getOutputMediaFile(MEDIA_TYPE_VTU, fileName);
-        try {
-	        FileOutputStream fileos = new FileOutputStream(newxmlfile);
-
-	        XmlSerializer serializer = Xml.newSerializer();
-	        serializer.setOutput(fileos, "UTF-8");
-	        serializer.startDocument(null, null);
-	        serializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
-	        serializer.startTag(null, "VTKFile");
-	        serializer.attribute(null, "type", "PolyData");
-	        serializer.attribute(null, "version", "0.1");
-	        serializer.attribute(null, "byte_order", "LittleEndian");
-	        serializer.attribute(null, "compressor", "vtkZLibDataCompressor");
-		        serializer.startTag(null, "PolyData");
-			        serializer.startTag(null, "Piece");
-			        serializer.attribute(null, "NumberOfPoints", String.valueOf(size));
-				        serializer.startTag(null, "PointData");
-				        serializer.endTag(null, "PointData");
-				        serializer.startTag(null, "CellData");
-				        serializer.endTag(null, "CellData");
-				        serializer.startTag(null, "Points");
-					        serializer.startTag(null, "DataArray");
-					        	serializer.attribute(null, "type", "Float32");
-					        	serializer.attribute(null, "NumberOfComponents", "3");
-					        	serializer.attribute(null, "format", "ascii");
-					        	serializer.text(pointsData);
-					        serializer.endTag(null, "DataArray");
-				        serializer.endTag(null, "Points");
-//				        serializer.startTag(null, "Cells");
-//					        serializer.startTag(null, "DataArray");
-//					        	serializer.attribute(null, "type", "Int32");
-//					        	serializer.attribute(null, "Name", "connectivity");
-//					        	serializer.attribute(null, "format", "ascii");
-//					        	serializer.text(connectivityData.toString());
-//					        serializer.endTag(null, "DataArray");
-//				        serializer.endTag(null, "Cells");
-			        serializer.endTag(null, "Piece");
-		        serializer.endTag(null, "PolyData");
-	        serializer.endTag(null,"VTKFile");
-	        serializer.endDocument();
-	        serializer.flush();
-	        fileos.close();
-
-        } catch(FileNotFoundException e) {
-            Log.e("FileNotFoundException",e.toString());
-        } catch (IOException e) {
-            Log.e("IOException", "Exception in create new File(");
-        } catch(Exception e) {
-            Log.e("Exception","Exception occured in wroting");
-        }
-
-    	return null;
-    }
 
     public static String saveBitmapAsPng(Bitmap bitmap, String position){
     	FileOutputStream out;
