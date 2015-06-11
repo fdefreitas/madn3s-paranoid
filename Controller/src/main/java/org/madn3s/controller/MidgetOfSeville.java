@@ -102,14 +102,20 @@ public class MidgetOfSeville {
 			leftMop.fromList(leftPoints);
 
 			rightMop = new MatOfPoint2f();
+            rightMop.fromList(rightPoints);
 
 			MatOfByte opticalFlowFoundFeatures = new MatOfByte();
 			MatOfFloat err = new MatOfFloat();
-//			TermCriteria termcrit = new TermCriteria(TermCriteria.MAX_ITER+TermCriteria.EPS, 20, 0.03);
-//			Size winSize = new Size(10, 10);
-//			int maxLevel = 8;
+			TermCriteria termcrit = new TermCriteria(TermCriteria.MAX_ITER+TermCriteria.EPS, 10, 0.1);
+			Size winSize = new Size(9, 9);
+			int maxLevel = 5;
+            double minEigThreshold = 0.0001;
 
-			Video.calcOpticalFlowPyrLK(leftMat, rightMat, leftMop, rightMop, opticalFlowFoundFeatures, err);
+			Video.calcOpticalFlowPyrLK(leftMat, rightMat, leftMop, rightMop, opticalFlowFoundFeatures,
+                    err, winSize, maxLevel,termcrit, 0, minEigThreshold);
+
+            MADN3SController.saveJsonToExternal(rightMop.dump(), "rightPoints");
+            MADN3SController.saveJsonToExternal(leftMop.dump(), "leftPoints");
 
 			byte[] statusBytes = opticalFlowFoundFeatures.toArray();
 //			Log.d(tag, "lengths. leftPoints: " + leftPoints.size() + " rightPoints: " + rightPoints.size()
@@ -123,8 +129,10 @@ public class MidgetOfSeville {
 			JSONObject leftSide = calibrationJson.getJSONObject(SIDE_LEFT);
 			JSONObject rightSide = calibrationJson.getJSONObject(SIDE_RIGHT);
 
-			Mat rightCameraMatrix = MADN3SController.getMatFromString(rightSide.getString(KEY_CALIB_CAMERA_MATRIX));
-			Mat leftCameraMatrix = MADN3SController.getMatFromString(leftSide.getString(KEY_CALIB_CAMERA_MATRIX));
+			Mat rightCameraMatrix = MADN3SController.getMatFromString(
+                    rightSide.getString(KEY_CALIB_CAMERA_MATRIX), CvType.CV_64F);
+			Mat leftCameraMatrix = MADN3SController.getMatFromString(
+                    leftSide.getString(KEY_CALIB_CAMERA_MATRIX), CvType.CV_64F);
 
 			JSONArray result = new JSONArray();
 			Scalar neutral = new Scalar(1,1,1);
@@ -212,12 +220,12 @@ public class MidgetOfSeville {
 			JSONObject rightSide = calibrationJson.getJSONObject(SIDE_RIGHT);
 
 			Log.d(tag, "doStereoCalibration. Parsing Dist Coeffs");
-			Mat rightDistCoeff = MADN3SController.getMatFromString(rightSide.getString(KEY_CALIB_DISTORTION_COEFFICIENTS));
-			Mat leftDistCoeff = MADN3SController.getMatFromString(leftSide.getString(KEY_CALIB_DISTORTION_COEFFICIENTS));
+			Mat rightDistCoeff = MADN3SController.getMatFromString(rightSide.getString(KEY_CALIB_DISTORTION_COEFFICIENTS), CvType.CV_64F);
+			Mat leftDistCoeff = MADN3SController.getMatFromString(leftSide.getString(KEY_CALIB_DISTORTION_COEFFICIENTS), CvType.CV_64F);
 
 			Log.d(tag, "doStereoCalibration. Parsing Camera Matrix");
-			Mat rightCameraMatrix = MADN3SController.getMatFromString(rightSide.getString(KEY_CALIB_CAMERA_MATRIX));
-			Mat leftCameraMatrix = MADN3SController.getMatFromString(leftSide.getString(KEY_CALIB_CAMERA_MATRIX));
+			Mat rightCameraMatrix = MADN3SController.getMatFromString(rightSide.getString(KEY_CALIB_CAMERA_MATRIX), CvType.CV_64F);
+			Mat leftCameraMatrix = MADN3SController.getMatFromString(leftSide.getString(KEY_CALIB_CAMERA_MATRIX), CvType.CV_64F);
 
 			Log.d(tag, "doStereoCalibration. Parsing Right Image Points");
 			JSONArray rightJsonImagePoints = new JSONArray(rightSide.getString(KEY_CALIB_IMAGE_POINTS));

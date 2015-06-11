@@ -157,17 +157,88 @@ public class DiscoveryFragment extends BaseFragment {
                 CameraMidget cameraMidget = CameraMidget.getInstance();
                 String template = "IMG_%d_%s.jpg";
                 try {
-                    for (int iter = 0; iter < MADN3SController.sharedPrefsGetInt(KEY_ITERATIONS); ++iter) {
 
-                        cameraMidget.shapeUp(String.format(template, iter, "left"),
+                    JSONObject stereoCalib = MADN3SController.getInputJson("stereo-calibration-result.json");
+                    stereoCalib = new JSONObject(stereoCalib.getString(KEY_CALIBRATION_RESULT));
+                    MADN3SController.sharedPrefsPutJSONObject(KEY_CALIBRATION, stereoCalib);
+                    // Set left maps
+                    JSONObject leftStereoCalib = stereoCalib.getJSONObject(SIDE_LEFT);
+                    cameraMidget.setMap1Left(MADN3SController.getMatFromString(leftStereoCalib.getString(KEY_CALIB_MAP_1), CvType.CV_32FC1));
+                    cameraMidget.setMap2Left(MADN3SController.getMatFromString(leftStereoCalib.getString(KEY_CALIB_MAP_2), CvType.CV_32FC1));
+                    // Set right maps
+                    JSONObject rightStereoCalib = stereoCalib.getJSONObject(SIDE_RIGHT);
+                    cameraMidget.setMap1Right(MADN3SController.getMatFromString(rightStereoCalib.getString(KEY_CALIB_MAP_1), CvType.CV_32FC1));
+                    cameraMidget.setMap2Right(MADN3SController.getMatFromString(rightStereoCalib.getString(KEY_CALIB_MAP_2), CvType.CV_32FC1));
+
+                    JSONArray framesJson = new JSONArray();
+                    JSONObject tempFrame;
+                    JSONObject tempSide;
+
+                    MADN3SController.sharedPrefsPutInt(KEY_ITERATIONS, 6);
+                    int iterations = MADN3SController.sharedPrefsGetInt(KEY_ITERATIONS);
+                    Log.d(tag, "tests. iterations " + iterations);
+
+                    for (int iter = 0; iter < iterations; ++iter) {
+                        MADN3SController.sharedPrefsPutInt(KEY_ITERATION, iter);
+                        Log.d(tag, "tests. shapeUp iteration " + iter);
+
+                        tempFrame = new JSONObject();
+                        tempSide = cameraMidget.shapeUp(String.format(template, iter, SIDE_LEFT), SIDE_LEFT,
                                 MADN3SController.sharedPrefsGetJSONObject(KEY_CONFIG));
+                        tempFrame.put(SIDE_LEFT, tempSide);
 
-                        cameraMidget.shapeUp(String.format(template, iter, "right"),
+                         tempSide = cameraMidget.shapeUp(String.format(template, iter, SIDE_RIGHT), SIDE_RIGHT,
                                 MADN3SController.sharedPrefsGetJSONObject(KEY_CONFIG));
+                        tempFrame.put(SIDE_RIGHT, tempSide);
 
-
-
+                        framesJson.put(tempFrame);
                     }
+
+                    MADN3SController.saveJsonToExternal(framesJson.toString(), "frames");
+                    MADN3SController.sharedPrefsPutJSONArray(KEY_FRAMES, framesJson);
+
+                    JSONArray result;
+                    JSONArray previous = null;
+                    ArrayList<JSONObject> pointsList = new ArrayList<>();
+                    Mat icpMatrix;
+                    String icpResult;
+
+                    String filepath = MADN3SController.getAppDirectory().getAbsolutePath()
+                            + "/" + MADN3SController.sharedPrefsGetString(KEY_PROJECT_NAME) + "/";
+                    Log.d(tag, "filepath: " + filepath);
+
+                    for(int frameIndex = 0; frameIndex < iterations; ++frameIndex){
+                        result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(frameIndex));
+
+                        if(frameIndex > 0){
+                            if(result.length() > 0) {
+                                icpResult = Madn3sNative.doIcp(result.toString(), previous.toString(),
+                                        filepath, frameIndex, true, 40, 0.1, 15, true);
+                                Log.d(tag, "icpResult:" + icpResult);
+                                icpMatrix = MADN3SController.getMatFromString(icpResult, CvType.CV_64F);
+                                previous = MADN3SController.applyTransform(icpMatrix, result, pointsList);
+                            }
+                        } else {
+                            previous = result;
+                            JSONObject point;
+                                /* Agregar los puntos del inicial al acumulado de puntos*/
+                            for(int i = 0; i<result.length(); ++i){
+                                point = result.getJSONObject(i);
+                                pointsList.add(point);
+                            }
+                        }
+                    }
+
+                    JSONArray meshResultJson = new JSONArray();
+                    for(JSONObject point:pointsList){
+                        meshResultJson.put(point);
+                    }
+
+                    Log.d(tag, "meshResult length: " + meshResultJson.length());
+                    Madn3sNative.saveVtp(meshResultJson.toString(), filepath, "final_mesh");
+
+                    MADN3SController.saveJsonToExternal(meshResultJson.toString(1), "frames-after-pyr");
+
                 } catch (JSONException e){
                     e.printStackTrace();
                 }
@@ -204,6 +275,7 @@ public class DiscoveryFragment extends BaseFragment {
                 Log.d(tag, "Running Stereo Calibration");
                 JSONObject stereoCalibrationJson = MidgetOfSeville.doStereoCalibration();
                 Log.d(tag, "Finished Stereo Calibration. Saving result");
+                MADN3SController.sharedPrefsPutJSONObject(KEY_STEREO_CALIBRATION, stereoCalibrationJson);
                 String resultPath = MADN3SController.saveJsonToExternal(stereoCalibrationJson.toString(),
                         "stereo-calibration-result.json");
                 Log.d(tag, "Calibration result saved to: " + resultPath);

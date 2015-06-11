@@ -469,7 +469,7 @@ public class MADN3SController extends Application {
 	 * @param str Matriz en forma de String
 	 * @return Instancia de Mat con valores en Matriz recibida como String
 	 */
-	public static Mat getMatFromString(String str){
+	public static Mat getMatFromString(String str, int type){
 //		str = "[672.2618351846742, 0, 359.5; 0, 672.2618351846742, 239.5; 0, 0, 1]";
 		int rows = 0;
 		int cols = 0;
@@ -496,7 +496,6 @@ public class MADN3SController extends Application {
 //				Log.d(tag, "row[" + row + "]col[" + col + "]: " + colStr);
 			}
 		}
-		int type = CvType.CV_64F;
 		Mat mat = new Mat(rows, cols, type);
 		mat.put(0, 0, data);
 //		Log.d(tag, "getMatFromString. Result Mat: " + mat.dump());
@@ -630,10 +629,10 @@ public class MADN3SController extends Application {
         return mediaFile;
     }
 
-    public static String saveBitmapAsJpeg(Bitmap bitmap, String position){
+    public static String saveBitmapAsJpeg(Bitmap bitmap, String name){
         FileOutputStream out;
         try {
-            final File imgFile = getOutputMediaFile(MEDIA_TYPE_IMAGE, sharedPrefsGetString(KEY_PROJECT_NAME), position, true, true);
+            final File imgFile = getOutputMediaFile(MEDIA_TYPE_IMAGE, sharedPrefsGetString(KEY_PROJECT_NAME), name, false, true);
 
             out = new FileOutputStream(imgFile.getAbsoluteFile());
             bitmap.compress(Consts.BITMAP_COMPRESS_FORMAT, Consts.COMPRESSION_QUALITY, out);
@@ -648,7 +647,7 @@ public class MADN3SController extends Application {
             return imgFile.getPath();
 
         } catch (FileNotFoundException e) {
-            Log.e(position, "saveBitmapAsJpeg: No se pudo guardar el Bitmap", e);
+            Log.e(name, "saveBitmapAsJpeg: No se pudo guardar el Bitmap", e);
             return null;
         }
     }
@@ -656,7 +655,7 @@ public class MADN3SController extends Application {
     public static String saveJsonToExternal(String output, String fileName) throws JSONException {
 		try {
             String projectName = MADN3SController.sharedPrefsGetString(KEY_PROJECT_NAME);
-			File calibrationFile = getOutputMediaFile(MEDIA_TYPE_JSON, projectName, fileName);
+			File calibrationFile = getOutputMediaFile(MEDIA_TYPE_JSON, projectName, fileName, false, false);
 			Log.i(MidgetOfSeville.tag, "saveJsonToExternal. filepath: " + calibrationFile.getAbsolutePath());
 			FileOutputStream fos = new FileOutputStream(calibrationFile);
 			fos.write(output.getBytes());

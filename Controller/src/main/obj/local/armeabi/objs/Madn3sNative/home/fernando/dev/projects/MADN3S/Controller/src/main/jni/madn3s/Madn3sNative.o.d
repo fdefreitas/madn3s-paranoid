@@ -64,6 +64,8 @@
  /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkXMLReader.h \
  /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkAlgorithm.h \
  /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkCommonExecutionModelModule.h \
+ /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkXMLDataSetWriter.h \
+ /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkXMLWriter.h \
  /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkAlgorithmOutput.h \
  /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkVersion.h \
  /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkTransform.h \
@@ -107,7 +109,6 @@
  /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkMatrix4x4.h \
  /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkXMLPolyDataWriter.h \
  /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkXMLUnstructuredDataWriter.h \
- /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkXMLWriter.h \
  /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkPolyDataMapper.h \
  /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkRenderingCoreModule.h \
  /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkFiltersExtractionModule.h \
@@ -263,6 +264,10 @@
 
 /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkCommonExecutionModelModule.h:
 
+/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkXMLDataSetWriter.h:
+
+/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkXMLWriter.h:
+
 /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkAlgorithmOutput.h:
 
 /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkVersion.h:
@@ -348,8 +353,6 @@
 /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkXMLPolyDataWriter.h:
 
 /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkXMLUnstructuredDataWriter.h:
-
-/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkXMLWriter.h:
 
 /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkPolyDataMapper.h:
 

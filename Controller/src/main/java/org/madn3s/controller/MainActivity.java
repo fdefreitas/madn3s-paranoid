@@ -1,5 +1,6 @@
 package org.madn3s.controller;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.madn3s.controller.MADN3SController.Mode;
 import org.madn3s.controller.components.CameraSelectionDialogFragment;
@@ -141,22 +142,34 @@ public class MainActivity extends Activity implements
 	        nxtJson.put(Consts.KEY_COMMAND, Consts.COMMAND_ABORT);
 	        nxtJson.put(Consts.KEY_ACTION, Consts.ACTION_ABORT);
 
-	        MADN3SController.talker.write(nxtJson.toString().getBytes());
+            try {
+                MADN3SController.talker.write(nxtJson.toString().getBytes());
+            } catch (Exception e) {
+                Log.w(tag, "Talker not available. Couldn't abort.");
+            }
 
 			JSONObject json = new JSONObject();
 	        json.put(Consts.KEY_ACTION, Consts.ACTION_EXIT_APP);
-	        json.put(Consts.KEY_SIDE, Consts.SIDE_LEFT);
 
-	        HiddenMidgetWriter sendRightCamera = new HiddenMidgetWriter(
-	        		MADN3SController.rightCameraWeakReference, json.toString());
-	        sendRightCamera.execute();
+            try{
+                json.put(Consts.KEY_SIDE, Consts.SIDE_LEFT);
+                HiddenMidgetWriter sendRightCamera = new HiddenMidgetWriter(
+                        MADN3SController.rightCameraWeakReference, json.toString());
+                sendRightCamera.execute();
+            } catch (Exception e) {
+                Log.w(tag, "Right Camera not available. Couldn't abort.");
+            }
 
-	        json.put(Consts.KEY_SIDE, Consts.SIDE_RIGHT);
+            try {
+                json.put(Consts.KEY_SIDE, Consts.SIDE_RIGHT);
+                HiddenMidgetWriter sendLeftCamera = new HiddenMidgetWriter(
+                        MADN3SController.leftCameraWeakReference, json.toString());
+                sendLeftCamera.execute();
+            } catch (Exception e) {
+                Log.w(tag, "Left Camera not available. Couldn't abort.");
+            }
 
-	        HiddenMidgetWriter sendLeftCamera = new HiddenMidgetWriter(
-	        		MADN3SController.leftCameraWeakReference, json.toString());
-	        sendLeftCamera.execute();
-		} catch (Exception e) {
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 

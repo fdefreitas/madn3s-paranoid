@@ -93,8 +93,8 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
         figaro = MidgetOfSeville.getInstance();
 
         //Ambos en true para arrancar listo para calibrar
-        isCapturing = new AtomicBoolean(false);
-        isCalibrating = new AtomicBoolean(false);
+        isCalibrating = new AtomicBoolean(true);
+        isCapturing = new AtomicBoolean(true);
         isManual = new AtomicBoolean(true);
 
         MADN3SCamera.isPictureTaken = new AtomicBoolean(true);

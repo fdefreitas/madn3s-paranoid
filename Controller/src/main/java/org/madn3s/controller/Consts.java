@@ -18,6 +18,7 @@ public class Consts {
 	public static final String KEY_SIDE = "side";
 	public static final String KEY_CONFIG = "config";
 	public static final String KEY_CALIBRATION = "calibration";
+	public static final String KEY_STEREO_CALIBRATION = "stereo_calibration";
     public static final String KEY_CALIBRATION_RESULT = "calib_result";
 	public static final String KEY_COMMAND = "command";
 	public static final String KEY_ACTION = "action";

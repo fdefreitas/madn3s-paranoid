@@ -175,33 +175,14 @@ namespace madn3s {
         //Almacenar puntos en polydata
         vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
 
-        //New stuff from http://vtk.1045678.n5.nabble.com/Polygon-triangulation-using-vtkPolugon-Triangulate-td1238179.html
-//        LOGI("Creating Polygon");
-//        vtkSmartPointer<vtkPolygon> polygon = vtkSmartPointer<vtkPolygon>::New();
-//
-//        LOGI("Setting number of polygon points");
-//        points ->SetNumberOfPoints(numberOfPoints);
-//
-//        LOGI("Setting polygon points ids");
-//        polygon->GetPointIds()->SetNumberOfIds(numberOfPoints);
-//        for(int i = 0; i < numberOfPoints; ++i){
-//            polygon->GetPointIds()->SetId(i, i);
-//        }
-//
-//        LOGI("polydata allocate");
-//        polydata->Allocate();
-//        LOGI("polydata insert next cell");
-//        polydata->InsertNextCell(polygon->GetCellType(), polygon->GetPointIds());
-//        LOGI("polydata set points");
         polydata->SetPoints(points);
-
-//        vtkSmartPointer<vtkPolyData> temp = vtkSmartPointer<vtkPolyData>::New();
-//        temp->SetPoints(points);
 
         vtkSmartPointer<vtkVertexGlyphFilter> vertexFilter = vtkSmartPointer<vtkVertexGlyphFilter>::New();
         vertexFilter->AddInputData(polydata);
         vertexFilter->Update();
         polydata->ShallowCopy(vertexFilter->GetOutput());
+
+//        polydata->GetPointData()->SetScalars(colors);
 
 //        if(debug){
         return saveVtp(polydata, projectPathStr, fileName, ascii);

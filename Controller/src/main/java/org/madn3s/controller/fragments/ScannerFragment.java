@@ -379,7 +379,7 @@ public class ScannerFragment extends BaseFragment {
                                 icpResult = Madn3sNative.doIcp(result.toString(), previous.toString(),
                                         filepath, frameIndex, true, 40, 0.001, 15, true);
                                 Log.d(tag, "icpResult:" + icpResult);
-                                icpMatrix = MADN3SController.getMatFromString(icpResult);
+                                icpMatrix = MADN3SController.getMatFromString(icpResult, CvType.CV_64F);
                                 previous = MADN3SController.applyTransform(icpMatrix, result, pointsList);
                             }
                         } else {
