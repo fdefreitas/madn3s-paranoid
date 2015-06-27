@@ -278,7 +278,7 @@ public class DiscoveryFragment extends BaseFragment {
                 Log.d(tag, "Finished Stereo Calibration. Saving result");
                 MADN3SController.sharedPrefsPutJSONObject(KEY_STEREO_CALIBRATION, stereoCalibrationJson);
                 String resultPath = MADN3SController.saveJsonToExternal(stereoCalibrationJson.toString(),
-                        "stereo-calibration-result.json");
+                        "stereo-calibration-result");
                 Log.d(tag, "Calibration result saved to: " + resultPath);
 
             } catch (JSONException e) {
