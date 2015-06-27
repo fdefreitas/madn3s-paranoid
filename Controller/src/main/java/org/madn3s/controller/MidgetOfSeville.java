@@ -191,9 +191,9 @@ public class MidgetOfSeville {
 
                     //Primer Row
                     tempRow[0] = leftPoints.get(index).x * p1Row2.get(0, 0)[0] - p1Row0.get(0, 0)[0];
-                    tempRow[1] = leftPoints.get(index).x * p1Row2.get(0, 1)[0] - p1Row0.get(0, 1)[0];
-                    tempRow[2] = leftPoints.get(index).x * p1Row2.get(0, 2)[0] - p1Row0.get(0, 2)[0];
-                    tempRow[3] = leftPoints.get(index).x * p1Row2.get(0, 3)[0] - p1Row0.get(0, 3)[0];
+                    tempRow[1] = leftPoints.get(index).x * p1Row2.get(1, 0)[0] - p1Row0.get(1, 0)[0];
+                    tempRow[2] = leftPoints.get(index).x * p1Row2.get(2, 0)[0] - p1Row0.get(2, 0)[0];
+                    tempRow[3] = leftPoints.get(index).x * p1Row2.get(3, 0)[0] - p1Row0.get(3, 0)[0];
                     A.put(0, 0, tempRow);
                     tempRow[0] = 0;
                     tempRow[1] = 0;
