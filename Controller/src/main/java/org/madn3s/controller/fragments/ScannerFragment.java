@@ -372,7 +372,7 @@ public class ScannerFragment extends BaseFragment {
                 try {
 
                     for(int frameIndex = 0; frameIndex < points; ++frameIndex){
-                        result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(frameIndex));
+                        result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(frameIndex), frameIndex);
 
                         if(frameIndex > 0){
                             if(result.length() > 0) {

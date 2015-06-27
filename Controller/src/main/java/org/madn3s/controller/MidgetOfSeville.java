@@ -31,7 +31,7 @@ import static org.madn3s.controller.Consts.*;
 public class MidgetOfSeville {
 	static final String tag = MidgetOfSeville.class.getSimpleName();
 
-	public static JSONArray calculateFrameOpticalFlow(JSONObject data) throws JSONException{
+	public static JSONArray calculateFrameOpticalFlow(JSONObject data, int frameIndex) throws JSONException{
 		Log.d(tag, "calculateFrameOpticalFlow. Starting");
 //		Log.d(tag, "calculateFrameOpticalFlow. data: " + data);
 		JSONObject rightJson;
@@ -47,6 +47,7 @@ public class MidgetOfSeville {
 		ArrayList<Point> rightPoints = new ArrayList<Point>();
 		MatOfPoint2f leftMop;
 		MatOfPoint2f rightMop;
+        JSONArray pointsJsonArr = new JSONArray();
 //		vtkDataSet dataSet = new vtkDataSet();
 //		dataSet
 //		vtkIterativeClosestPointTransform icp = new vtkIterativeClosestPointTransform();
@@ -146,45 +147,122 @@ public class MidgetOfSeville {
 			Mat mult = new Mat(1, n, CvType.CV_64FC2);
 			Mat sub = new Mat(1, n, CvType.CV_64FC2);
 
+            // Row temporal para resta y multipliacion en el for
+            double tempRow[] = new double[n];
+
+            Mat P1 = MADN3SController.getMatFromString(MADN3SController.sharedPrefsGetString(KEY_CALIB_P1), CvType.CV_64F);
+            Mat P2 = MADN3SController.getMatFromString(MADN3SController.sharedPrefsGetString(KEY_CALIB_P2), CvType.CV_64F);
+
+            // Rows de P1 necesarios para la multiplicacion en el for
+            double p1Row0[] = P1.get(0,0);
+            double p1Row1[] = P1.get(1,0);
+            double p1Row2[] = P1.get(2,0);
+
+            // Rows de P2 necesarios para la multiplicacion en el for
+            double p2Row0[] = P2.get(0,0);
+            double p2Row1[] = P2.get(1,0);
+            double p2Row2[] = P2.get(2,0);
+
+            //Punto para calculo de punto al final del for
+            double tempPoint[] = new double[3];
+
 			for(int index = 0; index < statusBytes.length; ++index){
 				if(statusBytes[index] == 1 && index < leftPoints.size() && index < rightPoints.size()){
-					//Primer Row
-					Core.multiply(leftCameraMatrix.row(2), neutral, mult, leftPoints.get(index).x);
-					Core.subtract(mult, leftCameraMatrix.row(0), sub);
-					sub.copyTo(A.row(0));
+                    // TODO comentado para pruebas con codigo de Astrid
+//					//Primer Row
+//					Core.multiply(leftCameraMatrix.row(2), neutral, mult, leftPoints.get(index).x);
+//					Core.subtract(mult, leftCameraMatrix.row(0), sub);
+//					sub.copyTo(A.row(0));
+//
+//					//Segundo Row
+//					Core.multiply(leftCameraMatrix.row(2), neutral, mult, leftPoints.get(index).y);
+//					Core.subtract(mult, leftCameraMatrix.row(1), sub);
+//					sub.copyTo(A.row(1));
+//
+//					//Tercer Row
+//					Core.multiply(rightCameraMatrix.row(2), neutral, mult, rightPoints.get(index).x);
+//					Core.subtract(mult, rightCameraMatrix.row(0), sub);
+//					sub.copyTo(A.row(2));
+//
+//					//Cuarto Row
+//					Core.multiply(rightCameraMatrix.row(2), neutral, mult, rightPoints.get(index).x);
+//					Core.subtract(mult, rightCameraMatrix.row(1), sub);
+//					sub.copyTo(A.row(3));
 
-					//Segundo Row
-					Core.multiply(leftCameraMatrix.row(2), neutral, mult, leftPoints.get(index).y);
-					Core.subtract(mult, leftCameraMatrix.row(1), sub);
-					sub.copyTo(A.row(1));
+                    //Primer Row
+                    tempRow[0] = leftPoints.get(index).x * p1Row2[0] - p1Row0[0];
+                    tempRow[1] = leftPoints.get(index).x * p1Row2[1] - p1Row0[1];
+                    tempRow[2] = leftPoints.get(index).x * p1Row2[2] - p1Row0[2];
+                    tempRow[3] = leftPoints.get(index).x * p1Row2[3] - p1Row0[3];
+                    A.put(0, 0, tempRow);
+                    tempRow[0] = 0;
+                    tempRow[1] = 0;
+                    tempRow[2] = 0;
+                    tempRow[3] = 0;
 
-					//Tercer Row
-					Core.multiply(rightCameraMatrix.row(2), neutral, mult, rightPoints.get(index).x);
-					Core.subtract(mult, rightCameraMatrix.row(0), sub);
-					sub.copyTo(A.row(2));
+                    //Segundo Row
+                    tempRow[0] = leftPoints.get(index).y * p1Row2[0] - p1Row1[0];
+                    tempRow[1] = leftPoints.get(index).y * p1Row2[1] - p1Row1[1];
+                    tempRow[2] = leftPoints.get(index).y * p1Row2[2] - p1Row1[2];
+                    tempRow[3] = leftPoints.get(index).y * p1Row2[3] - p1Row1[3];
+                    A.put(1, 0, tempRow);
+                    tempRow[0] = 0;
+                    tempRow[1] = 0;
+                    tempRow[2] = 0;
+                    tempRow[3] = 0;
 
-					//Cuarto Row
-					Core.multiply(rightCameraMatrix.row(2), neutral, mult, rightPoints.get(index).x);
-					Core.subtract(mult, rightCameraMatrix.row(1), sub);
-					sub.copyTo(A.row(3));
+                    //Tercer Row
+                    tempRow[0] = rightPoints.get(index).x * p2Row2[0] - p2Row0[0];
+                    tempRow[1] = rightPoints.get(index).x * p2Row2[1] - p2Row0[1];
+                    tempRow[2] = rightPoints.get(index).x * p2Row2[2] - p2Row0[2];
+                    tempRow[3] = rightPoints.get(index).x * p2Row2[3] - p2Row0[3];
+                    A.put(2, 0, tempRow);
+                    tempRow[0] = 0;
+                    tempRow[1] = 0;
+                    tempRow[2] = 0;
+                    tempRow[3] = 0;
+
+                    //Cuarto Row
+                    tempRow[0] = rightPoints.get(index).y * p2Row2[0] - p2Row1[0];
+                    tempRow[1] = rightPoints.get(index).y * p2Row2[1] - p2Row1[1];
+                    tempRow[2] = rightPoints.get(index).y * p2Row2[2] - p2Row1[2];
+                    tempRow[3] = rightPoints.get(index).y * p2Row2[3] - p2Row1[3];
+                    A.put(3, 0, tempRow);
+                    tempRow[0] = 0;
+                    tempRow[1] = 0;
+                    tempRow[2] = 0;
+                    tempRow[3] = 0;
 
 			        Core.SVDecomp(A, wSingularValue, uLeftOrthogonal, vRightOrtogonal, Core.DECOMP_SVD);
 
-			        vRightOrtogonal = vRightOrtogonal.t();
-			        last = vRightOrtogonal.cols();
-			        Mat point = vRightOrtogonal.col(last - 1);
-			        JSONObject pointJsonResult = new JSONObject();
-			        if(point.rows() == 3){
-			        	double[] coordinates = new double[3];
-			        	point.get(0, 0, coordinates);
-			        	pointJsonResult.put(KEY_X, coordinates[0]);
-			        	pointJsonResult.put(KEY_Y, coordinates[1]);
-			        	pointJsonResult.put(KEY_Z, coordinates[2]);
-			        	result.put(pointJsonResult);
-//			        	result.put(coordinates[0] + " " + coordinates[1] + " " + coordinates[2] + "\n" );
-			        } else {
-			        	Log.e(tag, "No se obtuvieron coordenadas X, Y y Z");
-			        }
+//			        vRightOrtogonal = vRightOrtogonal.t();
+//			        last = vRightOrtogonal.cols();
+//			        Mat point = vRightOrtogonal.col(last - 1);
+//			        JSONObject pointJsonResult = new JSONObject();
+//			        if(point.rows() == 3){
+//			        	double[] coordinates = new double[3];
+//			        	point.get(0, 0, coordinates);
+//			        	pointJsonResult.put(KEY_X, coordinates[0]);
+//			        	pointJsonResult.put(KEY_Y, coordinates[1]);
+//			        	pointJsonResult.put(KEY_Z, coordinates[2]);
+//			        	result.put(pointJsonResult);
+////			        	result.put(coordinates[0] + " " + coordinates[1] + " " + coordinates[2] + "\n" );
+//			        } else {
+//			        	Log.e(tag, "No se obtuvieron coordenadas X, Y y Z");
+//			        }
+
+//                    if(frameIndex == 0){
+//                        tempPoint[0] = (vRightOrtogonal.get(0, 3)[0] / vRightOrtogonal.get(3, 3)[0]);
+//                        tempPoint[1] = (vRightOrtogonal.get(1, 3)[0] / vRightOrtogonal.get(3, 3)[0]);
+//                        tempPoint[2] = (vRightOrtogonal.get(2, 3)[0] / vRightOrtogonal.get(3, 3)[0]);
+//                    } else {
+                        JSONObject point = new JSONObject();
+                        point.put(KEY_X, (vRightOrtogonal.get(0, 3)[0] / vRightOrtogonal.get(3, 3)[0]));
+                        point.put(KEY_Y, (vRightOrtogonal.get(0, 3)[0] / vRightOrtogonal.get(3, 3)[0]));
+                        point.put(KEY_Z, (vRightOrtogonal.get(0, 3)[0] / vRightOrtogonal.get(3, 3)[0]));
+                        pointsJsonArr.put(point);
+                        result.put(point);
+//                    }
 				}
 			}
 
@@ -313,6 +391,8 @@ public class MidgetOfSeville {
 	        Calib3d.stereoRectify(leftCameraMatrix, leftDistCoeff
 	        		, rightCameraMatrix, rightDistCoeff
 	        		, mPatternSize, R, T, R1, R2, P1, P2, Q);
+            MADN3SController.sharedPrefsPutString(KEY_CALIB_P1, P1.dump());
+            MADN3SController.sharedPrefsPutString(KEY_CALIB_P2, P2.dump());
             Log.d(tag, "Finished StereoRectify");
 
             // Undistorted Right

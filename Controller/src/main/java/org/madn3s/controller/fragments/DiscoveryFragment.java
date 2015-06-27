@@ -208,7 +208,7 @@ public class DiscoveryFragment extends BaseFragment {
                     Log.d(tag, "filepath: " + filepath);
 
                     for(int frameIndex = 0; frameIndex < iterations; ++frameIndex){
-                        result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(frameIndex));
+                        result = MidgetOfSeville.calculateFrameOpticalFlow(framesJson.getJSONObject(frameIndex), frameIndex);
 
                         if(frameIndex > 0){
                             if(result.length() > 0) {
@@ -217,6 +217,7 @@ public class DiscoveryFragment extends BaseFragment {
                                 Log.d(tag, "icpResult:" + icpResult);
                                 icpMatrix = MADN3SController.getMatFromString(icpResult, CvType.CV_64F);
                                 previous = MADN3SController.applyTransform(icpMatrix, result, pointsList);
+                                // TODO multiplicar todos los puntos en MidgetOfSeville.pointsJsonArr por icpMatrix?
                             }
                         } else {
                             previous = result;

@@ -91,6 +91,9 @@ public class Consts {
     public static final String KEY_CALIB_IMAGE_POINTS = "calib_image_points";
     public static final String KEY_CALIB_MAP_1 = "calib_map_1";
     public static final String KEY_CALIB_MAP_2 = "calib_map_2";
+    public static final String KEY_CALIB_P0 = "calib_p0";
+    public static final String KEY_CALIB_P1 = "calib_p1";
+    public static final String KEY_CALIB_P2 = "calib_p2";
 
 	public static final CompressFormat BITMAP_COMPRESS_FORMAT = Bitmap.CompressFormat.JPEG;
 	public static final int COMPRESSION_QUALITY = 100;
