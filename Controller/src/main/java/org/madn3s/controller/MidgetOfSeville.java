@@ -154,14 +154,14 @@ public class MidgetOfSeville {
             Mat P2 = MADN3SController.getMatFromString(MADN3SController.sharedPrefsGetString(KEY_CALIB_P2), CvType.CV_64F);
 
             // Rows de P1 necesarios para la multiplicacion en el for
-            double p1Row0[] = P1.get(0,0);
-            double p1Row1[] = P1.get(1,0);
-            double p1Row2[] = P1.get(2,0);
+            Mat p1Row0 = P1.row(0);
+            Mat p1Row1 = P1.row(1);
+            Mat p1Row2 = P1.row(2);
 
             // Rows de P2 necesarios para la multiplicacion en el for
-            double p2Row0[] = P2.get(0,0);
-            double p2Row1[] = P2.get(1,0);
-            double p2Row2[] = P2.get(2,0);
+            Mat p2Row0 = P2.row(0);
+            Mat p2Row1 = P2.row(1);
+            Mat p2Row2 = P2.row(2);
 
             //Punto para calculo de punto al final del for
             double tempPoint[] = new double[3];
@@ -190,10 +190,10 @@ public class MidgetOfSeville {
 //					sub.copyTo(A.row(3));
 
                     //Primer Row
-                    tempRow[0] = leftPoints.get(index).x * p1Row2[0] - p1Row0[0];
-                    tempRow[1] = leftPoints.get(index).x * p1Row2[1] - p1Row0[1];
-                    tempRow[2] = leftPoints.get(index).x * p1Row2[2] - p1Row0[2];
-                    tempRow[3] = leftPoints.get(index).x * p1Row2[3] - p1Row0[3];
+                    tempRow[0] = leftPoints.get(index).x * p1Row2.get(0, 0)[0] - p1Row0.get(0, 0)[0];
+                    tempRow[1] = leftPoints.get(index).x * p1Row2.get(0, 1)[0] - p1Row0.get(0, 1)[0];
+                    tempRow[2] = leftPoints.get(index).x * p1Row2.get(0, 2)[0] - p1Row0.get(0, 2)[0];
+                    tempRow[3] = leftPoints.get(index).x * p1Row2.get(0, 3)[0] - p1Row0.get(0, 3)[0];
                     A.put(0, 0, tempRow);
                     tempRow[0] = 0;
                     tempRow[1] = 0;
@@ -201,10 +201,10 @@ public class MidgetOfSeville {
                     tempRow[3] = 0;
 
                     //Segundo Row
-                    tempRow[0] = leftPoints.get(index).y * p1Row2[0] - p1Row1[0];
-                    tempRow[1] = leftPoints.get(index).y * p1Row2[1] - p1Row1[1];
-                    tempRow[2] = leftPoints.get(index).y * p1Row2[2] - p1Row1[2];
-                    tempRow[3] = leftPoints.get(index).y * p1Row2[3] - p1Row1[3];
+                    tempRow[0] = leftPoints.get(index).y * p1Row2.get(0, 0)[0] - p1Row1.get(0, 0)[0];
+                    tempRow[1] = leftPoints.get(index).y * p1Row2.get(0, 1)[0] - p1Row1.get(0, 1)[0];
+                    tempRow[2] = leftPoints.get(index).y * p1Row2.get(0, 2)[0] - p1Row1.get(0, 2)[0];
+                    tempRow[3] = leftPoints.get(index).y * p1Row2.get(0, 3)[0] - p1Row1.get(0, 3)[0];
                     A.put(1, 0, tempRow);
                     tempRow[0] = 0;
                     tempRow[1] = 0;
@@ -212,10 +212,10 @@ public class MidgetOfSeville {
                     tempRow[3] = 0;
 
                     //Tercer Row
-                    tempRow[0] = rightPoints.get(index).x * p2Row2[0] - p2Row0[0];
-                    tempRow[1] = rightPoints.get(index).x * p2Row2[1] - p2Row0[1];
-                    tempRow[2] = rightPoints.get(index).x * p2Row2[2] - p2Row0[2];
-                    tempRow[3] = rightPoints.get(index).x * p2Row2[3] - p2Row0[3];
+                    tempRow[0] = rightPoints.get(index).x * p2Row2.get(0, 0)[0] - p2Row0.get(0, 0)[0];
+                    tempRow[1] = rightPoints.get(index).x * p2Row2.get(0, 1)[0] - p2Row0.get(0, 1)[0];
+                    tempRow[2] = rightPoints.get(index).x * p2Row2.get(0, 2)[0] - p2Row0.get(0, 2)[0];
+                    tempRow[3] = rightPoints.get(index).x * p2Row2.get(0, 3)[0] - p2Row0.get(0, 3)[0];
                     A.put(2, 0, tempRow);
                     tempRow[0] = 0;
                     tempRow[1] = 0;
@@ -223,10 +223,10 @@ public class MidgetOfSeville {
                     tempRow[3] = 0;
 
                     //Cuarto Row
-                    tempRow[0] = rightPoints.get(index).y * p2Row2[0] - p2Row1[0];
-                    tempRow[1] = rightPoints.get(index).y * p2Row2[1] - p2Row1[1];
-                    tempRow[2] = rightPoints.get(index).y * p2Row2[2] - p2Row1[2];
-                    tempRow[3] = rightPoints.get(index).y * p2Row2[3] - p2Row1[3];
+                    tempRow[0] = rightPoints.get(index).y * p2Row2.get(0, 0)[0] - p2Row1.get(0, 0)[0];
+                    tempRow[1] = rightPoints.get(index).y * p2Row2.get(0, 1)[0] - p2Row1.get(0, 1)[0];
+                    tempRow[2] = rightPoints.get(index).y * p2Row2.get(0, 2)[0] - p2Row1.get(0, 2)[0];
+                    tempRow[3] = rightPoints.get(index).y * p2Row2.get(0, 3)[0] - p2Row1.get(0, 3)[0];
                     A.put(3, 0, tempRow);
                     tempRow[0] = 0;
                     tempRow[1] = 0;
