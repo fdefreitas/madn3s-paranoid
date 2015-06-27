@@ -148,7 +148,7 @@ public class MidgetOfSeville {
 			Mat sub = new Mat(1, n, CvType.CV_64FC2);
 
             // Row temporal para resta y multipliacion en el for
-            double tempRow[] = new double[n];
+            double tempRow[] = new double[4];
 
             Mat P1 = MADN3SController.getMatFromString(MADN3SController.sharedPrefsGetString(KEY_CALIB_P1), CvType.CV_64F);
             Mat P2 = MADN3SController.getMatFromString(MADN3SController.sharedPrefsGetString(KEY_CALIB_P2), CvType.CV_64F);
@@ -164,7 +164,27 @@ public class MidgetOfSeville {
             Mat p2Row2 = P2.row(2);
 
             //Punto para calculo de punto al final del for
-            double tempPoint[] = new double[3];
+            double tempPoint[] = new double[4];
+
+			try{
+				Log.d(tag, p1Row0.rows() + " x " + p1Row0.cols() + " = " + p1Row0.dump());
+				Log.d(tag, p1Row0.get(0,0).length + " " + p1Row0.get(0, 0)[0]);
+				Log.d(tag, p1Row0.get(1,0).length + " " + p1Row0.get(1, 0)[0]);
+				Log.d(tag, p1Row0.get(2,0).length + " " + p1Row0.get(2, 0)[0]);
+				Log.d(tag, p1Row0.get(3,0).length + " " + p1Row0.get(3, 0)[0]);
+			} catch (Exception e){
+
+			}
+
+			try{
+				Log.d(tag, p1Row0.rows() + " x " + p1Row0.cols() + " = " + p1Row0.dump());
+				Log.d(tag, p1Row0.get(0,0).length + " " + p1Row0.get(0,0)[0]);
+				Log.d(tag, p1Row0.get(0,1).length + " " + p1Row0.get(0,1)[0]);
+				Log.d(tag, p1Row0.get(0,2).length + " " + p1Row0.get(0,2)[0]);
+				Log.d(tag, p1Row0.get(0,3).length + " " + p1Row0.get(0,3)[0]);
+			} catch (Exception e){
+				Log.d(tag, "boom");
+			}
 
 			for(int index = 0; index < statusBytes.length; ++index){
 				if(statusBytes[index] == 1 && index < leftPoints.size() && index < rightPoints.size()){
@@ -189,17 +209,21 @@ public class MidgetOfSeville {
 //					Core.subtract(mult, rightCameraMatrix.row(1), sub);
 //					sub.copyTo(A.row(3));
 
+					Log.d(tag, "Pre Primer Row");
                     //Primer Row
                     tempRow[0] = leftPoints.get(index).x * p1Row2.get(0, 0)[0] - p1Row0.get(0, 0)[0];
-                    tempRow[1] = leftPoints.get(index).x * p1Row2.get(1, 0)[0] - p1Row0.get(1, 0)[0];
-                    tempRow[2] = leftPoints.get(index).x * p1Row2.get(2, 0)[0] - p1Row0.get(2, 0)[0];
-                    tempRow[3] = leftPoints.get(index).x * p1Row2.get(3, 0)[0] - p1Row0.get(3, 0)[0];
+                    tempRow[1] = leftPoints.get(index).x * p1Row2.get(0, 1)[0] - p1Row0.get(0, 1)[0];
+                    tempRow[2] = leftPoints.get(index).x * p1Row2.get(0, 2)[0] - p1Row0.get(0, 2)[0];
+//                    double test = leftPoints.get(index).x * p1Row2.get(0, 3)[0] - p1Row0.get(0, 3)[0];
+                    tempRow[3] = leftPoints.get(index).x * p1Row2.get(0, 3)[0] - p1Row0.get(0, 3)[0];
                     A.put(0, 0, tempRow);
                     tempRow[0] = 0;
                     tempRow[1] = 0;
                     tempRow[2] = 0;
                     tempRow[3] = 0;
+					Log.d(tag, "Post Primer Row");
 
+					Log.d(tag, "Pre Segundo Row");
                     //Segundo Row
                     tempRow[0] = leftPoints.get(index).y * p1Row2.get(0, 0)[0] - p1Row1.get(0, 0)[0];
                     tempRow[1] = leftPoints.get(index).y * p1Row2.get(0, 1)[0] - p1Row1.get(0, 1)[0];
@@ -210,7 +234,9 @@ public class MidgetOfSeville {
                     tempRow[1] = 0;
                     tempRow[2] = 0;
                     tempRow[3] = 0;
+					Log.d(tag, "Post Segundo Row");
 
+					Log.d(tag, "Pre Tercer Row");
                     //Tercer Row
                     tempRow[0] = rightPoints.get(index).x * p2Row2.get(0, 0)[0] - p2Row0.get(0, 0)[0];
                     tempRow[1] = rightPoints.get(index).x * p2Row2.get(0, 1)[0] - p2Row0.get(0, 1)[0];
@@ -221,7 +247,9 @@ public class MidgetOfSeville {
                     tempRow[1] = 0;
                     tempRow[2] = 0;
                     tempRow[3] = 0;
+					Log.d(tag, "Post Tercer Row");
 
+					Log.d(tag, "Pre Cuarto Row");
                     //Cuarto Row
                     tempRow[0] = rightPoints.get(index).y * p2Row2.get(0, 0)[0] - p2Row1.get(0, 0)[0];
                     tempRow[1] = rightPoints.get(index).y * p2Row2.get(0, 1)[0] - p2Row1.get(0, 1)[0];
@@ -232,8 +260,17 @@ public class MidgetOfSeville {
                     tempRow[1] = 0;
                     tempRow[2] = 0;
                     tempRow[3] = 0;
+					Log.d(tag, "Post Cuarto Row");
 
+					Log.d(tag, "Pre SVDecomp");
 			        Core.SVDecomp(A, wSingularValue, uLeftOrthogonal, vRightOrtogonal, Core.DECOMP_SVD);
+					Log.d(tag, "Post SVDecomp");
+					Log.d(tag, "wSingularValue(" + wSingularValue.rows() + ", " + wSingularValue.cols() + ") = " + wSingularValue.dump());
+					Log.d(tag, "uLeftOrthogonal(" + uLeftOrthogonal.rows() + ", " + uLeftOrthogonal.cols() + ") = " + uLeftOrthogonal.dump());
+					Log.d(tag, "vRightOrtogonal(" + vRightOrtogonal.rows() + ", " + vRightOrtogonal.cols() + ") = " + vRightOrtogonal.dump());
+//wSingularValue es de 3x1
+//uLeftOrthogonal es de 4x3
+//vRightOrtogonal es de 3x3
 
 //			        vRightOrtogonal = vRightOrtogonal.t();
 //			        last = vRightOrtogonal.cols();
@@ -257,9 +294,9 @@ public class MidgetOfSeville {
 //                        tempPoint[2] = (vRightOrtogonal.get(2, 3)[0] / vRightOrtogonal.get(3, 3)[0]);
 //                    } else {
                         JSONObject point = new JSONObject();
-                        point.put(KEY_X, (vRightOrtogonal.get(0, 3)[0] / vRightOrtogonal.get(3, 3)[0]));
-                        point.put(KEY_Y, (vRightOrtogonal.get(0, 3)[0] / vRightOrtogonal.get(3, 3)[0]));
-                        point.put(KEY_Z, (vRightOrtogonal.get(0, 3)[0] / vRightOrtogonal.get(3, 3)[0]));
+                        point.put(KEY_X, (vRightOrtogonal.get(0, 2)[0] / vRightOrtogonal.get(2, 2)[0]));
+                        point.put(KEY_Y, (vRightOrtogonal.get(0, 2)[0] / vRightOrtogonal.get(2, 2)[0]));
+                        point.put(KEY_Z, (vRightOrtogonal.get(0, 2)[0] / vRightOrtogonal.get(2, 2)[0]));
                         pointsJsonArr.put(point);
                         result.put(point);
 //                    }
