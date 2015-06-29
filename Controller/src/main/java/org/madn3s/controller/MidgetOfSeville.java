@@ -144,11 +144,9 @@ public class MidgetOfSeville {
 			Mat wSingularValue = new Mat(m, n, CvType.CV_64F);
 	        Mat uLeftOrthogonal = new Mat(m, m, CvType.CV_64F);
 	        Mat vRightOrtogonal = new Mat(n, n, CvType.CV_64F);
-			Mat mult = new Mat(1, n, CvType.CV_64FC2);
-			Mat sub = new Mat(1, n, CvType.CV_64FC2);
 
             // Row temporal para resta y multipliacion en el for
-            double tempRow[] = new double[4];
+            double tempRow[] = new double[m];
 
             Mat P1 = MADN3SController.getMatFromString(MADN3SController.sharedPrefsGetString(KEY_CALIB_P1), CvType.CV_64F);
             Mat P2 = MADN3SController.getMatFromString(MADN3SController.sharedPrefsGetString(KEY_CALIB_P2), CvType.CV_64F);
@@ -164,7 +162,7 @@ public class MidgetOfSeville {
             Mat p2Row2 = P2.row(2);
 
             //Punto para calculo de punto al final del for
-            double tempPoint[] = new double[4];
+            double tempPoint[] = new double[m];
 
 			try{
 				Log.d(tag, p1Row0.rows() + " x " + p1Row0.cols() + " = " + p1Row0.dump());
@@ -173,7 +171,7 @@ public class MidgetOfSeville {
 				Log.d(tag, p1Row0.get(2,0).length + " " + p1Row0.get(2, 0)[0]);
 				Log.d(tag, p1Row0.get(3,0).length + " " + p1Row0.get(3, 0)[0]);
 			} catch (Exception e){
-
+                Log.d(tag, "boom");
 			}
 
 			try{
@@ -265,14 +263,19 @@ public class MidgetOfSeville {
 					Log.d(tag, "Pre SVDecomp");
 			        Core.SVDecomp(A, wSingularValue, uLeftOrthogonal, vRightOrtogonal, Core.DECOMP_SVD);
 					Log.d(tag, "Post SVDecomp");
-					Log.d(tag, "wSingularValue(" + wSingularValue.rows() + ", " + wSingularValue.cols() + ") = " + wSingularValue.dump());
-					Log.d(tag, "uLeftOrthogonal(" + uLeftOrthogonal.rows() + ", " + uLeftOrthogonal.cols() + ") = " + uLeftOrthogonal.dump());
-					Log.d(tag, "vRightOrtogonal(" + vRightOrtogonal.rows() + ", " + vRightOrtogonal.cols() + ") = " + vRightOrtogonal.dump());
-//wSingularValue es de 3x1
-//uLeftOrthogonal es de 4x3
-//vRightOrtogonal es de 3x3
 
-//			        vRightOrtogonal = vRightOrtogonal.t();
+					Log.d(tag, "wSingularValue(" + wSingularValue.rows()
+                            + ", " + wSingularValue.cols() + ") = " + wSingularValue.dump());
+					Log.d(tag, "uLeftOrthogonal(" + uLeftOrthogonal.rows()
+                            + ", " + uLeftOrthogonal.cols() + ") = " + uLeftOrthogonal.dump());
+					Log.d(tag, "vRightOrtogonal(" + vRightOrtogonal.rows()
+                            + ", " + vRightOrtogonal.cols() + ") = " + vRightOrtogonal.dump());
+                    /* wSingularValue es de 3x1
+                    * uLeftOrthogonal es de 4x3
+                    * vRightOrtogonal es de 3x3
+                    * */
+
+			        vRightOrtogonal = vRightOrtogonal.t();
 //			        last = vRightOrtogonal.cols();
 //			        Mat point = vRightOrtogonal.col(last - 1);
 //			        JSONObject pointJsonResult = new JSONObject();
