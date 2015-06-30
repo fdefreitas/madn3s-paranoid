@@ -101,14 +101,20 @@ public class MADN3SController extends Application {
 
         try {
             JSONObject point;
-
+            Log.d(tag, "icpMatrix: " +  icpMatrix.dump());
             for (int i = 0; i < result.length(); ++i) {
                 pAux = getMatFromJsonObject(result.getJSONObject(i));
+                Log.d(tag, "result at " + i + " str: " +  result.getJSONObject(i));
+                Log.d(tag, "result at " + i + " Mat dump: " +  pAux.dump());
                 Core.multiply(icpMatrix, pAux, pAux);
                 point = new JSONObject();
-                point.put("x", pAux.get(0, 0)[0]);
-                point.put("y", pAux.get(1, 0)[0]);
-                point.put("z", pAux.get(2, 0)[0]);
+                point.put(KEY_X, pAux.get(0, 0)[0]);
+                point.put(KEY_Y, pAux.get(1, 0)[0]);
+                point.put(KEY_Z, pAux.get(2, 0)[0]);
+
+                Log.d(tag, "pAux.x at 0: " +  pAux.get(0, 0)[0]);
+                Log.d(tag, "pAux.x at 1: " +  pAux.get(1, 0)[0]);
+                Log.d(tag, "pAux.x at 2: " +  pAux.get(2, 0)[0]);
 
                 result.put(i, point);
                 pointsList.add(point);

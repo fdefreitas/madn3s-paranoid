@@ -216,8 +216,7 @@ public class DiscoveryFragment extends BaseFragment {
                                         filepath, frameIndex, true, 40, 0.1, 15, true);
                                 Log.d(tag, "icpResult:" + icpResult);
                                 icpMatrix = MADN3SController.getMatFromString(icpResult, CvType.CV_64F);
-//                                previous = MADN3SController.applyTransform(icpMatrix, result, pointsList);
-                                previous = result;
+                                previous = MADN3SController.applyTransform(icpMatrix, result, pointsList);
                                 // TODO multiplicar todos los puntos en MidgetOfSeville.pointsJsonArr por icpMatrix?
                             }
                         } else {
