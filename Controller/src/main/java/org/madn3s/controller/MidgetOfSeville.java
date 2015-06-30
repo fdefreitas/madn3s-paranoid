@@ -275,7 +275,7 @@ public class MidgetOfSeville {
                     * vRightOrtogonal es de 3x3
                     * */
 
-			        vRightOrtogonal = vRightOrtogonal.t();
+//			        vRightOrtogonal = vRightOrtogonal.t();
 //			        last = vRightOrtogonal.cols();
 //			        Mat point = vRightOrtogonal.col(last - 1);
 //			        JSONObject pointJsonResult = new JSONObject();
