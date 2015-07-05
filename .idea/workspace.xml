@@ -22,15 +22,14 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: org.madn3s.controller" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01d3b7cb-771b-4106-8f1c-961fc16fc58e" name="Default" comment="">
+    <list default="true" id="01d3b7cb-771b-4106-8f1c-961fc16fc58e" name="Default" comment="Generando delaunay.off">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/libs/armeabi/libMadn3sNative.so" afterPath="$PROJECT_DIR$/Controller/src/main/libs/armeabi/libMadn3sNative.so" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/libs/armeabi-v7a/libMadn3sNative.so" afterPath="$PROJECT_DIR$/Controller/src/main/libs/armeabi-v7a/libMadn3sNative.so" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/libMadn3sNative.so" afterPath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/libMadn3sNative.so" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/libMadn3sNative.so" afterPath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/libMadn3sNative.so" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/DiscoveryFragment.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/fragments/DiscoveryFragment.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/jni/madn3s/Madn3sNative.cpp" afterPath="$PROJECT_DIR$/Controller/src/main/jni/madn3s/Madn3sNative.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/vtk/Madn3sNative.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/vtk/Madn3sNative.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MidgetOfSeville.java" afterPath="$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/MidgetOfSeville.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs/Madn3sNative/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/Madn3sNative.o.d" afterPath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs/Madn3sNative/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/Madn3sNative.o.d" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/Madn3sNative/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/Madn3sNative.o.d" afterPath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/Madn3sNative/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/Madn3sNative.o.d" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="MADN3SCamera.iws" />
@@ -64,21 +63,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Madn3sNative.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Controller/src/main/java/org/madn3s/controller/vtk/Madn3sNative.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="432">
-              <caret line="26" column="94" selection-start-line="26" selection-start-column="94" selection-end-line="26" selection-end-column="94" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Madn3sNative.cpp" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Controller/src/main/jni/madn3s/Madn3sNative.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.15010142" vertical-offset="1024" max-vertical-offset="5868">
-              <caret line="61" column="80" selection-start-line="61" selection-start-column="80" selection-end-line="61" selection-end-column="80" />
+            <state vertical-scroll-proportion="-2.7642586" vertical-offset="3488" max-vertical-offset="6480">
+              <caret line="113" column="50" selection-start-line="113" selection-start-column="50" selection-end-line="113" selection-end-column="50" />
               <folding />
             </state>
           </provider>
@@ -2741,7 +2730,11 @@
       <created>1435623773308</created>
       <updated>1435623773308</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Compilando Delaunay">
+      <created>1436118346335</created>
+      <updated>1436118346335</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2758,6 +2751,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32867134" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32867134" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3216783" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41433567" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2765,7 +2759,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2857143" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31643358" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Memory Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32867134" sideWeight="0.5539514" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -2775,7 +2769,6 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41083917" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3216783" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -2811,7 +2804,8 @@
     <MESSAGE value="Multiplicacion por transpuesta activa" />
     <MESSAGE value="Quitando multiplicacion por icpMatrix" />
     <MESSAGE value="Agegando Logs a applyTransform" />
-    <option name="LAST_COMMIT_MESSAGE" value="Agegando Logs a applyTransform" />
+    <MESSAGE value="Compilando Delaunay" />
+    <option name="LAST_COMMIT_MESSAGE" value="Compilando Delaunay" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -3188,8 +3182,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Controller/src/main/jni/madn3s/Madn3sNative.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.15010142" vertical-offset="1024" max-vertical-offset="5868">
-          <caret line="61" column="80" selection-start-line="61" selection-start-column="80" selection-end-line="61" selection-end-column="80" />
+        <state vertical-scroll-proportion="-2.7642586" vertical-offset="3488" max-vertical-offset="6480">
+          <caret line="113" column="50" selection-start-line="113" selection-start-column="50" selection-end-line="113" selection-end-column="50" />
           <folding />
         </state>
       </provider>

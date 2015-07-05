@@ -134,7 +134,10 @@
  /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkActorCollection.h \
  /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkActor.h \
  /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkRenderWindowInteractor.h \
- /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkProperty.h
+ /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkProperty.h \
+ /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkUnstructuredGrid.h \
+ /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkDataSetSurfaceFilter.h \
+ /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkFiltersGeometryModule.h
 
 /home/fernando/dev/android-ndk-r10d/platforms/android-3/arch-arm/usr/include/jni.h:
 
@@ -405,3 +408,9 @@
 /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkRenderWindowInteractor.h:
 
 /home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkProperty.h:
+
+/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkUnstructuredGrid.h:
+
+/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkDataSetSurfaceFilter.h:
+
+/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/vtk-android/include/vtk-6.0/vtkFiltersGeometryModule.h:
