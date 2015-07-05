@@ -83,7 +83,7 @@ namespace madn3s {
 
             LOGI("Native doDelaunay. delaunay3D.");
             vtkSmartPointer<vtkDelaunay3D> delaunay3D = vtkSmartPointer<vtkDelaunay3D>::New();
-            delaunay3D->SetInputConnection (reader->GetOutputPort());
+            delaunay3D->SetInputConnection (cleanPolyData->GetOutputPort());
             delaunay3D->SetAlpha(alpha);
             delaunay3D->Update();
             LOGI("Native doDelaunay. Done delaunay3D.");
