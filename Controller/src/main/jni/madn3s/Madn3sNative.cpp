@@ -14,7 +14,7 @@
 
 #include <vtkIterativeClosestPointTransform.h>
 #include <vtkSmartPointer.h>
-#include <vtkSimplePointReader.h>
+#include <vtkSimplePointsReader.h>
 #include <vtkXMLPolyDataReader.h>
 #include <vtkXMLDataSetWriter.h>
 #include <vtkAlgorithmOutput.h>
@@ -70,7 +70,7 @@ namespace madn3s {
             LOGI("Native doDelaunay. alpha %s.", patch::to_string(alpha).c_str());
 
             LOGI("Native doDelaunay. reading source.");
-            vtkSmartPointer<vtkSimplePointReader> reader = vtkSmartPointer<vtkSimplePointReader>::New();
+            vtkSmartPointer<vtkSimplePointsReader> reader = vtkSmartPointer<vtkSimplePointsReader>::New();
             reader->SetFileName(offStr.c_str());
             reader->Update();
             LOGI("Native doDelaunay. Done reading source.");
