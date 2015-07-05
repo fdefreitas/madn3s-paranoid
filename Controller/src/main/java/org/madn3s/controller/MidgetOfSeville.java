@@ -71,8 +71,6 @@ public class MidgetOfSeville {
 				rightMat = new Mat(height, width, CvType.CV_8UC3);
 				Utils.bitmapToMat(tempBitmap, rightMat);
 				Imgproc.cvtColor(rightMat, rightMat, Imgproc.COLOR_BGR2GRAY);
-
-//				Log.d(tag, "calculateFrameOpticalFlow. rightMat: " + (rightMat == null));
 			}
 
 			if(leftFilepath != null){
@@ -84,8 +82,6 @@ public class MidgetOfSeville {
 				leftMat = new Mat(height, width, CvType.CV_8UC3);
 				Utils.bitmapToMat(tempBitmap, leftMat);
 				Imgproc.cvtColor(leftMat, leftMat, Imgproc.COLOR_BGR2GRAY);
-
-//				Log.d(tag, "calculateFrameOpticalFlow. leftMat: " + (leftMat == null));
 			}
 
 			JSONObject pointJson;
@@ -119,12 +115,7 @@ public class MidgetOfSeville {
             MADN3SController.saveJsonToExternal(leftMop.dump(), "leftPoints");
 
 			byte[] statusBytes = opticalFlowFoundFeatures.toArray();
-//			Log.d(tag, "lengths. leftPoints: " + leftPoints.size() + " rightPoints: " + rightPoints.size()
-//					+ " status: " + statusBytes.length);
 
-//			for(int i = 0; i < leftPoints.size(); ++i){
-//				Log.d(tag, "calculateFrameOpticalFlow. status(" + String.format("%02d", i) + "): " + statusBytes[i]);
-//			}
 
 			JSONObject calibrationJson = MADN3SController.sharedPrefsGetJSONObject(KEY_CALIBRATION);
 			JSONObject leftSide = calibrationJson.getJSONObject(SIDE_LEFT);
@@ -139,7 +130,7 @@ public class MidgetOfSeville {
 			Scalar neutral = new Scalar(1,1,1);
 			int last;
 			int m = 4;
-			int n = 3;
+			int n = 4;
 			Mat A = Mat.zeros(m, n, CvType.CV_64F);
 			Mat wSingularValue = new Mat(m, n, CvType.CV_64F);
 	        Mat uLeftOrthogonal = new Mat(m, m, CvType.CV_64F);
@@ -164,55 +155,13 @@ public class MidgetOfSeville {
             //Punto para calculo de punto al final del for
             double tempPoint[] = new double[m];
 
-			try{
-				Log.d(tag, p1Row0.rows() + " x " + p1Row0.cols() + " = " + p1Row0.dump());
-				Log.d(tag, p1Row0.get(0,0).length + " " + p1Row0.get(0, 0)[0]);
-				Log.d(tag, p1Row0.get(1,0).length + " " + p1Row0.get(1, 0)[0]);
-				Log.d(tag, p1Row0.get(2,0).length + " " + p1Row0.get(2, 0)[0]);
-				Log.d(tag, p1Row0.get(3,0).length + " " + p1Row0.get(3, 0)[0]);
-			} catch (Exception e){
-                Log.d(tag, "boom");
-			}
-
-			try{
-				Log.d(tag, p1Row0.rows() + " x " + p1Row0.cols() + " = " + p1Row0.dump());
-				Log.d(tag, p1Row0.get(0,0).length + " " + p1Row0.get(0,0)[0]);
-				Log.d(tag, p1Row0.get(0,1).length + " " + p1Row0.get(0,1)[0]);
-				Log.d(tag, p1Row0.get(0,2).length + " " + p1Row0.get(0,2)[0]);
-				Log.d(tag, p1Row0.get(0,3).length + " " + p1Row0.get(0,3)[0]);
-			} catch (Exception e){
-				Log.d(tag, "boom");
-			}
-
 			for(int index = 0; index < statusBytes.length; ++index){
 				if(statusBytes[index] == 1 && index < leftPoints.size() && index < rightPoints.size()){
-                    // TODO comentado para pruebas con codigo de Astrid
-//					//Primer Row
-//					Core.multiply(leftCameraMatrix.row(2), neutral, mult, leftPoints.get(index).x);
-//					Core.subtract(mult, leftCameraMatrix.row(0), sub);
-//					sub.copyTo(A.row(0));
-//
-//					//Segundo Row
-//					Core.multiply(leftCameraMatrix.row(2), neutral, mult, leftPoints.get(index).y);
-//					Core.subtract(mult, leftCameraMatrix.row(1), sub);
-//					sub.copyTo(A.row(1));
-//
-//					//Tercer Row
-//					Core.multiply(rightCameraMatrix.row(2), neutral, mult, rightPoints.get(index).x);
-//					Core.subtract(mult, rightCameraMatrix.row(0), sub);
-//					sub.copyTo(A.row(2));
-//
-//					//Cuarto Row
-//					Core.multiply(rightCameraMatrix.row(2), neutral, mult, rightPoints.get(index).x);
-//					Core.subtract(mult, rightCameraMatrix.row(1), sub);
-//					sub.copyTo(A.row(3));
-
 					Log.d(tag, "Pre Primer Row");
                     //Primer Row
                     tempRow[0] = leftPoints.get(index).x * p1Row2.get(0, 0)[0] - p1Row0.get(0, 0)[0];
                     tempRow[1] = leftPoints.get(index).x * p1Row2.get(0, 1)[0] - p1Row0.get(0, 1)[0];
                     tempRow[2] = leftPoints.get(index).x * p1Row2.get(0, 2)[0] - p1Row0.get(0, 2)[0];
-//                    double test = leftPoints.get(index).x * p1Row2.get(0, 3)[0] - p1Row0.get(0, 3)[0];
                     tempRow[3] = leftPoints.get(index).x * p1Row2.get(0, 3)[0] - p1Row0.get(0, 3)[0];
                     A.put(0, 0, tempRow);
                     tempRow[0] = 0;

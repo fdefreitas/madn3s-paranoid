@@ -24,7 +24,7 @@ public class Madn3sNative {
             String projectPath, int currentIteration, boolean ascii, int nLandmarks,
             double maxMeanDistance, int nIterations, boolean debug);
 
-	public static native synchronized boolean doDelaunay(String icpFilePath, double alpha);
+	public static native synchronized boolean doDelaunay(String icpFilePath, String resultFilePath, double alpha);
 
     public static native synchronized String saveVtp(String data, String path, String name);
 }

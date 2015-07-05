@@ -59,7 +59,7 @@ namespace madn3s {
     vtkSmartPointer<vtkPolyData> loadVtp( std::string projectPathStr);
 
 //----------------------------------------------------------------------------
-    bool doDelaunay(std::string sourceStr, double alpha, std::string targetStr){
+    bool doDelaunay(std::string sourceStr, std::string targetStr, double alpha){
             vtkSmartPointer<vtkXMLPolyDataReader> reader = vtkSmartPointer<vtkXMLPolyDataReader>::New();
             reader->SetFileName(sourceStr.c_str());
             reader->Update();
@@ -290,13 +290,15 @@ JNIEXPORT jstring JNICALL Java_org_madn3s_controller_vtk_Madn3sNative_doIcp(JNIE
 }
 
 JNIEXPORT jboolean JNICALL Java_org_madn3s_controller_vtk_Madn3sNative_doDelaunay(JNIEnv * env
-    , jobject obj, jstring icpFilePath, jdouble alpha){
+    , jobject obj, jstring icpFilePath, jstring resultFilePath, jdouble alpha){
     LOGI("doIcp JNI. doDelaunay with p0 and p1");
     const double mAlpha = alpha;
     const char *pathPointer = env->GetStringUTFChars(icpFilePath, NULL);
     std::string pathStr = pathPointer;
+    const char *resultPathPointer = env->GetStringUTFChars(resultFilePath, NULL);
+    std::string resultPathStr = resultPathPointer;
 //    vtkSmartPointer<vtkPolyData> data = madn3s::loadVtp(pathStr);
-    madn3s::doDelaunay(pathStr, mAlpha, pathStr);
+    madn3s::doDelaunay(pathStr, resultPathStr, mAlpha);
     return false;
 }
 

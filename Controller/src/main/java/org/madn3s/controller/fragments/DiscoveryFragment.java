@@ -237,6 +237,7 @@ public class DiscoveryFragment extends BaseFragment {
 
                     Log.d(tag, "meshResult length: " + meshResultJson.length());
                     Madn3sNative.saveVtp(meshResultJson.toString(), filepath, "final_mesh");
+                    Madn3sNative.doDelaunay(filepath + "final_mesh.vtp", filepath + "delaunay_result.vtp", 0.6);
 
                     MADN3SController.saveJsonToExternal(meshResultJson.toString(1), "frames-after-pyr");
 
