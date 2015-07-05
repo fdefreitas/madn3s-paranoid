@@ -22,14 +22,12 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: org.madn3s.controller" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01d3b7cb-771b-4106-8f1c-961fc16fc58e" name="Default" comment="Generando delaunay.off">
+    <list default="true" id="01d3b7cb-771b-4106-8f1c-961fc16fc58e" name="Default" comment="Fix indent y delaunay">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/libs/armeabi/libMadn3sNative.so" afterPath="$PROJECT_DIR$/Controller/src/main/libs/armeabi/libMadn3sNative.so" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/libs/armeabi-v7a/libMadn3sNative.so" afterPath="$PROJECT_DIR$/Controller/src/main/libs/armeabi-v7a/libMadn3sNative.so" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/libMadn3sNative.so" afterPath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/libMadn3sNative.so" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/libMadn3sNative.so" afterPath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/libMadn3sNative.so" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/jni/madn3s/Madn3sNative.cpp" afterPath="$PROJECT_DIR$/Controller/src/main/jni/madn3s/Madn3sNative.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs/Madn3sNative/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/Madn3sNative.o.d" afterPath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi-v7a/objs/Madn3sNative/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/Madn3sNative.o.d" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/Madn3sNative/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/Madn3sNative.o.d" afterPath="$PROJECT_DIR$/Controller/src/main/obj/local/armeabi/objs/Madn3sNative/home/fernando/dev/projects/MADN3S/Controller/src/main/jni/madn3s/Madn3sNative.o.d" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="MADN3SCamera.iws" />
@@ -66,8 +64,8 @@
       <file leaf-file-name="Madn3sNative.cpp" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Controller/src/main/jni/madn3s/Madn3sNative.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.7642586" vertical-offset="3488" max-vertical-offset="6480">
-              <caret line="113" column="50" selection-start-line="113" selection-start-column="50" selection-end-line="113" selection-end-column="50" />
+            <state vertical-scroll-proportion="0.486692" vertical-offset="896" max-vertical-offset="6462">
+              <caret line="64" column="97" selection-start-line="64" selection-start-column="97" selection-end-line="64" selection-end-column="97" />
               <folding />
             </state>
           </provider>
@@ -2734,7 +2732,11 @@
       <created>1436118346335</created>
       <updated>1436118346335</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Generando delaunay.off">
+      <created>1436127206732</created>
+      <updated>1436127206732</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2805,7 +2807,8 @@
     <MESSAGE value="Quitando multiplicacion por icpMatrix" />
     <MESSAGE value="Agegando Logs a applyTransform" />
     <MESSAGE value="Compilando Delaunay" />
-    <option name="LAST_COMMIT_MESSAGE" value="Compilando Delaunay" />
+    <MESSAGE value="Generando delaunay.off" />
+    <option name="LAST_COMMIT_MESSAGE" value="Generando delaunay.off" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -3182,8 +3185,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Controller/src/main/jni/madn3s/Madn3sNative.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.7642586" vertical-offset="3488" max-vertical-offset="6480">
-          <caret line="113" column="50" selection-start-line="113" selection-start-column="50" selection-end-line="113" selection-end-column="50" />
+        <state vertical-scroll-proportion="0.486692" vertical-offset="896" max-vertical-offset="6462">
+          <caret line="64" column="97" selection-start-line="64" selection-start-column="97" selection-end-line="64" selection-end-column="97" />
           <folding />
         </state>
       </provider>

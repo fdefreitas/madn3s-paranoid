@@ -62,13 +62,15 @@ namespace madn3s {
 
 //----------------------------------------------------------------------------
     bool doDelaunay(std::string sourceStr, std::string targetStr, double alpha){
+            std::string delaunayFile = "/storage/emulated/0/Pictures/MADN3SController/graduation/delaunay.off";
             LOGI("Native doDelaunay. sourceStr %s.", sourceStr.c_str());
             LOGI("Native doDelaunay. targetStr %s.", targetStr.c_str());
             LOGI("Native doDelaunay. alpha %s.", patch::to_string(alpha).c_str());
 
             LOGI("Native doDelaunay. reading source.");
             vtkSmartPointer<vtkXMLPolyDataReader> reader = vtkSmartPointer<vtkXMLPolyDataReader>::New();
-            reader->SetFileName(sourceStr.c_str());
+//            reader->SetFileName(sourceStr.c_str());
+            reader->SetFileName(delaunayFile.c_str());
             reader->Update();
             LOGI("Native doDelaunay. Done reading source.");
 
@@ -102,7 +104,6 @@ namespace madn3s {
             , int iterations, int landmarks, double maxMeanDistance, std::string projectPathStr, std::string fileName, bool ascii){
 
 //            return example::testExample("/storage/emulated/0/Pictures/MADN3SController/scumbag-robin/example-icp-test.vtp");
-            std::string delaunayFile = projectPathStr + "delaunay.off";
             LOGI("Native doIcp. source %s.", strSource.c_str());
             LOGI("Native doIcp. target %s.", strTarget.c_str());
             LOGI("Native doIcp. iter %s.", patch::to_string(iterations).c_str());
@@ -110,8 +111,7 @@ namespace madn3s {
             /* Load Source PolyData */
             vtkSmartPointer<vtkPolyData> source = vtkSmartPointer<vtkPolyData>::New();
             vtkSmartPointer<vtkXMLPolyDataReader> sourceReader = vtkSmartPointer<vtkXMLPolyDataReader>::New();
-//            sourceReader->SetFileName(strSource.c_str());
-            sourceReader->SetFileName(delaunayFile);
+            sourceReader->SetFileName(strSource.c_str());
             sourceReader->Update();
             source->ShallowCopy(sourceReader->GetOutput());
 
@@ -210,6 +210,17 @@ namespace madn3s {
 //        return polydata;
     }
 
+    std::string saveOff(vtkSmartPointer<vtkPolyData> data, std::string filePath){
+        std::ofstream out(filePath);
+
+        for (vtkIdType i = 0; i < data->GetNumberOfPoints(); i++) {
+            double *x = data->GetPoint(i);
+            out << x[0] << " " << x[1] << " " << x[2] << endl;
+        }
+
+        out.close();
+    }
+
     std::string saveVtp(vtkSmartPointer<vtkPolyData> data, std::string projectPathStr, std::string fileName, bool ascii){
 
         std::string asciiStr (ascii? "_ascii" : "");
@@ -229,18 +240,6 @@ namespace madn3s {
 
         return filenameStr;
     }
-
-    std::string saveOff(vtkSmartPointer<vtkPolyData> data, std::string filePath){
-
-            std::ofstream out(filePath);
-
-            for (vtkIdType i = 0; i < data->GetNumberOfPoints(); i++) {
-                double *x = data->GetPoint(i);
-                out << x[0] << " " << x[1] << " " << x[2] << endl;
-            }
-
-            out.close();
-        }
 
     vtkSmartPointer<vtkPolyData> loadVtp( std::string projectPathStr){
         vtkSmartPointer<vtkPolyData> data = vtkSmartPointer<vtkPolyData>::New();
