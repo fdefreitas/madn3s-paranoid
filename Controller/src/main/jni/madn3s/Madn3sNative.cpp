@@ -36,6 +36,8 @@
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkProperty.h>
+#include <vtkUnstructuredGrid.h>
+#include <vtkDataSetSurfaceFilter.h>
 
 #define  LOG_TAG    "MADN3SController_native"
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
@@ -60,19 +62,36 @@ namespace madn3s {
 
 //----------------------------------------------------------------------------
     bool doDelaunay(std::string sourceStr, std::string targetStr, double alpha){
+            LOGI("Native doDelaunay. sourceStr %s.", sourceStr.c_str());
+            LOGI("Native doDelaunay. targetStr %s.", targetStr.c_str());
+            LOGI("Native doDelaunay. alpha %s.", patch::to_string(alpha).c_str());
+
+            LOGI("Native doDelaunay. reading source.");
             vtkSmartPointer<vtkXMLPolyDataReader> reader = vtkSmartPointer<vtkXMLPolyDataReader>::New();
             reader->SetFileName(sourceStr.c_str());
             reader->Update();
+            LOGI("Native doDelaunay. Done reading source.");
+
+            LOGI("Native doDelaunay. cleaning source.");
             vtkSmartPointer<vtkCleanPolyData> cleanPolyData = vtkSmartPointer<vtkCleanPolyData>::New();
             cleanPolyData->SetInputConnection(reader->GetOutputPort());
             cleanPolyData->Update();
+            LOGI("Native doDelaunay. Done cleaning source.");
+
+            LOGI("Native doDelaunay. delaunay3D.");
             vtkSmartPointer<vtkDelaunay3D> delaunay3D = vtkSmartPointer<vtkDelaunay3D>::New();
             delaunay3D->SetInputConnection (reader->GetOutputPort());
             delaunay3D->SetAlpha(alpha);
+            delaunay3D->Update();
+            LOGI("Native doDelaunay. Done delaunay3D.");
+
+            LOGI("Native doDelaunay. writing target.");
             vtkSmartPointer<vtkXMLDataSetWriter> writer = vtkSmartPointer<vtkXMLDataSetWriter>::New();
             writer->SetFileName(targetStr.c_str());
             writer->SetInputConnection ( delaunay3D->GetOutputPort() );
             writer->Write();
+            LOGI("Native doDelaunay. Done writing target.");
+
             return true;
     }
 
@@ -232,7 +251,7 @@ extern "C" {
         jdouble maxMeanDistance, jint nIterations, jboolean debug);
 
     JNIEXPORT jboolean JNICALL Java_org_madn3s_controller_vtk_Madn3sNative_doDelaunay(JNIEnv * env,
-        jobject obj, jstring icpFilePath, jdouble alpha);
+        jobject obj, jstring icpFilePath, jstring resultFilePath, jdouble alpha);
 
     JNIEXPORT jstring JNICALL Java_org_madn3s_controller_vtk_Madn3sNative_saveVtp(JNIEnv * env
         , jobject obj, jstring data, jstring path, jstring name);
