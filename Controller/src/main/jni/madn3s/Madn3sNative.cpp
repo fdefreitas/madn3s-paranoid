@@ -61,16 +61,15 @@ namespace madn3s {
     vtkSmartPointer<vtkPolyData> loadVtp( std::string projectPathStr);
 
 //----------------------------------------------------------------------------
-    bool doDelaunay(std::string sourceStr, std::string targetStr, double alpha){
-            std::string delaunayFile = "/storage/emulated/0/Pictures/MADN3SController/graduation/delaunay.off";
+    bool doDelaunay(std::string sourceStr, std::string targetStr, std::string offStr,
+        std::string projectPathStr, double alpha){
             LOGI("Native doDelaunay. sourceStr %s.", sourceStr.c_str());
             LOGI("Native doDelaunay. targetStr %s.", targetStr.c_str());
             LOGI("Native doDelaunay. alpha %s.", patch::to_string(alpha).c_str());
 
             LOGI("Native doDelaunay. reading source.");
             vtkSmartPointer<vtkXMLPolyDataReader> reader = vtkSmartPointer<vtkXMLPolyDataReader>::New();
-//            reader->SetFileName(sourceStr.c_str());
-            reader->SetFileName(delaunayFile.c_str());
+            reader->SetFileName(offStr.c_str());
             reader->Update();
             LOGI("Native doDelaunay. Done reading source.");
 
@@ -265,10 +264,11 @@ extern "C" {
         jdouble maxMeanDistance, jint nIterations, jboolean debug);
 
     JNIEXPORT jboolean JNICALL Java_org_madn3s_controller_vtk_Madn3sNative_doDelaunay(JNIEnv * env,
-        jobject obj, jstring icpFilePath, jstring resultFilePath, jdouble alpha);
+        jobject obj, jstring icpFilePath, jstring resultFilePath, jstring offFilePath,
+        jstring projectPath, jdouble alpha);
 
-    JNIEXPORT jstring JNICALL Java_org_madn3s_controller_vtk_Madn3sNative_saveVtp(JNIEnv * env
-        , jobject obj, jstring data, jstring path, jstring name);
+    JNIEXPORT jstring JNICALL Java_org_madn3s_controller_vtk_Madn3sNative_saveVtp(JNIEnv * env,
+        jobject obj, jstring data, jstring path, jstring name);
 
 };
 
@@ -323,15 +323,20 @@ JNIEXPORT jstring JNICALL Java_org_madn3s_controller_vtk_Madn3sNative_doIcp(JNIE
 }
 
 JNIEXPORT jboolean JNICALL Java_org_madn3s_controller_vtk_Madn3sNative_doDelaunay(JNIEnv * env
-    , jobject obj, jstring icpFilePath, jstring resultFilePath, jdouble alpha){
+    , jobject obj, jstring icpFilePath, jstring resultFilePath, jstring offFilePath
+    , jstring projectPath, jdouble alpha){
     LOGI("doIcp JNI. doDelaunay with p0 and p1");
     const double mAlpha = alpha;
     const char *pathPointer = env->GetStringUTFChars(icpFilePath, NULL);
     std::string pathStr = pathPointer;
     const char *resultPathPointer = env->GetStringUTFChars(resultFilePath, NULL);
     std::string resultPathStr = resultPathPointer;
+    const char *offFilePathPointer = env->GetStringUTFChars(offFilePath, NULL);
+    std::string offFilePathStr = offFilePathPointer;
+    const char *projectPathPointer = env->GetStringUTFChars(projectPath, NULL);
+    std::string projectPathStr = projectPathPointer;
 //    vtkSmartPointer<vtkPolyData> data = madn3s::loadVtp(pathStr);
-    madn3s::doDelaunay(pathStr, resultPathStr, mAlpha);
+    madn3s::doDelaunay(pathStr, resultPathStr, offFilePathStr, projectPathStr, mAlpha);
     return false;
 }
 
