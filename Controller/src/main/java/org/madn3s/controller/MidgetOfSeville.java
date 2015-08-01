@@ -18,7 +18,6 @@ import org.opencv.core.MatOfByte;
 import org.opencv.core.MatOfFloat;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
-import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.core.TermCriteria;
 import org.opencv.imgproc.Imgproc;
@@ -31,15 +30,15 @@ import static org.madn3s.controller.Consts.*;
 public class MidgetOfSeville {
 	static final String tag = MidgetOfSeville.class.getSimpleName();
 
-	public static JSONArray calculateFrameOpticalFlow(JSONObject data, int frameIndex) throws JSONException{
+    public static JSONArray calculateFrameOpticalFlow(JSONObject data, int frameIndex) throws JSONException{
 		Log.d(tag, "calculateFrameOpticalFlow. Starting");
 //		Log.d(tag, "calculateFrameOpticalFlow. data: " + data);
 		JSONObject rightJson;
 		JSONObject leftJson;
 		JSONArray rightJsonArray;
 		JSONArray leftJsonArray;
-		String leftFilepath = null;
-		String rightFilepath = null;
+		String leftFilepath;
+		String rightFilepath;
 		Bitmap tempBitmap = null;
 		Mat leftMat = null;
 		Mat rightMat = null;
@@ -103,32 +102,31 @@ public class MidgetOfSeville {
 
 			MatOfByte opticalFlowFoundFeatures = new MatOfByte();
 			MatOfFloat err = new MatOfFloat();
-			TermCriteria termcrit = new TermCriteria(TermCriteria.MAX_ITER+TermCriteria.EPS, 10, 0.1);
+			TermCriteria termCrit = new TermCriteria(TermCriteria.MAX_ITER+TermCriteria.EPS, 10, 0.1);
 			Size winSize = new Size(9, 9);
 			int maxLevel = 5;
             double minEigThreshold = 0.0001;
 
 			Video.calcOpticalFlowPyrLK(leftMat, rightMat, leftMop, rightMop, opticalFlowFoundFeatures,
-                    err, winSize, maxLevel,termcrit, 0, minEigThreshold);
+                    err, winSize, maxLevel,termCrit, 0, minEigThreshold);
 
             MADN3SController.saveJsonToExternal(rightMop.dump(), "rightPoints");
             MADN3SController.saveJsonToExternal(leftMop.dump(), "leftPoints");
 
 			byte[] statusBytes = opticalFlowFoundFeatures.toArray();
 
+//			JSONObject calibrationJson = MADN3SController.sharedPrefsGetJSONObject(KEY_CALIBRATION);
+//			JSONObject leftSide = calibrationJson.getJSONObject(SIDE_LEFT);
+//			JSONObject rightSide = calibrationJson.getJSONObject(SIDE_RIGHT);
 
-			JSONObject calibrationJson = MADN3SController.sharedPrefsGetJSONObject(KEY_CALIBRATION);
-			JSONObject leftSide = calibrationJson.getJSONObject(SIDE_LEFT);
-			JSONObject rightSide = calibrationJson.getJSONObject(SIDE_RIGHT);
-
-			Mat rightCameraMatrix = MADN3SController.getMatFromString(
-                    rightSide.getString(KEY_CALIB_CAMERA_MATRIX), CvType.CV_64F);
-			Mat leftCameraMatrix = MADN3SController.getMatFromString(
-                    leftSide.getString(KEY_CALIB_CAMERA_MATRIX), CvType.CV_64F);
+//			Mat rightCameraMatrix = MADN3SController.getMatFromString(
+//                    rightSide.getString(KEY_CALIB_CAMERA_MATRIX), CvType.CV_64F);
+//			Mat leftCameraMatrix = MADN3SController.getMatFromString(
+//                    leftSide.getString(KEY_CALIB_CAMERA_MATRIX), CvType.CV_64F);
 
 			JSONArray result = new JSONArray();
-			Scalar neutral = new Scalar(1,1,1);
-			int last;
+//			Scalar neutral = new Scalar(1,1,1);
+//			int last;
 			int m = 4;
 			int n = 4;
 			Mat A = Mat.zeros(m, n, CvType.CV_64F);
@@ -136,7 +134,7 @@ public class MidgetOfSeville {
 	        Mat uLeftOrthogonal = new Mat(m, m, CvType.CV_64F);
 	        Mat vRightOrtogonal = new Mat(n, n, CvType.CV_64F);
 
-            // Row temporal para resta y multipliacion en el for
+            // Row temporal para resta y multiplicacion en el for
             double tempRow[] = new double[m];
 
             Mat P1 = MADN3SController.getMatFromString(MADN3SController.sharedPrefsGetString(KEY_CALIB_P1), CvType.CV_64F);
@@ -153,7 +151,7 @@ public class MidgetOfSeville {
             Mat p2Row2 = P2.row(2);
 
             //Punto para calculo de punto al final del for
-            double tempPoint[] = new double[m];
+//            double tempPoint[] = new double[m];
 
 			for(int index = 0; index < statusBytes.length; ++index){
 				if(statusBytes[index] == 1 && index < leftPoints.size() && index < rightPoints.size()){
@@ -296,7 +294,7 @@ public class MidgetOfSeville {
 
 			Log.d(tag, "doStereoCalibration. Parsing Right Image Points");
 			JSONArray rightJsonImagePoints = new JSONArray(rightSide.getString(KEY_CALIB_IMAGE_POINTS));
-			ArrayList<Mat> rightImagePoints = new ArrayList<Mat>(rightJsonImagePoints.length());
+			ArrayList<Mat> rightImagePoints = new ArrayList<>(rightJsonImagePoints.length());
 			for(int i = 0; i < rightJsonImagePoints.length(); ++i){
 				rightImagePoints.add(MADN3SController.getImagePointFromString(rightJsonImagePoints.getString(i)));
 //				Log.d(tag, " rightImagePoints(" + i + ")[" + rightImagePoints.get(i).rows() + "][" + rightImagePoints.get(i).cols() + "]"
@@ -306,7 +304,7 @@ public class MidgetOfSeville {
 
 			Log.d(tag, "doStereoCalibration. Parsing Left Image Points");
 			JSONArray leftJsonImagePoints = new JSONArray(leftSide.getString(KEY_CALIB_IMAGE_POINTS));
-			ArrayList<Mat> leftImagePoints = new ArrayList<Mat>(leftJsonImagePoints.length());
+			ArrayList<Mat> leftImagePoints = new ArrayList<>(leftJsonImagePoints.length());
 			for(int i = 0; i < leftJsonImagePoints.length(); ++i){
 				leftImagePoints.add(MADN3SController.getImagePointFromString(leftJsonImagePoints.getString(i)));
 //				Log.d(tag, " leftImagePoints(" + i + ")[" + leftImagePoints.get(i).rows() + "][" + leftImagePoints.get(i).cols() + "]"
@@ -316,7 +314,7 @@ public class MidgetOfSeville {
 
 			Log.d(tag, "doStereoCalibration. Generating Object Points");
 			int corners = leftImagePoints.size() >= rightImagePoints.size()? leftImagePoints.size(): rightImagePoints.size();
-			ArrayList<Mat> objectPoints = new ArrayList<Mat>();
+			ArrayList<Mat> objectPoints = new ArrayList<>();
 	        objectPoints.add(Mat.zeros(corners, 1, CvType.CV_32FC3));
 	        calcBoardCornerPositions(objectPoints.get(0));
 	        for (int i = 1; i < corners; i++) {
@@ -457,21 +455,21 @@ public class MidgetOfSeville {
         corners.put(0, 0, positions);
     }
 
-	public static void restoreBackupJson(){
-		String jsonBakString = "{}";
-		try {
-            Log.d(tag, "Restoring json backup");
-			JSONObject jsonBak = new JSONObject(jsonBakString);
-			JSONArray framesJsonArray = jsonBak.getJSONArray("frames");
-			JSONObject frame;
-			for(int i = 0; i < framesJsonArray.length(); i++){
-				frame = framesJsonArray.getJSONObject(i);
-				MADN3SController.sharedPrefsPutJSONObject(FRAME_PREFIX + i, frame);
-				Log.d(tag, FRAME_PREFIX + i + " = " + frame.toString());
-			}
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void restoreBackupJson(){
+//		String jsonBakString = "{}";
+//		try {
+//            Log.d(tag, "Restoring json backup");
+//			JSONObject jsonBak = new JSONObject(jsonBakString);
+//			JSONArray framesJsonArray = jsonBak.getJSONArray("frames");
+//			JSONObject frame;
+//			for(int i = 0; i < framesJsonArray.length(); i++){
+//				frame = framesJsonArray.getJSONObject(i);
+//				MADN3SController.sharedPrefsPutJSONObject(FRAME_PREFIX + i, frame);
+//				Log.d(tag, FRAME_PREFIX + i + " = " + frame.toString());
+//			}
+//
+//		} catch (JSONException e) {
+//			e.printStackTrace();
+//		}
+//	}
 }
