@@ -147,6 +147,14 @@ public class DiscoveryFragment extends BaseFragment {
                 calibrate();
             }
         });
+
+        Button loadCalibrationButton = (Button) getView().findViewById(R.id.load_calibration_button);
+        loadCalibrationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadCalibration();
+            }
+        });
 	}
 
     private void tests() {
@@ -250,6 +258,11 @@ public class DiscoveryFragment extends BaseFragment {
             }
 
         }.execute();
+    }
+
+    private void loadCalibration(){
+        JSONObject calibrationJson = MADN3SController.getInputJson("stereo-calibration-result.json");
+        MADN3SController.sharedPrefsPutJSONObject(KEY_STEREO_CALIBRATION, calibrationJson);
     }
 
     private void calibrate(){

@@ -61,11 +61,28 @@
         android:layout_alignTop="@+id/button_separator2"
         android:text="Run Test" />
 
+    <Button
+        android:id="@+id/load_calibration_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/button_separator3"
+        android:layout_alignTop="@+id/button_separator3"
+        android:text="@string/load_calibration" />
+
+    <View
+        android:id="@+id/button_separator3"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:layout_below="@id/calibrate_button"
+        android:layout_centerHorizontal="true" />
+
     <ProgressBar
         android:id="@+id/discovery_progressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tests_button"
+        android:layout_below="@+id/load_calibration_button"
         android:layout_margin="8dp"
         android:indeterminate="true"
         android:visibility="visible" />

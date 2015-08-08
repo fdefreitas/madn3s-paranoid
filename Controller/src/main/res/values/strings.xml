@@ -38,6 +38,7 @@
     <string name="error_connect_lost">Connection Lost</string>
 
     <string name="calibration">Calibration</string>
+    <string name="load_calibration">Load Calibration</string>
     <string name="nxt_action">Sending Signal to NXT</string>
     <string name="right_camera_action">Sending Signal to Camera1</string>
     <string name="left_camera_action">Sending Signal to Camera2</string>
