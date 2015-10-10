@@ -38,8 +38,8 @@ public class MidgetOfSeville {
 		JSONObject leftJson;
 		JSONArray rightJsonArray;
 		JSONArray leftJsonArray;
-		String leftFilepath = null;
-		String rightFilepath = null;
+		String leftFilepath;
+		String rightFilepath;
 		Bitmap tempBitmap = null;
 		Mat leftMat = null;
 		Mat rightMat = null;
@@ -47,6 +47,7 @@ public class MidgetOfSeville {
 		ArrayList<Point> rightPoints = new ArrayList<Point>();
 		MatOfPoint2f leftMop;
 		MatOfPoint2f rightMop;
+        JSONArray pointsJsonArr = new JSONArray();
 //		vtkDataSet dataSet = new vtkDataSet();
 //		dataSet
 //		vtkIterativeClosestPointTransform icp = new vtkIterativeClosestPointTransform();
@@ -70,8 +71,6 @@ public class MidgetOfSeville {
 				rightMat = new Mat(height, width, CvType.CV_8UC3);
 				Utils.bitmapToMat(tempBitmap, rightMat);
 				Imgproc.cvtColor(rightMat, rightMat, Imgproc.COLOR_BGR2GRAY);
-
-//				Log.d(tag, "calculateFrameOpticalFlow. rightMat: " + (rightMat == null));
 			}
 
 			if(leftFilepath != null){
@@ -83,8 +82,6 @@ public class MidgetOfSeville {
 				leftMat = new Mat(height, width, CvType.CV_8UC3);
 				Utils.bitmapToMat(tempBitmap, leftMat);
 				Imgproc.cvtColor(leftMat, leftMat, Imgproc.COLOR_BGR2GRAY);
-
-//				Log.d(tag, "calculateFrameOpticalFlow. leftMat: " + (leftMat == null));
 			}
 
 			JSONObject pointJson;
@@ -102,81 +99,137 @@ public class MidgetOfSeville {
 			leftMop.fromList(leftPoints);
 
 			rightMop = new MatOfPoint2f();
+            rightMop.fromList(rightPoints);
 
 			MatOfByte opticalFlowFoundFeatures = new MatOfByte();
 			MatOfFloat err = new MatOfFloat();
-//			TermCriteria termcrit = new TermCriteria(TermCriteria.MAX_ITER+TermCriteria.EPS, 20, 0.03);
-//			Size winSize = new Size(10, 10);
-//			int maxLevel = 8;
+			TermCriteria termCrit = new TermCriteria(TermCriteria.MAX_ITER+TermCriteria.EPS, 10, 0.1);
+			Size winSize = new Size(9, 9);
+			int maxLevel = 5;
+            double minEigThreshold = 0.0001;
 
-			Video.calcOpticalFlowPyrLK(leftMat, rightMat, leftMop, rightMop, opticalFlowFoundFeatures, err);
+			Video.calcOpticalFlowPyrLK(leftMat, rightMat, leftMop, rightMop, opticalFlowFoundFeatures,
+                    err, winSize, maxLevel,termCrit, 0, minEigThreshold);
+
+            MADN3SController.saveJsonToExternal(rightMop.dump(), "rightPoints");
+            MADN3SController.saveJsonToExternal(leftMop.dump(), "leftPoints");
 
 			byte[] statusBytes = opticalFlowFoundFeatures.toArray();
-//			Log.d(tag, "lengths. leftPoints: " + leftPoints.size() + " rightPoints: " + rightPoints.size()
-//					+ " status: " + statusBytes.length);
 
-//			for(int i = 0; i < leftPoints.size(); ++i){
-//				Log.d(tag, "calculateFrameOpticalFlow. status(" + String.format("%02d", i) + "): " + statusBytes[i]);
-//			}
+//			JSONObject calibrationJson = MADN3SController.sharedPrefsGetJSONObject(KEY_CALIBRATION);
+//			JSONObject leftSide = calibrationJson.getJSONObject(SIDE_LEFT);
+//			JSONObject rightSide = calibrationJson.getJSONObject(SIDE_RIGHT);
 
-			JSONObject calibrationJson = MADN3SController.sharedPrefsGetJSONObject(KEY_CALIBRATION);
-			JSONObject leftSide = calibrationJson.getJSONObject(SIDE_LEFT);
-			JSONObject rightSide = calibrationJson.getJSONObject(SIDE_RIGHT);
-
-			Mat rightCameraMatrix = MADN3SController.getMatFromString(rightSide.getString(KEY_CALIB_CAMERA_MATRIX));
-			Mat leftCameraMatrix = MADN3SController.getMatFromString(leftSide.getString(KEY_CALIB_CAMERA_MATRIX));
+//			Mat rightCameraMatrix = MADN3SController.getMatFromString(
+//                    rightSide.getString(KEY_CALIB_CAMERA_MATRIX), CvType.CV_64F);
+//			Mat leftCameraMatrix = MADN3SController.getMatFromString(
+//                    leftSide.getString(KEY_CALIB_CAMERA_MATRIX), CvType.CV_64F);
 
 			JSONArray result = new JSONArray();
-			Scalar neutral = new Scalar(1,1,1);
-			int last;
+//			Scalar neutral = new Scalar(1,1,1);
+//			int last;
 			int m = 4;
-			int n = 3;
+			int n = 4;
 			Mat A = Mat.zeros(m, n, CvType.CV_64F);
 			Mat wSingularValue = new Mat(m, n, CvType.CV_64F);
 	        Mat uLeftOrthogonal = new Mat(m, m, CvType.CV_64F);
 	        Mat vRightOrtogonal = new Mat(n, n, CvType.CV_64F);
-			Mat mult = new Mat(1, n, CvType.CV_64FC2);
-			Mat sub = new Mat(1, n, CvType.CV_64FC2);
+
+            // Row temporal para resta y multiplicacion en el for
+            double tempRow[] = new double[m];
+
+            Mat P1 = MADN3SController.getMatFromString(MADN3SController.sharedPrefsGetString(KEY_CALIB_P1), CvType.CV_64F);
+            Mat P2 = MADN3SController.getMatFromString(MADN3SController.sharedPrefsGetString(KEY_CALIB_P2), CvType.CV_64F);
+
+            // Rows de P1 necesarios para la multiplicacion en el for
+            Mat p1Row0 = P1.row(0);
+            Mat p1Row1 = P1.row(1);
+            Mat p1Row2 = P1.row(2);
+
+            // Rows de P2 necesarios para la multiplicacion en el for
+            Mat p2Row0 = P2.row(0);
+            Mat p2Row1 = P2.row(1);
+            Mat p2Row2 = P2.row(2);
+
+            //Punto para calculo de punto al final del for
+//            double tempPoint[] = new double[m];
 
 			for(int index = 0; index < statusBytes.length; ++index){
 				if(statusBytes[index] == 1 && index < leftPoints.size() && index < rightPoints.size()){
-					//Primer Row
-					Core.multiply(leftCameraMatrix.row(2), neutral, mult, leftPoints.get(index).x);
-					Core.subtract(mult, leftCameraMatrix.row(0), sub);
-					sub.copyTo(A.row(0));
+					Log.d(tag, "Pre Primer Row");
+                    //Primer Row
+                    tempRow[0] = leftPoints.get(index).x * p1Row2.get(0, 0)[0] - p1Row0.get(0, 0)[0];
+                    tempRow[1] = leftPoints.get(index).x * p1Row2.get(0, 1)[0] - p1Row0.get(0, 1)[0];
+                    tempRow[2] = leftPoints.get(index).x * p1Row2.get(0, 2)[0] - p1Row0.get(0, 2)[0];
+                    tempRow[3] = leftPoints.get(index).x * p1Row2.get(0, 3)[0] - p1Row0.get(0, 3)[0];
+                    A.put(0, 0, tempRow);
+                    tempRow[0] = 0;
+                    tempRow[1] = 0;
+                    tempRow[2] = 0;
+                    tempRow[3] = 0;
+					Log.d(tag, "Post Primer Row");
 
-					//Segundo Row
-					Core.multiply(leftCameraMatrix.row(2), neutral, mult, leftPoints.get(index).y);
-					Core.subtract(mult, leftCameraMatrix.row(1), sub);
-					sub.copyTo(A.row(1));
+					Log.d(tag, "Pre Segundo Row");
+                    //Segundo Row
+                    tempRow[0] = leftPoints.get(index).y * p1Row2.get(0, 0)[0] - p1Row1.get(0, 0)[0];
+                    tempRow[1] = leftPoints.get(index).y * p1Row2.get(0, 1)[0] - p1Row1.get(0, 1)[0];
+                    tempRow[2] = leftPoints.get(index).y * p1Row2.get(0, 2)[0] - p1Row1.get(0, 2)[0];
+                    tempRow[3] = leftPoints.get(index).y * p1Row2.get(0, 3)[0] - p1Row1.get(0, 3)[0];
+                    A.put(1, 0, tempRow);
+                    tempRow[0] = 0;
+                    tempRow[1] = 0;
+                    tempRow[2] = 0;
+                    tempRow[3] = 0;
+					Log.d(tag, "Post Segundo Row");
 
-					//Tercer Row
-					Core.multiply(rightCameraMatrix.row(2), neutral, mult, rightPoints.get(index).x);
-					Core.subtract(mult, rightCameraMatrix.row(0), sub);
-					sub.copyTo(A.row(2));
+					Log.d(tag, "Pre Tercer Row");
+                    //Tercer Row
+                    tempRow[0] = rightPoints.get(index).x * p2Row2.get(0, 0)[0] - p2Row0.get(0, 0)[0];
+                    tempRow[1] = rightPoints.get(index).x * p2Row2.get(0, 1)[0] - p2Row0.get(0, 1)[0];
+                    tempRow[2] = rightPoints.get(index).x * p2Row2.get(0, 2)[0] - p2Row0.get(0, 2)[0];
+                    tempRow[3] = rightPoints.get(index).x * p2Row2.get(0, 3)[0] - p2Row0.get(0, 3)[0];
+                    A.put(2, 0, tempRow);
+                    tempRow[0] = 0;
+                    tempRow[1] = 0;
+                    tempRow[2] = 0;
+                    tempRow[3] = 0;
+					Log.d(tag, "Post Tercer Row");
 
-					//Cuarto Row
-					Core.multiply(rightCameraMatrix.row(2), neutral, mult, rightPoints.get(index).x);
-					Core.subtract(mult, rightCameraMatrix.row(1), sub);
-					sub.copyTo(A.row(3));
+					Log.d(tag, "Pre Cuarto Row");
+                    //Cuarto Row
+                    tempRow[0] = rightPoints.get(index).y * p2Row2.get(0, 0)[0] - p2Row1.get(0, 0)[0];
+                    tempRow[1] = rightPoints.get(index).y * p2Row2.get(0, 1)[0] - p2Row1.get(0, 1)[0];
+                    tempRow[2] = rightPoints.get(index).y * p2Row2.get(0, 2)[0] - p2Row1.get(0, 2)[0];
+                    tempRow[3] = rightPoints.get(index).y * p2Row2.get(0, 3)[0] - p2Row1.get(0, 3)[0];
+                    A.put(3, 0, tempRow);
+                    tempRow[0] = 0;
+                    tempRow[1] = 0;
+                    tempRow[2] = 0;
+                    tempRow[3] = 0;
+					Log.d(tag, "Post Cuarto Row");
 
+					Log.d(tag, "Pre SVDecomp");
 			        Core.SVDecomp(A, wSingularValue, uLeftOrthogonal, vRightOrtogonal, Core.DECOMP_SVD);
+					Log.d(tag, "Post SVDecomp");
 
-			        vRightOrtogonal = vRightOrtogonal.t();
-			        last = vRightOrtogonal.cols();
-			        Mat point = vRightOrtogonal.col(last - 1);
-			        JSONObject pointJsonResult = new JSONObject();
-			        if(point.rows() == 3){
-			        	double[] coordinates = new double[3];
-			        	point.get(0, 0, coordinates);
-			        	pointJsonResult.put(KEY_X, coordinates[0]);
-			        	pointJsonResult.put(KEY_Y, coordinates[1]);
-			        	pointJsonResult.put(KEY_Z, coordinates[2]);
-			        	result.put(pointJsonResult);
-//			        	result.put(coordinates[0] + " " + coordinates[1] + " " + coordinates[2] + "\n" );
-			        } else {
-			        	Log.e(tag, "No se obtuvieron coordenadas X, Y y Z");
-			        }
+					Log.d(tag, "wSingularValue(" + wSingularValue.rows()
+                            + ", " + wSingularValue.cols() + ") = " + wSingularValue.dump());
+					Log.d(tag, "uLeftOrthogonal(" + uLeftOrthogonal.rows()
+                            + ", " + uLeftOrthogonal.cols() + ") = " + uLeftOrthogonal.dump());
+					Log.d(tag, "vRightOrtogonal(" + vRightOrtogonal.rows()
+                            + ", " + vRightOrtogonal.cols() + ") = " + vRightOrtogonal.dump());
+                    /* wSingularValue es de 3x1
+                    * uLeftOrthogonal es de 4x3
+                    * vRightOrtogonal es de 3x3
+                    * */
+
+                         JSONObject point = new JSONObject();
+                        point.put(KEY_X, (vRightOrtogonal.get(0, 2)[0] / vRightOrtogonal.get(2, 2)[0]));
+                        point.put(KEY_Y, (vRightOrtogonal.get(0, 2)[0] / vRightOrtogonal.get(2, 2)[0]));
+                        point.put(KEY_Z, (vRightOrtogonal.get(0, 2)[0] / vRightOrtogonal.get(2, 2)[0]));
+                        pointsJsonArr.put(point);
+                        result.put(point);
+//                    }
 				}
 			}
 
@@ -212,16 +265,16 @@ public class MidgetOfSeville {
 			JSONObject rightSide = calibrationJson.getJSONObject(SIDE_RIGHT);
 
 			Log.d(tag, "doStereoCalibration. Parsing Dist Coeffs");
-			Mat rightDistCoeff = MADN3SController.getMatFromString(rightSide.getString(KEY_CALIB_DISTORTION_COEFFICIENTS));
-			Mat leftDistCoeff = MADN3SController.getMatFromString(leftSide.getString(KEY_CALIB_DISTORTION_COEFFICIENTS));
+			Mat rightDistCoeff = MADN3SController.getMatFromString(rightSide.getString(KEY_CALIB_DISTORTION_COEFFICIENTS), CvType.CV_64F);
+			Mat leftDistCoeff = MADN3SController.getMatFromString(leftSide.getString(KEY_CALIB_DISTORTION_COEFFICIENTS), CvType.CV_64F);
 
 			Log.d(tag, "doStereoCalibration. Parsing Camera Matrix");
-			Mat rightCameraMatrix = MADN3SController.getMatFromString(rightSide.getString(KEY_CALIB_CAMERA_MATRIX));
-			Mat leftCameraMatrix = MADN3SController.getMatFromString(leftSide.getString(KEY_CALIB_CAMERA_MATRIX));
+			Mat rightCameraMatrix = MADN3SController.getMatFromString(rightSide.getString(KEY_CALIB_CAMERA_MATRIX), CvType.CV_64F);
+			Mat leftCameraMatrix = MADN3SController.getMatFromString(leftSide.getString(KEY_CALIB_CAMERA_MATRIX), CvType.CV_64F);
 
 			Log.d(tag, "doStereoCalibration. Parsing Right Image Points");
 			JSONArray rightJsonImagePoints = new JSONArray(rightSide.getString(KEY_CALIB_IMAGE_POINTS));
-			ArrayList<Mat> rightImagePoints = new ArrayList<Mat>(rightJsonImagePoints.length());
+			ArrayList<Mat> rightImagePoints = new ArrayList<>(rightJsonImagePoints.length());
 			for(int i = 0; i < rightJsonImagePoints.length(); ++i){
 				rightImagePoints.add(MADN3SController.getImagePointFromString(rightJsonImagePoints.getString(i)));
 //				Log.d(tag, " rightImagePoints(" + i + ")[" + rightImagePoints.get(i).rows() + "][" + rightImagePoints.get(i).cols() + "]"
@@ -231,7 +284,7 @@ public class MidgetOfSeville {
 
 			Log.d(tag, "doStereoCalibration. Parsing Left Image Points");
 			JSONArray leftJsonImagePoints = new JSONArray(leftSide.getString(KEY_CALIB_IMAGE_POINTS));
-			ArrayList<Mat> leftImagePoints = new ArrayList<Mat>(leftJsonImagePoints.length());
+			ArrayList<Mat> leftImagePoints = new ArrayList<>(leftJsonImagePoints.length());
 			for(int i = 0; i < leftJsonImagePoints.length(); ++i){
 				leftImagePoints.add(MADN3SController.getImagePointFromString(leftJsonImagePoints.getString(i)));
 //				Log.d(tag, " leftImagePoints(" + i + ")[" + leftImagePoints.get(i).rows() + "][" + leftImagePoints.get(i).cols() + "]"
@@ -241,7 +294,7 @@ public class MidgetOfSeville {
 
 			Log.d(tag, "doStereoCalibration. Generating Object Points");
 			int corners = leftImagePoints.size() >= rightImagePoints.size()? leftImagePoints.size(): rightImagePoints.size();
-			ArrayList<Mat> objectPoints = new ArrayList<Mat>();
+			ArrayList<Mat> objectPoints = new ArrayList<>();
 	        objectPoints.add(Mat.zeros(corners, 1, CvType.CV_32FC3));
 	        calcBoardCornerPositions(objectPoints.get(0));
 	        for (int i = 1; i < corners; i++) {
@@ -305,6 +358,8 @@ public class MidgetOfSeville {
 	        Calib3d.stereoRectify(leftCameraMatrix, leftDistCoeff
 	        		, rightCameraMatrix, rightDistCoeff
 	        		, mPatternSize, R, T, R1, R2, P1, P2, Q);
+            MADN3SController.sharedPrefsPutString(KEY_CALIB_P1, P1.dump());
+            MADN3SController.sharedPrefsPutString(KEY_CALIB_P2, P2.dump());
             Log.d(tag, "Finished StereoRectify");
 
             // Undistorted Right

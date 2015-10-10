@@ -1,8 +1,10 @@
 package org.madn3s.controller;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.math.BigInteger;
@@ -25,13 +27,11 @@ import org.madn3s.controller.fragments.SettingsFragment;
 import org.madn3s.controller.io.BraveHeartMidgetService;
 import org.madn3s.controller.io.HiddenMidgetReader;
 import org.madn3s.controller.io.UniversalComms;
-import org.madn3s.controller.vtk.Madn3sNative;
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.xmlpull.v1.XmlSerializer;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
@@ -49,11 +49,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-import android.util.Xml;
 import android.widget.Toast;
 
 /**
  * Created by inaki on 1/11/14.
+ * This is the extension of the Application class
  */
 public class MADN3SController extends Application {
 	private static final String tag = MADN3SController.class.getSimpleName();
@@ -95,7 +95,7 @@ public class MADN3SController extends Application {
 	public static boolean isOpenCvLoaded;
 
     public static JSONArray applyTransform(Mat icpMatrix, JSONArray result, ArrayList<JSONObject> pointsList) {
-        Mat pAux = new Mat(4, 1, CvType.CV_64F);
+        Mat pAux;
 
         try {
             JSONObject point;
@@ -225,7 +225,7 @@ public class MADN3SController extends Application {
 				if (mBluetoothHandlerCallback != null) {
 					mBluetoothHandlerCallback.handleMessage(msg);
 				}
-			};
+			}
 		};
 
 	}
@@ -417,20 +417,12 @@ public class MADN3SController extends Application {
 	}
 
 	public static boolean isRightCamera(String macAddress) {
-		if (macAddress != null && rightCamera != null
-				&& rightCamera.getAddress() != null) {
-			return macAddress.equalsIgnoreCase(rightCamera.getAddress());
-		}
-		return false;
-	}
+        return macAddress != null && rightCamera != null && rightCamera.getAddress() != null && macAddress.equalsIgnoreCase(rightCamera.getAddress());
+    }
 
 	public static boolean isLeftCamera(String macAddress) {
-		if (macAddress != null && leftCamera != null
-				&& leftCamera.getAddress() != null) {
-			return macAddress.equalsIgnoreCase(leftCamera.getAddress());
-		}
-		return false;
-	}
+        return macAddress != null && leftCamera != null && leftCamera.getAddress() != null && macAddress.equalsIgnoreCase(leftCamera.getAddress());
+    }
 
 	public Handler getBluetoothHandler() {
 		return mBluetoothHandler;
@@ -463,22 +455,22 @@ public class MADN3SController extends Application {
     }
 
 	/**
-	 * Crea un Mat desde un String
-	 * @param str Matriz en forma de String
-	 * @return Instancia de Mat con valores en Matriz recibida como String
+	 * Creates a new Mat from a String
+	 * @param str Serialized Matrix
+	 * @return Mat instance with str matrix values
 	 */
-	public static Mat getMatFromString(String str){
+	public static Mat getMatFromString(String str, int type){
 //		str = "[672.2618351846742, 0, 359.5; 0, 672.2618351846742, 239.5; 0, 0, 1]";
-		int rows = 0;
-		int cols = 0;
+		int rows;
+		int cols;
 		double[] data;
-		String[] colsStr = null;
-		String rowStr = "";
-		String colStr = "";
+		String[] colsStr;
+		String rowStr;
+		String colStr;
 		str = str.replaceAll("^\\[|\\]$", "");
 		String[] rowsStr = str.split(";");
 		rows = rowsStr.length;
-		//Por sacar cls
+
 		rowStr = rowsStr[0];
 		cols = rowStr.split(",").length;
 		data = new double[rows*cols];
@@ -487,36 +479,29 @@ public class MADN3SController extends Application {
 			rowStr = rowsStr[row];
 			colsStr = rowStr.split(",");
 			cols = colsStr.length;
-//			Log.d(tag, "row[" + row + "]: " + rowStr);
 			for(int col = 0; col < colsStr.length; ++col){
 				colStr = colsStr[col];
 				data[row*cols+col] = Double.valueOf(colStr);
-//				Log.d(tag, "row[" + row + "]col[" + col + "]: " + colStr);
 			}
 		}
-		int type = CvType.CV_64F;
 		Mat mat = new Mat(rows, cols, type);
 		mat.put(0, 0, data);
-//		Log.d(tag, "getMatFromString. Result Mat: " + mat.dump());
 		return mat;
 	}
 
 	public static Mat getImagePointFromString(String str){
-		int rows = 0;
+		int rows;
 		int cols = 1;
 		float[] data;
-		String[] colsStr = null;
-		String rowStr = "";
-		String colStr = "";
+		String[] colsStr;
+		String rowStr;
+		String colStr;
 		str = str.replaceAll("^\\[|\\]$", "");
 		String[] rowsStr = str.split(";");
 		rows = rowsStr.length;
 		int type = CvType.CV_64F;
 		Mat mat = new Mat(rows, cols, type);
 		mat.create(rows, 1, CvType.CV_32FC2);
-		//Por sacar cls
-		rowStr = rowsStr[0];
-		cols = rowStr.split(",").length;
 		data = new float[2];
 
 		for(int row = 0; row < rowsStr.length; ++row){
@@ -525,11 +510,8 @@ public class MADN3SController extends Application {
 			for(int col = 0; col < colsStr.length; ++col){
 				colStr = colsStr[col];
 				data[col] = Float.valueOf(colStr);
-//				Log.d(tag, "str = " + colStr + " float = " + Float.valueOf(colStr));
 			}
-//			Log.d(tag, "data[0] = " + data[0] + " data[1] = " + data[1]);
 			mat.put(row, 0, data);
-
 		}
 		return mat;
 	}
@@ -541,8 +523,40 @@ public class MADN3SController extends Application {
     	return appDirectory;
     }
 
-    public static Uri getOutputMediaFileUri(int type, String position){
-        return Uri.fromFile(getOutputMediaFile(type, position));
+    public static JSONObject getInputJson(String filename){
+        return getInputJson(sharedPrefsGetString(KEY_PROJECT_NAME), filename);
+    }
+
+    public static JSONObject getInputJson(String projectName, String filename){
+        String inputString;
+        File inputFile = getInputMediaFile(projectName, filename);
+
+        try{
+            if(inputFile.exists()){
+                BufferedReader inputReader = new BufferedReader(new FileReader(inputFile));
+                inputString = inputReader.readLine();
+                return new JSONObject(inputString);
+            } else {
+                Log.e(tag, filename + " doesn't exists");
+            }
+        } catch (IOException e){
+            Log.e(tag, "Error Reading config JSONObject");
+            e.printStackTrace();
+        } catch (JSONException e){
+            Log.e(tag, "Error Parsing config JSONObject");
+            e.printStackTrace();
+        }
+
+        return new JSONObject();
+    }
+
+    public static File getInputMediaFile(String projectName, String filename){
+        File projectDirectory = new File(getAppDirectory(), projectName);
+        return new File(projectDirectory.getPath(), filename);
+    }
+
+    public static File getInputMediaFile(String filename){
+        return getInputMediaFile(sharedPrefsGetString(KEY_PROJECT_NAME), filename);
     }
 
     public static Uri getOutputMediaFileUri(int type, String projectName, String position){
@@ -550,13 +564,15 @@ public class MADN3SController extends Application {
     }
 
     @SuppressLint("SimpleDateFormat")
-	public static File getOutputMediaFile(int type, String name){
-    	return getOutputMediaFile(type, sharedPrefsGetString(KEY_PROJECT_NAME), name);
+    public static File getOutputMediaFile(int type, String projectName, String name){
+        return getOutputMediaFile(type, projectName, name, false, true);
     }
 
     @SuppressLint("SimpleDateFormat")
-	public static File getOutputMediaFile(int type, String projectName, String name){
-    	Log.d(tag, "getOutputMediaFile. projectName: " + projectName + " name: " + name);
+    public static File getOutputMediaFile(int type, String projectName, String name,
+                                          boolean withTimestamp, boolean withIteration){
+
+        Log.d(tag, "getOutputMediaFile. projectName: " + projectName + " name: " + name);
         File mediaStorageDir = new File(getAppDirectory(), projectName);
 
         if (!mediaStorageDir.exists()){
@@ -567,33 +583,60 @@ public class MADN3SController extends Application {
         }
 
         if(name == null){
-        	name = "";
-        }
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String filename;
-        String iteration = String.valueOf(sharedPrefsGetInt(KEY_ITERATION));
-        File mediaFile;
-
-        if (type == MEDIA_TYPE_IMAGE){
-            filename = "IMG_" + iteration + "_" + name + "_" + timeStamp + Consts.IMAGE_EXT;
-        } else if(type == MEDIA_TYPE_JSON){
-        	filename = name + "_" + timeStamp + Consts.JSON_EXT;
-        } else if(type == MEDIA_TYPE_VTU){
-        	filename = name + "_" + timeStamp + Consts.VTU_EXT;
-        } else {
             return null;
         }
 
-        mediaFile = new File(mediaStorageDir.getPath(), filename);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        StringBuilder filenameBuilder = new StringBuilder();
+        String iteration = String.valueOf(sharedPrefsGetInt(KEY_ITERATION));
+        File mediaFile;
+
+        if (type == MEDIA_TYPE_IMAGE){ filenameBuilder.append("IMG_"); }
+        if(withIteration){ filenameBuilder.append(iteration).append("_"); }
+
+        filenameBuilder.append(name);
+
+        if(withTimestamp){ filenameBuilder.append("_").append(timeStamp); }
+        if(type == MEDIA_TYPE_IMAGE){
+            filenameBuilder.append(Consts.IMAGE_EXT);
+        } else if(type == MEDIA_TYPE_JSON) {
+            filenameBuilder.append(Consts.JSON_EXT);
+        } else if(type == MEDIA_TYPE_VTU) {
+            filenameBuilder.append(Consts.VTU_EXT);
+        }
+
+        mediaFile = new File(mediaStorageDir.getPath(), filenameBuilder.toString());
 
         return mediaFile;
+    }
+
+    public static String saveBitmapAsJpeg(Bitmap bitmap, String name){
+        FileOutputStream out;
+        try {
+            final File imgFile = getOutputMediaFile(MEDIA_TYPE_IMAGE, sharedPrefsGetString(KEY_PROJECT_NAME), name, false, true);
+
+            out = new FileOutputStream(imgFile.getAbsoluteFile());
+            bitmap.compress(Consts.BITMAP_COMPRESS_FORMAT, Consts.COMPRESSION_QUALITY, out);
+
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(appContext, imgFile.getName(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            return imgFile.getPath();
+
+        } catch (FileNotFoundException e) {
+            Log.e(name, "saveBitmapAsJpeg: No se pudo guardar el Bitmap", e);
+            return null;
+        }
     }
 
     public static String saveJsonToExternal(String output, String fileName) throws JSONException {
 		try {
             String projectName = MADN3SController.sharedPrefsGetString(KEY_PROJECT_NAME);
-			File calibrationFile = getOutputMediaFile(MEDIA_TYPE_JSON, projectName, fileName);
+			File calibrationFile = getOutputMediaFile(MEDIA_TYPE_JSON, projectName, fileName, false, false);
 			Log.i(MidgetOfSeville.tag, "saveJsonToExternal. filepath: " + calibrationFile.getAbsolutePath());
 			FileOutputStream fos = new FileOutputStream(calibrationFile);
 			fos.write(output.getBytes());
@@ -608,68 +651,6 @@ public class MADN3SController extends Application {
 
 		return null;
 	}
-
-    public static String createVtpFromPoints(String pointsData, int size, String fileName){
-//    	StringBuffer connectivityData = null;
-//    	if(pointsData != null){
-//    		connectivityData = new StringBuffer();
-//    		for(int i = 0; i < size; ++i){
-//    			connectivityData.append(String.format("%02d ", i));
-//    		}
-//    	}
-    	File newxmlfile = getOutputMediaFile(MEDIA_TYPE_VTU, fileName);
-        try {
-	        FileOutputStream fileos = new FileOutputStream(newxmlfile);
-
-	        XmlSerializer serializer = Xml.newSerializer();
-	        serializer.setOutput(fileos, "UTF-8");
-	        serializer.startDocument(null, null);
-	        serializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
-	        serializer.startTag(null, "VTKFile");
-	        serializer.attribute(null, "type", "PolyData");
-	        serializer.attribute(null, "version", "0.1");
-	        serializer.attribute(null, "byte_order", "LittleEndian");
-	        serializer.attribute(null, "compressor", "vtkZLibDataCompressor");
-		        serializer.startTag(null, "PolyData");
-			        serializer.startTag(null, "Piece");
-			        serializer.attribute(null, "NumberOfPoints", String.valueOf(size));
-				        serializer.startTag(null, "PointData");
-				        serializer.endTag(null, "PointData");
-				        serializer.startTag(null, "CellData");
-				        serializer.endTag(null, "CellData");
-				        serializer.startTag(null, "Points");
-					        serializer.startTag(null, "DataArray");
-					        	serializer.attribute(null, "type", "Float32");
-					        	serializer.attribute(null, "NumberOfComponents", "3");
-					        	serializer.attribute(null, "format", "ascii");
-					        	serializer.text(pointsData);
-					        serializer.endTag(null, "DataArray");
-				        serializer.endTag(null, "Points");
-//				        serializer.startTag(null, "Cells");
-//					        serializer.startTag(null, "DataArray");
-//					        	serializer.attribute(null, "type", "Int32");
-//					        	serializer.attribute(null, "Name", "connectivity");
-//					        	serializer.attribute(null, "format", "ascii");
-//					        	serializer.text(connectivityData.toString());
-//					        serializer.endTag(null, "DataArray");
-//				        serializer.endTag(null, "Cells");
-			        serializer.endTag(null, "Piece");
-		        serializer.endTag(null, "PolyData");
-	        serializer.endTag(null,"VTKFile");
-	        serializer.endDocument();
-	        serializer.flush();
-	        fileos.close();
-
-        } catch(FileNotFoundException e) {
-            Log.e("FileNotFoundException",e.toString());
-        } catch (IOException e) {
-            Log.e("IOException", "Exception in create new File(");
-        } catch(Exception e) {
-            Log.e("Exception","Exception occured in wroting");
-        }
-
-    	return null;
-    }
 
     public static String saveBitmapAsPng(Bitmap bitmap, String position){
     	FileOutputStream out;
@@ -703,11 +684,16 @@ public class MADN3SController extends Application {
             e.printStackTrace();
         }
 
-        mdEnc.update(bytes, 0, bytes.length);
-        String md5 = new BigInteger(1, mdEnc.digest()).toString(16);
-        while ( md5.length() < 32 ) {
-            md5 = "0"+md5;
+        String md5 = null;
+
+        if (mdEnc != null) {
+            mdEnc.update(bytes, 0, bytes.length);
+            md5 = new BigInteger(1, mdEnc.digest()).toString(16);
+            while ( md5.length() < 32 ) {
+                md5 = "0"+md5;
+            }
         }
+
         return md5;
     }
 }

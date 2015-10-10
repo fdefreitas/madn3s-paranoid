@@ -178,9 +178,9 @@ public class DiscoveryFragment extends BaseFragment {
                                 if(frameIndex > 0){
                                     if(result.length() > 0) {
                                         icpResult = Madn3sNative.doIcp(result.toString(), previous.toString(),
-                                                filepath, frameIndex, true, 40, 0.001, 15, true);
+                                        filepath, frameIndex, true, 40, 0.1, 15, true);
                                         Log.d(tag, "icpResult:" + icpResult);
-                                        icpMatrix = MADN3SController.getMatFromString(icpResult);
+                                icpMatrix = MADN3SController.getMatFromString(icpResult, CvType.CV_64F);
                                         previous = MADN3SController.applyTransform(icpMatrix, result, pointsList);
                                     }
                                 } else {
