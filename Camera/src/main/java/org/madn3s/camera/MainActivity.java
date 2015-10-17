@@ -72,6 +72,8 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
 
     public JSONObject config, result;
 
+    public static JSONObject fConfig;
+
     private BaseLoaderCallback mLoaderCallback;
     private ProgressDialog calibrationProgress;
 
@@ -326,7 +328,7 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
 			@Override
 			public void callback(Object msg) {
                 isCapturing.set(true);
-				config = (JSONObject) msg;
+//				config = (JSONObject) msg;
 				Log.d(tag, "takePhoto. config == null? " + (config == null));
 			}
 		};
@@ -351,19 +353,19 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
 	}
 
     private void playSound(String title, String msg){
-        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
-        Notification mNotification = new Notification.Builder(this)
-                .setContentTitle(title)
-                .setContentText(msg)
-                .setSmallIcon(R.drawable.ic_launcher)
-//                .setContentIntent(pIntent)
-                .setSound(soundUri)
-                .build();
-
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(0, mNotification);
+//        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//
+//        Notification mNotification = new Notification.Builder(this)
+//                .setContentTitle(title)
+//                .setContentText(msg)
+//                .setSmallIcon(R.drawable.ic_launcher)
+////                .setContentIntent(pIntent)
+//                .setSound(soundUri)
+//                .build();
+//
+//        NotificationManager mNotificationManager =
+//                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        mNotificationManager.notify(0, mNotification);
     }
 
     //Metodos de CvCameraViewListener2
@@ -398,7 +400,7 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
             @Override
             protected JSONObject doInBackground(Void... params) {
                 try {
-                    JSONObject resultJsonObject = figaro.shapeUp(resultMat, config);
+                    JSONObject resultJsonObject = figaro.shapeUp(resultMat, fConfig);
                     JSONArray pointsJson = resultJsonObject.getJSONArray(KEY_POINTS);
 
                     SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.app_name)
@@ -407,15 +409,17 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
                     sharedPreferencesEditor.putString(KEY_FILE_PATH, resultJsonObject.getString(KEY_FILE_PATH));
                     sharedPreferencesEditor.apply();
 
+                    Log.d(tag, KEY_FILE_PATH + ": " + resultJsonObject.getString(KEY_FILE_PATH));
+
                     if(pointsJson != null && pointsJson.length() > 0){
                         result.put(KEY_MD5, resultJsonObject.get(KEY_MD5));
                         result.put(Consts.KEY_ERROR, false);
                         result.put(Consts.KEY_POINTS, pointsJson);
-                        Log.d(tag, "pointsJson: " + pointsJson.toString(1));
+                        Log.d(tag, "pointsJson: " + pointsJson.toString());
                     } else {
                         result.put(Consts.KEY_ERROR, true);
                     }
-                    Log.d(tag, "mPictureCallback. result: " + result.toString(1));
+                    Log.d(tag, "mPictureCallback. result: " + result.toString());
                 } catch (JSONException e) {
                     Log.e(tag, "Couldn't execute MidgetOfSeville.shapeUp to Camera Frame");
                     e.printStackTrace();

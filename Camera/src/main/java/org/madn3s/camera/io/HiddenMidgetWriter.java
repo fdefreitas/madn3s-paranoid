@@ -30,10 +30,10 @@ public class HiddenMidgetWriter extends AsyncTask<Void, Void, Void> {
     public HiddenMidgetWriter(WeakReference<BluetoothSocket> mBluetoothSocketWeakReference, Object msg){
     	mSocket = mBluetoothSocketWeakReference.get();
     	if(msg instanceof String){
-    		Log.d(tag, "instanceof String");
+//    		Log.d(tag, "instanceof String");
     		this.msg = ((String) msg).getBytes();
     	} else if(msg instanceof Bitmap){
-    		Log.d(tag, "instanceof Bitmap");
+//    		Log.d(tag, "instanceof Bitmap");
     		ByteArrayOutputStream baos = new ByteArrayOutputStream();
     		((Bitmap) msg).compress(Consts.BITMAP_COMPRESS_FORMAT, Consts.COMPRESSION_QUALITY, baos);
     		this.msg = baos.toByteArray();
@@ -41,7 +41,7 @@ public class HiddenMidgetWriter extends AsyncTask<Void, Void, Void> {
     	
     	this.msg = Base64.encode(this.msg, Base64.DEFAULT);
     	String md5HexBase64 = new String(MADN3SCamera.getMD5EncryptedString(this.msg));
-		Log.d(tag, "MD5 Base64: " + md5HexBase64);
+//		Log.d(tag, "MD5 Base64: " + md5HexBase64);
     }
     
     @Override

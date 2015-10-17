@@ -117,7 +117,8 @@ public class HiddenMidgetConnector extends AsyncTask<Void, Void, Void> {
 		try{
 			JSONObject json = new JSONObject();
 	        json.put(KEY_ACTION, "config");
-	        json.put(KEY_CLEAN, MADN3SController.sharedPrefsGetBoolean("clean"));
+	        json.put(KEY_CLEAN, MADN3SController.sharedPrefsGetBoolean(KEY_CLEAN));
+	        json.put(KEY_VALIDATE, MADN3SController.sharedPrefsGetBoolean(KEY_VALIDATE));
 	        json.put("side", side);
 	        json.put("camera_name", name);
 	        JSONObject grabCut = new JSONObject();

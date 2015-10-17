@@ -154,6 +154,7 @@ public class BraveheartMidgetService extends IntentService {
 					if(action.equalsIgnoreCase(KEY_CONFIG)){
 						Log.d(tag, "Received config: " + config.toString(1));
 						config = msg;
+						MainActivity.fConfig = msg;
 						MADN3SCamera.sharedPrefsPutJSONObject(KEY_CONFIG, config);
 						MADN3SCamera.isPictureTaken.set(true);
 					} else if(action.equalsIgnoreCase(ACTION_TAKE_PICTURE)){
@@ -222,7 +223,7 @@ public class BraveheartMidgetService extends IntentService {
 			if(mSocketWeakReference != null){
 				HiddenMidgetWriter writerTask = new HiddenMidgetWriter(mSocketWeakReference, bitmap);
 				writerTask.setmActivity(mActivity);
-		        Log.d(tag, "Ejecutando a HiddenMidgetWriter desde sendPicture");
+		        Log.d(tag, "Ejecutando a HiddenMidgetWriter desde sendPicture " + filepath);
 		        writerTask.execute();
 		        MADN3SCamera.isPictureTaken.set(true);
 			}
@@ -305,11 +306,11 @@ public class BraveheartMidgetService extends IntentService {
     }
 
 	private void sendResult() {
-		Log.d(tag, "mSocketWeakReference == null: " + (mSocketWeakReference == null));
-		Log.d(tag, "sendResult: " + result.toString());
+//		Log.d(tag, "mSocketWeakReference == null: " + (mSocketWeakReference == null));
+//		Log.d(tag, "sendResult: " + result.toString());
 		if(mSocketWeakReference != null){
 			HiddenMidgetWriter writerTask = new HiddenMidgetWriter(mSocketWeakReference, result.toString());
-	        Log.d(tag, "Ejecutando a HiddenMidgetWriter desde sendResult");
+//	        Log.d(tag, "Ejecutando a HiddenMidgetWriter desde sendResult");
 	        writerTask.execute();
             MADN3SCamera.isPictureTaken.set(true);
 		}
@@ -336,18 +337,18 @@ public class BraveheartMidgetService extends IntentService {
 	}
 
     private void playSound(String title, String msg){
-        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
-        Notification mNotification = new Notification.Builder(this)
-                .setContentTitle(title)
-                .setContentText(msg)
-                .setSmallIcon(R.drawable.ic_launcher)
-//                .setContentIntent(pIntent)
-                .setSound(soundUri)
-                .build();
-
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(0, mNotification);
+//        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//
+//        Notification mNotification = new Notification.Builder(this)
+//                .setContentTitle(title)
+//                .setContentText(msg)
+//                .setSmallIcon(R.drawable.ic_launcher)
+////                .setContentIntent(pIntent)
+//                .setSound(soundUri)
+//                .build();
+//
+//        NotificationManager mNotificationManager =
+//                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        mNotificationManager.notify(0, mNotification);
     }
 }

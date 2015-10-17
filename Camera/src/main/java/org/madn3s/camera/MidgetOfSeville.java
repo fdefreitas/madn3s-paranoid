@@ -67,8 +67,8 @@ public class MidgetOfSeville {
 
 		Imgproc.cvtColor(imgMat, imgMat, Imgproc.COLOR_RGBA2RGB);
 
-        Log.d(tag, "shapeUp. imgMat type:" + imgMat.type());
-        Log.d(tag, "shapeUp. imgMat channels:" + imgMat.channels());
+//        Log.d(tag, "shapeUp. imgMat type:" + imgMat.type());
+//        Log.d(tag, "shapeUp. imgMat channels:" + imgMat.channels());
 
         Bitmap renderFrameBitmap = Bitmap.createBitmap(imgMat.cols(), imgMat.rows(), Bitmap.Config.RGB_565);
         Utils.matToBitmap(imgMat, renderFrameBitmap);
@@ -76,8 +76,8 @@ public class MidgetOfSeville {
         MADN3SCamera.saveBitmapAsJpeg(renderFrameBitmap, "rendered-frame");
 
 		Mat maskMat = new Mat(height, width, CvType.CV_8UC1, ZERO_SCALAR);
-        Log.d(tag, "shapeUp. maskMat type:" + maskMat.type());
-        Log.d(tag, "shapeUp. maskMat channels:" + maskMat.channels());
+//        Log.d(tag, "shapeUp. maskMat type:" + maskMat.type());
+//        Log.d(tag, "shapeUp. maskMat channels:" + maskMat.channels());
 
         Bitmap exportedBitmap;
         String edgeDetectionsAlgorithm = "canny";
@@ -100,38 +100,40 @@ public class MidgetOfSeville {
         int radius = 10;
 
 		if (config != null) {
+            Log.d(tag, "config:" + config.toString());
             // Sets Validation Mode (send image with circles or without)
-            if(config.has("validation")){
-                isOnValidationMode = config.getBoolean("validation");
+            if(config.has("validate")){
+                isOnValidationMode = config.getBoolean("validate");
             }
-			//grabCut
-			if (config.has("grab_cut")) {
-				JSONObject grabCut = config.getJSONObject("grab_cut");
-				if (grabCut.has("rectangle")) {
-					JSONObject points = grabCut.getJSONObject("rectangle");
-					JSONObject point1 = points.getJSONObject("point_1");
-					JSONObject point2 = points.getJSONObject("point_2");
-					x1 = point1.getDouble("x");
-					y1 = point1.getDouble("y");
-					x2 = point2.getDouble("x");
-					y2 = point2.getDouble("y");
-				}
-				if (grabCut.has("iterations")) {
-					iterCount = grabCut.getInt("iterations");
-				}
-			}
+
+			//grabCut el rectangulo q tenemos default en la tablet hace q explote el grabcut
+//			if (config.has("grab_cut")) {
+//				JSONObject grabCut = config.getJSONObject("grab_cut");
+//				if (grabCut.has("rectangle")) {
+//					JSONObject points = grabCut.getJSONObject("rectangle");
+//					JSONObject point1 = points.getJSONObject("point_1");
+//					JSONObject point2 = points.getJSONObject("point_2");
+//					x1 = point1.getDouble("x");
+//					y1 = point1.getDouble("y");
+//					x2 = point2.getDouble("x");
+//					y2 = point2.getDouble("y");
+//				}
+//				if (grabCut.has("iterations")) {
+//					iterCount = grabCut.getInt("iterations");
+//				}
+//			}
 
 			//goodFeaturesToTrack
 			if (config.has("good_features")) {
 				JSONObject goodFeaturesToTrack = config.getJSONObject("good_features");
 				if (goodFeaturesToTrack.has("max_corners")) {
-					maxCorners = config.getInt("max_corners");
+					maxCorners = goodFeaturesToTrack.getInt("max_corners");
 				}
 				if (goodFeaturesToTrack.has("quality_level")) {
-					qualityLevel = config.getDouble("quality_level");
+					qualityLevel = goodFeaturesToTrack.getDouble("quality_level");
 				}
 				if (goodFeaturesToTrack.has("min_distance")) {
-					minDistance = config.getInt("min_distance");
+					minDistance = goodFeaturesToTrack.getInt("min_distance");
 				}
 			}
 
@@ -194,8 +196,12 @@ public class MidgetOfSeville {
 
 		Mat bgdModel = new Mat();
 		Mat fgdModel = new Mat();
+        String fgdSavepath;
+        String gfttSavePath;
 
         try {
+
+            Log.d(tag, "isOnValidationMode = " + (isOnValidationMode));
 
             Log.d(tag, "shapeUp. grabCut. begin");
 
@@ -277,19 +283,21 @@ public class MidgetOfSeville {
             Bitmap goodFeaturesBitmap = Bitmap.createBitmap(goodFeaturesHighlight.cols(),
                     goodFeaturesHighlight.rows(), Bitmap.Config.RGB_565);
             Utils.matToBitmap(goodFeaturesHighlight, goodFeaturesBitmap);
-            savePath = MADN3SCamera.saveBitmapAsJpeg(goodFeaturesBitmap, "good_features");
-            Log.d(tag, "goodFeatures saved to " + savePath);
+            gfttSavePath = MADN3SCamera.saveBitmapAsJpeg(goodFeaturesBitmap, "good_features");
+            Log.d(tag, "goodFeatures saved to " + gfttSavePath);
 
             Bitmap fgdBitmap = Bitmap.createBitmap(foregroundMat.cols(), foregroundMat.rows(),
                     Bitmap.Config.RGB_565);
             Utils.matToBitmap(foregroundMat, fgdBitmap);
-            savePath = MADN3SCamera.saveBitmapAsJpeg(fgdBitmap, "fgd");
-            Log.d(tag, "foreground saved to " + savePath);
+            fgdSavepath = MADN3SCamera.saveBitmapAsJpeg(fgdBitmap, "fgd");
+            Log.d(tag, "foreground saved to " + fgdSavepath);
 
             if(isOnValidationMode){
                 exportedBitmap = goodFeaturesBitmap;
+                savePath = gfttSavePath;
             } else {
                 exportedBitmap = fgdBitmap;
+                savePath = fgdSavepath;
             }
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
