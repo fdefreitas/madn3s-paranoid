@@ -1,6 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 
-.idea/*
+.idea/
+.idea/workspace.xml
 
 ### Android template
 # Built application files
