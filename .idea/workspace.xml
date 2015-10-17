@@ -2611,7 +2611,11 @@
       <created>1445104828880</created>
       <updated>1445104828880</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Delete .idea/workspace.xml">
+      <created>1445104911702</created>
+      <updated>1445104911702</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
