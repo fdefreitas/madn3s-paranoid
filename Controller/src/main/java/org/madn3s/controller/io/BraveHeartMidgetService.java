@@ -37,7 +37,8 @@ import android.widget.Toast;
 public class BraveHeartMidgetService extends IntentService {
 
 	private static final String tag = BraveHeartMidgetService.class.getSimpleName();
-	private static Handler mHandler = null;
+	@SuppressWarnings("FieldCanBeLocal")
+    private static Handler mHandler = null;
     public static MainActivity mActivity;
     private final IBinder mBinder = new LocalBinder();
 	public static UniversalComms scannerBridge;
@@ -57,8 +58,9 @@ public class BraveHeartMidgetService extends IntentService {
 	@Override
     public IBinder onBind(Intent intent) {
         mHandler = ((MADN3SController) getApplication()).getBluetoothHandler();
-        Log.d(tag, "mHandler " + mHandler == null ? "NULL" : mHandler.toString());
-        Log.d(tag, "mBinder " + mBinder == null ? "NULL" : mBinder.toString());
+        Log.d(tag, "mHandler " + (mHandler == null ? "NULL" : mHandler.toString()));
+        //noinspection ConstantConditions
+        Log.d(tag, "mBinder " + (mBinder == null ? "NULL" : mBinder.toString()));
         return mBinder;
     }
 
@@ -74,8 +76,8 @@ public class BraveHeartMidgetService extends IntentService {
 				|| intent.hasExtra(EXTRA_CALLBACK_CALIBRATION_RESULT)){
     		return super.onStartCommand(intent,flags,startId);
     	} else {
-	        String stopservice = intent.getStringExtra(EXTRA_STOP_SERVICE);
-	        if (stopservice != null && stopservice.length() > 0) {
+	        String stopService = intent.getStringExtra(EXTRA_STOP_SERVICE);
+	        if (stopService != null && stopService.length() > 0) {
 	            stopSelf();
 	        }
 	        return START_NOT_STICKY;
@@ -396,23 +398,14 @@ public class BraveHeartMidgetService extends IntentService {
 	private String getPrintableFrame() {
 		int iter = MADN3SController.sharedPrefsGetInt(KEY_ITERATION);
 		JSONObject frame = MADN3SController.sharedPrefsGetJSONObject(FRAME_PREFIX + iter);
-		try{
-
-			if(frame.has(SIDE_RIGHT)){
-				frame.getJSONObject(SIDE_RIGHT).remove(KEY_POINTS);
-			}
-
-			if(frame.has(SIDE_LEFT)){
-				frame.getJSONObject(SIDE_LEFT).remove(KEY_POINTS);
-			}
-
+		try {
+			if(frame.has(SIDE_RIGHT)){ frame.getJSONObject(SIDE_RIGHT).remove(KEY_POINTS); }
+			if(frame.has(SIDE_LEFT)){ frame.getJSONObject(SIDE_LEFT).remove(KEY_POINTS); }
 			return frame.toString(1);
 		} catch (Exception e){
 			Log.e(tag, "getPrintableFrame. Couldn't parse frame", e);
 			return "{}";
 		}
-
-
 	}
 
 	/**

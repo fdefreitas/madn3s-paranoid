@@ -92,6 +92,7 @@
     <string name="settings_edge_detection_sobel_d_x">dx</string>
     <string name="settings_edge_detection_sobel_d_y">dy</string>
     <string name="settings_clean_images">Clean Images</string>
+    <string name="settings_validation_mode">Validation Mode</string>
 
     <string name="x">X</string>
     <string name="y">Y</string>

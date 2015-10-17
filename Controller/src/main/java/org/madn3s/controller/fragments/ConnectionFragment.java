@@ -31,18 +31,21 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import static org.madn3s.controller.Consts.*;
+
 /**
  * Created by inaki on 26/01/14.
+ *
  */
 public class ConnectionFragment extends BaseFragment {
-	
+
 	private static final String TAG = ConnectionFragment.class.getSimpleName();
-	
+
 	public static final int REQUEST_PICK_FILE = 1;
     public static final int MESSAGE_STATE_CHANGE = 2;
     public static final int MESSAGE_TOAST = 1;
     public static final String TOAST = "toast";
-    
+
     private int mState;
     private Handler mHandler;
     private ConnectionFragment mFragment;
@@ -62,11 +65,11 @@ public class ConnectionFragment extends BaseFragment {
     private Button scannerButton;
     private Button remoteControlButton;
     private Button modelGalleryButton;
-    
+
     private boolean rightCameraStatus;
     private boolean leftCameraStatus;
     private boolean nxtStatus;
-    
+
     public ConnectionFragment(){
     	rightCameraStatus = leftCameraStatus = nxtStatus = false;
     }
@@ -75,25 +78,25 @@ public class ConnectionFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFragment = this;
-        
+
         HiddenMidgetReader.connectionFragmentBridge = new UniversalComms() {
 			@Override
 			public void callback(Object msg) {
 				Bundle bundle = (Bundle)msg;
-				final Device device = Device.setDevice(bundle.getInt("device"));
-				final State state = State.setState(bundle.getInt("state"));
-				mFragment.getView().post(
-					new Runnable() { 
-						public void run() { 
-							setMarkers(state, device);
-						} 
-					}
-				); 
+				final Device device = Device.setDevice(bundle.getInt(KEY_DEVICE));
+				final State state = State.setState(bundle.getInt(KEY_STATE));
+                if(mFragment.getView() != null){
+                    mFragment.getView().post(
+                            new Runnable() {
+                                public void run() {
+                                    setMarkers(state, device);
+                                }
+                            }
+                    );
+                }
 			}
 		};
     }
-
-    
 
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -107,28 +110,29 @@ public class ConnectionFragment extends BaseFragment {
 
         nxtNameTextView = (TextView) view.findViewById(R.id.nxt_name_connection_textView);
         nxtAddressTextView = (TextView) view.findViewById(R.id.nxt_address_connection_textView);
-        
+
         if(MADN3SController.nxt != null){
 	        nxtNameTextView.setText(MADN3SController.nxt.getName());
 	        nxtAddressTextView.setText(MADN3SController.nxt.getAddress());
         }
-        
+
         nxtStatusViewHolder = new StatusViewHolder(
-        		view.findViewById(R.id.nxt_not_connected_imageView), 
-        		view.findViewById(R.id.nxt_connected_imageView), 
+        		view.findViewById(R.id.nxt_not_connected_imageView),
+        		view.findViewById(R.id.nxt_connected_imageView),
         		view.findViewById(R.id.nxt_connecting_progressBar)
     		);
         if(nxtStatus){
         	nxtStatusViewHolder.success();
         }
-        
+
 
         mHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case MESSAGE_TOAST:
-                        Toast.makeText(getActivity().getApplicationContext(), msg.getData().getString(TOAST), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity().getApplicationContext(),
+                                msg.getData().getString(TOAST), Toast.LENGTH_SHORT).show();
                         break;
                     case MESSAGE_STATE_CHANGE:
                         mState = msg.arg1;
@@ -138,9 +142,9 @@ public class ConnectionFragment extends BaseFragment {
                                 nxtStatus = true;
                                 try {
                                 	JSONObject nxtJson = new JSONObject();
-                        	        nxtJson.put("command", "scanner");
-                        	        nxtJson.put("action", "config");
-                        	        nxtJson.put("points", MADN3SController.sharedPrefsGetInt("points"));
+                        	        nxtJson.put(KEY_COMMAND, COMMAND_SCANNER);
+                        	        nxtJson.put(KEY_ACTION, VALUE_CONFIG);
+                        	        nxtJson.put(KEY_POINTS, MADN3SController.sharedPrefsGetInt(KEY_POINTS));
                         	        nxtJson.put("radius", MADN3SController.sharedPrefsGetFloat("radius"));
                         	        nxtJson.put("speed", MADN3SController.sharedPrefsGetInt("speed"));
                         	        MADN3SController.talker.write(nxtJson.toString().getBytes());
@@ -165,56 +169,50 @@ public class ConnectionFragment extends BaseFragment {
             MADN3SController.talker.connect(MADN3SController.nxt);
             Log.d(TAG, "Iniciando Conexion con NXT: " + MADN3SController.nxt.getName());
         }
-        
-        
-        
+
         if(!rightCameraStatus){
         	HiddenMidgetConnector rightCameraConnector = new HiddenMidgetConnector(rightCamera, MADN3SController.readRightCamera);
             rightCameraConnector.execute();
             Log.d(TAG, "Iniciando conexion con Right Camera: " + rightCamera.getName());
         }
-        
+
         if(!leftCameraStatus){
         	HiddenMidgetConnector leftCameraConnector = new HiddenMidgetConnector(leftCamera, MADN3SController.readLeftCamera);
             leftCameraConnector.execute();
             Log.d(TAG, "Iniciando conexion con Left Camera: " + leftCamera.getName());
         }
-        
+
         rightCameraNameTextView = (TextView) view.findViewById(R.id.right_camera_name_connection_textView);
         rightCameraAddressTextView = (TextView) view.findViewById(R.id.right_camera_address_connection_textView);
-        
+
         if(rightCamera != null){
         	rightCameraNameTextView.setText(rightCamera.getName());
         	rightCameraAddressTextView.setText(rightCamera.getAddress());
         }
-        
+
         rightCameraStatusViewHolder = new StatusViewHolder(
-        		view.findViewById(R.id.right_camera_not_connected_imageView), 
-        		view.findViewById(R.id.right_camera_connected_imageView), 
+        		view.findViewById(R.id.right_camera_not_connected_imageView),
+        		view.findViewById(R.id.right_camera_connected_imageView),
         		view.findViewById(R.id.right_camera_connecting_progressBar)
     		);
-        
-	    if(rightCameraStatus){
-        	rightCameraStatusViewHolder.success();
-        }
-        
+
+	    if(rightCameraStatus){ rightCameraStatusViewHolder.success(); }
+
         leftCameraNameTextView = (TextView) view.findViewById(R.id.left_camera_name_connection_textView);
         leftCameraAddressTextView = (TextView) view.findViewById(R.id.left_camera_address_connection_textView);
-        
+
         if(leftCamera != null){
 	        leftCameraNameTextView.setText(leftCamera.getName());
 	        leftCameraAddressTextView.setText(leftCamera.getAddress());
         }
-        
+
         leftCameraStatusViewHolder = new StatusViewHolder(
-        		view.findViewById(R.id.left_camera_not_connected_imageView), 
-        		view.findViewById(R.id.left_camera_connected_imageView), 
+        		view.findViewById(R.id.left_camera_not_connected_imageView),
+        		view.findViewById(R.id.left_camera_connected_imageView),
         		view.findViewById(R.id.left_camera_connecting_progressBar)
     		);
-        if(leftCameraStatus){
-        	leftCameraStatusViewHolder.success();
-        }
 
+        if(leftCameraStatus){ leftCameraStatusViewHolder.success(); }
         scannerButton = (Button) view.findViewById(R.id.scanner_button);
         scannerButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -222,7 +220,8 @@ public class ConnectionFragment extends BaseFragment {
 				if(rightCameraStatus && leftCameraStatus && nxtStatus){
 					listener.onObjectSelected(Mode.SCAN, mFragment);
 				} else {
-					Toast missingName = Toast.makeText(getActivity().getBaseContext(), "Faltan dispositivos por conectar", Toast.LENGTH_LONG);
+					Toast missingName = Toast.makeText(getActivity().getBaseContext(),
+                            "Faltan dispositivos por conectar", Toast.LENGTH_LONG);
 					missingName.show();
 				}
 			}
@@ -234,7 +233,8 @@ public class ConnectionFragment extends BaseFragment {
 				if(nxtStatus){
 					listener.onObjectSelected(Mode.CONTROLLER, mFragment);
 				} else {
-					Toast missingName = Toast.makeText(getActivity().getBaseContext(), "Falta el NXT por conectar", Toast.LENGTH_LONG);
+					Toast missingName = Toast.makeText(getActivity().getBaseContext(),
+                            "Falta el NXT por conectar", Toast.LENGTH_LONG);
 					missingName.show();
 				}
 			}
@@ -252,9 +252,7 @@ public class ConnectionFragment extends BaseFragment {
 			}
 		});
     }
-    
-    
-    
+
     protected void setMarkers(State state, Device device) {
     	StatusViewHolder statusHolder;
     	switch (device){
@@ -269,7 +267,7 @@ public class ConnectionFragment extends BaseFragment {
 	        	statusHolder = nxtStatusViewHolder;
 	        	break;
 	    }
-    	
+
     	switch (state){
 	        case CONNECTED:
         		statusHolder.success();
@@ -289,7 +287,6 @@ public class ConnectionFragment extends BaseFragment {
 	        	statusHolder.failure();
 	            break;
 	    }
-		
-	}
 
+	}
 }

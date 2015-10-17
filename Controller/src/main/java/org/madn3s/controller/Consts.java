@@ -23,6 +23,7 @@ public class Consts {
 	public static final String KEY_COMMAND = "command";
 	public static final String KEY_ACTION = "action";
 	public static final String KEY_CLEAN = "clean";
+	public static final String KEY_VALIDATE = "validate";
 	public static final String KEY_ERROR = "error";
 	public static final String KEY_POINTS = "points";
 	public static final String KEY_STATE = "state";
@@ -77,6 +78,7 @@ public class Consts {
 	public static final String EXTRA_STOP_SERVICE = "stopservice";
 
 	public static final String VALUE_CLEAN = "clean";
+	public static final String VALUE_CONFIG = "config";
 	public static final String VALUE_DEFAULT_PROJECT_NAME = "default";
 	public static final String VALUE_DEFAULT_SIDE = "default";
 	public static final String FRAME_PREFIX = "frame-";

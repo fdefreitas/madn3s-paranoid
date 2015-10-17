@@ -25,6 +25,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
+import static org.madn3s.controller.Consts.*;
+
 public class MainActivity extends Activity implements
 		BaseFragment.OnItemSelectedListener
 		, CameraSelectionDialogFragment.DialogListener {
@@ -123,8 +125,6 @@ public class MainActivity extends Activity implements
 		super.onDestroy();
 	}
 
-
-
 	@Override
 	protected void onStop() {
 		finishCommunications();
@@ -138,20 +138,20 @@ public class MainActivity extends Activity implements
 	private void finishCommunications() {
 		try {
 			JSONObject nxtJson = new JSONObject();
-	        nxtJson.put(Consts.KEY_COMMAND, Consts.COMMAND_ABORT);
-	        nxtJson.put(Consts.KEY_ACTION, Consts.ACTION_ABORT);
+	        nxtJson.put(KEY_COMMAND, COMMAND_ABORT);
+	        nxtJson.put(KEY_ACTION, ACTION_ABORT);
 
 	        MADN3SController.talker.write(nxtJson.toString().getBytes());
 
 			JSONObject json = new JSONObject();
-	        json.put(Consts.KEY_ACTION, Consts.ACTION_EXIT_APP);
-	        json.put(Consts.KEY_SIDE, Consts.SIDE_LEFT);
+	        json.put(KEY_ACTION, ACTION_EXIT_APP);
+	        json.put(KEY_SIDE, SIDE_LEFT);
 
 	        HiddenMidgetWriter sendRightCamera = new HiddenMidgetWriter(
 	        		MADN3SController.rightCameraWeakReference, json.toString());
 	        sendRightCamera.execute();
 
-	        json.put(Consts.KEY_SIDE, Consts.SIDE_RIGHT);
+	        json.put(KEY_SIDE, SIDE_RIGHT);
 
 	        HiddenMidgetWriter sendLeftCamera = new HiddenMidgetWriter(
 	        		MADN3SController.leftCameraWeakReference, json.toString());
@@ -160,6 +160,7 @@ public class MainActivity extends Activity implements
 			e.printStackTrace();
 		}
 
+        MADN3SController.sharedPrefsPutInt(KEY_ITERATION, 0);
 		MADN3SController.isRunning.set(false);
 		stopService(new Intent(this, BraveHeartMidgetService.class));
 	}
@@ -223,12 +224,12 @@ public class MainActivity extends Activity implements
 			if(!MADN3SController.sharedPrefsGetBoolean("loaded")){
 				MADN3SController.sharedPrefsPutInt("speed", 15);
 				MADN3SController.sharedPrefsPutFloat("radius", 45.0f);
-				MADN3SController.sharedPrefsPutInt("points", 6);
+				MADN3SController.sharedPrefsPutInt(Consts.KEY_POINTS, 6);
 				MADN3SController.sharedPrefsPutInt("p1x", 0);
 				MADN3SController.sharedPrefsPutInt("p1y", 0);
 				MADN3SController.sharedPrefsPutInt("p2x", 1);
 				MADN3SController.sharedPrefsPutInt("p2y", 1);
-				MADN3SController.sharedPrefsPutInt("iterations", 1);
+				MADN3SController.sharedPrefsPutInt(Consts.KEY_ITERATIONS, 1);
 				MADN3SController.sharedPrefsPutInt("maxCorners", 50);
 				MADN3SController.sharedPrefsPutFloat("qualityLevel", (float) 0.01);
 				MADN3SController.sharedPrefsPutInt("minDistance", 30);
@@ -239,7 +240,8 @@ public class MainActivity extends Activity implements
 				MADN3SController.sharedPrefsPutInt("dY", 0);
 				MADN3SController.sharedPrefsPutString("algorithm", "Canny");
 				MADN3SController.sharedPrefsPutInt("algorithmIndex", R.id.canny_radio);
-				MADN3SController.sharedPrefsPutBoolean("clean", false);
+				MADN3SController.sharedPrefsPutBoolean(Consts.KEY_CLEAN, false);
+				MADN3SController.sharedPrefsPutBoolean(Consts.KEY_VALIDATE, false);
 			}
 		} catch (Exception e) {
 			Log.d(tag, "Exception. Could not initialize SharedPrefs");

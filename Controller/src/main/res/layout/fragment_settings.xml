@@ -6,12 +6,12 @@
 	<RelativeLayout
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content" >
-	
+
 	    <RelativeLayout
 	        android:id="@+id/settings_points_relativeLayout"
 	        style="@style/Controller.Form.Container"
 	        android:layout_height="wrap_content" >
-	
+
 	        <TextView
 	            android:id="@+id/general_textView"
 	            android:layout_width="match_parent"
@@ -20,7 +20,7 @@
 	            style="@style/Controller.GreyTitle"
 	            android:text="@string/general"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	        
+
 	        <TextView
 	            android:id="@+id/points_textView"
 	            android:layout_width="wrap_content"
@@ -29,7 +29,7 @@
 	            style="@style/Controller.Form.Element"
 	            android:text="@string/settings_points"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	
+
 	        <EditText
 	            android:id="@+id/points_editText"
 	            style="@style/Controller.Form.Element"
@@ -39,10 +39,10 @@
 	            android:layout_toRightOf="@id/points_textView"
 	            android:ems="10"
 	            android:inputType="number" >
-	
+
 	            <requestFocus />
 	        </EditText>
-	
+
 	        <TextView
 	            android:id="@+id/radius_textView"
 	            style="@style/Controller.Form.Element"
@@ -51,7 +51,7 @@
 	            android:layout_below="@id/points_textView"
 	            android:text="@string/settings_radius"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	
+
 	        <EditText
 	            android:id="@+id/radius_editText"
 	            android:layout_width="@dimen/input_large_width"
@@ -61,7 +61,7 @@
 	            android:layout_alignBaseline="@+id/radius_textView"
 	            android:ems="10"
 	            android:inputType="number" />
-	
+
 	        <TextView
 	            android:id="@+id/speed_textView"
 	            android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
 	            style="@style/Controller.Form.Element"
 	            android:text="@string/settings_speed"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	
+
 	        <EditText
 	            android:id="@+id/speed_editText"
 	            android:layout_width="@dimen/input_medium_width"
@@ -81,7 +81,7 @@
 	            android:ems="10"
 	            android:inputType="number" >
 	        </EditText>
-	
+
 	        <CheckBox
 	            android:id="@+id/clean_checkBox"
 	            android:layout_width="wrap_content"
@@ -89,14 +89,23 @@
 	            android:layout_below="@id/speed_textView"
 	            style="@style/Controller.Form.Element"
 	            android:text="@string/settings_clean_images" />
+
+            <CheckBox
+                android:id="@+id/validation_checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/speed_textView"
+                android:layout_toRightOf="@id/clean_checkBox"
+                style="@style/Controller.Form.Element"
+                android:text="@string/settings_validation_mode" />
 	    </RelativeLayout>
-	
+
 	    <RelativeLayout
 	        android:id="@+id/grabcut_relativeLayout"
 	        android:layout_height="wrap_content"
 	        style="@style/Controller.Form.Container"
 	        android:layout_below="@+id/settings_points_relativeLayout" >
-	
+
 	        <TextView
 	            android:id="@+id/grabcut_textView"
 	            android:layout_width="match_parent"
@@ -104,7 +113,7 @@
 	            style="@style/Controller.GreyTitle"
 	            android:text="@string/settings_grabcut"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	
+
 	        <TextView
 	            android:id="@+id/p1_opening_textView"
 	            android:layout_width="wrap_content"
@@ -113,7 +122,7 @@
 	            style="@style/Controller.Form.Element"
 	            android:text="@string/settings_grabcut_rectangle_p1_open"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	
+
 	        <EditText
 	            android:id="@+id/p1_x_editText"
 	            style="@style/Controller.Form.Element"
@@ -124,7 +133,7 @@
 	            android:hint="@string/x"
 	            android:ems="10"
 	            android:inputType="number" />
-	
+
 	        <TextView
 	            android:id="@+id/p1_separator_textView"
 	            android:layout_width="wrap_content"
@@ -134,7 +143,7 @@
 	            android:layout_toRightOf="@+id/p1_x_editText"
 	            android:text="@string/comma"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	
+
 	        <EditText
 	            android:id="@+id/p1_y_editText"
 	            android:layout_width="@dimen/input_small_width"
@@ -145,7 +154,7 @@
 	            android:hint="@string/y"
 	            android:ems="10"
 	            android:inputType="number" />
-	        
+
 	        <TextView
 	            android:id="@+id/p1_closing_textView"
 	            android:layout_width="wrap_content"
@@ -155,7 +164,7 @@
 	            style="@style/Controller.Form.Element"
 	            android:text="@string/parenthesis_close"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	
+
 	        <TextView
 	            android:id="@+id/p2_opening_textView"
 	            android:layout_width="wrap_content"
@@ -164,7 +173,7 @@
 	            style="@style/Controller.Form.Element"
 	            android:text="@string/settings_grabcut_rectangle_p2_open"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	
+
 	        <EditText
 	            android:id="@+id/p2_x_EditText"
 	            android:layout_width="@dimen/input_small_width"
@@ -175,7 +184,7 @@
 	            android:hint="@string/x"
 	            android:ems="10"
 	            android:inputType="number" />
-	
+
 	        <TextView
 	            android:id="@+id/p2_y_textView"
 	            android:layout_width="wrap_content"
@@ -185,7 +194,7 @@
 	            style="@style/Controller.Form.Element"
 	            android:text="@string/comma"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	
+
 	        <EditText
 	            android:id="@+id/p2_y_editText"
 	            android:layout_width="@dimen/input_small_width"
@@ -196,7 +205,7 @@
 	            android:hint="@string/y"
 	            android:ems="10"
 	            android:inputType="number" />
-	        
+
 	        <TextView
 	            android:id="@+id/p2_closing_textView"
 	            android:layout_width="wrap_content"
@@ -206,7 +215,7 @@
 	            style="@style/Controller.Form.Element"
 	            android:text="@string/parenthesis_close"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	
+
 	        <TextView
 	            android:id="@+id/iterations_textView"
 	            android:layout_width="wrap_content"
@@ -215,7 +224,7 @@
 	            style="@style/Controller.Form.Element"
 	            android:text="@string/settings_iterations"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	
+
 	        <EditText
 	            android:id="@+id/iterations_editText"
 	            android:layout_width="@dimen/input_small_width"
@@ -227,13 +236,13 @@
 	            android:ems="10"
 	            android:inputType="number" />
 	    </RelativeLayout>
-	
+
 	    <RelativeLayout
 	        android:id="@+id/goodFeatures_relativeLayout"
 	        style="@style/Controller.Form.Container"
 	        android:layout_height="wrap_content"
 	        android:layout_below="@+id/grabcut_relativeLayout" >
-	
+
 	        <TextView
 	            android:id="@+id/good_features_textView"
 	            android:layout_width="match_parent"
@@ -241,7 +250,7 @@
 	            style="@style/Controller.GreyTitle"
 	            android:text="@string/settings_good_features"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	
+
 	        <TextView
 	            android:id="@+id/max_corners_textView"
 	            android:layout_width="wrap_content"
@@ -250,7 +259,7 @@
 	            style="@style/Controller.Form.Element"
 	            android:text="@string/settings_good_features_max_corners"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	
+
 	        <EditText
 	            android:id="@+id/max_corners_editText"
 	            android:layout_width="@dimen/input_small_width"
@@ -260,7 +269,7 @@
 	            style="@style/Controller.Form.Element"
 	            android:ems="10"
 	            android:inputType="number" />
-	        
+
 	        <TextView
 	            android:id="@+id/quality_level_textView"
 	            android:layout_width="wrap_content"
@@ -269,7 +278,7 @@
 	            style="@style/Controller.Form.Element"
 	            android:text="@string/settings_good_features_quality_level"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	
+
 	        <EditText
 	            android:id="@+id/quality_level_editText"
 	            android:layout_width="@dimen/input_small_width"
@@ -279,7 +288,7 @@
 	            style="@style/Controller.Form.Element"
 	            android:ems="10"
 	            android:inputType="numberDecimal" />
-	
+
 	        <TextView
 	            android:id="@+id/min_distance_textView"
 	            android:layout_width="wrap_content"
@@ -288,7 +297,7 @@
 	            style="@style/Controller.Form.Element"
 	            android:text="@string/settings_good_features_min_distance"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	
+
 	        <EditText
 	            android:id="@+id/min_distance_editText"
 	            android:layout_width="@dimen/input_small_width"
@@ -299,13 +308,13 @@
 	            android:ems="10"
 	            android:inputType="number" />
 	    </RelativeLayout>
-	
+
 	    <RelativeLayout
 	        android:id="@+id/edgeDetection_relativeLayout"
 	        style="@style/Controller.Form.Container"
 	        android:layout_height="wrap_content"
 	        android:layout_below="@+id/goodFeatures_relativeLayout" >
-	
+
 	        <TextView
 	            android:id="@+id/edge_detection_textView"
 	            android:layout_width="match_parent"
@@ -313,16 +322,16 @@
 	            style="@style/Controller.GreyTitle"
 	            android:text="@string/settings_edge_detection"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	
+
 	        <TextView
 	            android:id="@+id/algorithm_textView"
 	            style="@style/Controller.Form.Element"
 	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"            
+	            android:layout_height="wrap_content"
 	            android:layout_below="@+id/edge_detection_textView"
 	            android:text="@string/settings_edge_detection_algorithm"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
-	
+
 	        <RadioGroup
 	            android:id="@+id/algorithm_radioGroup"
 	            android:layout_width="wrap_content"
@@ -330,14 +339,14 @@
 	            android:layout_toRightOf="@+id/algorithm_textView"
 	            android:layout_below="@+id/edge_detection_textView"
 	            android:orientation="horizontal" >
-	
+
 	            <RadioButton
 	                android:id="@+id/canny_radio"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:checked="true"
 	                android:text="@string/settings_edge_detection_canny" />
-	
+
 	            <RadioButton
 	                android:id="@+id/sobel_radio"
 	                android:layout_width="wrap_content"
@@ -351,7 +360,7 @@
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content"
 	            android:layout_below="@+id/algorithm_radioGroup" >
-	            
+
 	            <TextView
               android:id="@+id/lower_threshold_textView"
               android:layout_width="wrap_content"
@@ -360,7 +369,7 @@
               style="@style/Controller.Form.Element"
               android:text="@string/settings_edge_detection_canny_lower_threshold"
               android:textAppearance="?android:attr/textAppearanceMedium" />
-  
+
 		          <EditText
 		              android:id="@+id/lower_threshold_editText"
 		              android:layout_width="@dimen/input_medium_width"
@@ -370,7 +379,7 @@
 		              style="@style/Controller.Form.Element"
 		              android:ems="10"
 		              android:inputType="numberDecimal" />
-		  
+
 		          <TextView
 		              android:id="@+id/upper_threshold_textView"
 		              android:layout_width="wrap_content"
@@ -379,7 +388,7 @@
 		              style="@style/Controller.Form.Element"
 		              android:text="@string/settings_edge_detection_canny_upper_threshold"
 		              android:textAppearance="?android:attr/textAppearanceMedium" />
-		  
+
 		          <EditText
 		              android:id="@+id/upper_threshold_editText"
 		              android:layout_width="@dimen/input_medium_width"
@@ -389,15 +398,15 @@
 		              style="@style/Controller.Form.Element"
 		              android:ems="10"
 		              android:inputType="numberDecimal" />
-	            
+
 	        </RelativeLayout>
-	        
+
 	        <RelativeLayout
               android:id="@+id/sobel_params"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_below="@+id/canny_params" >
-		          
+
 	            <TextView
 		              android:id="@+id/d_depth_textView"
 		              android:layout_width="wrap_content"
@@ -406,7 +415,7 @@
 		              style="@style/Controller.Form.Element"
 		              android:text="@string/settings_edge_detection_sobel_d_depth"
 		              android:textAppearance="?android:attr/textAppearanceMedium" />
-  
+
 		          <EditText
 		              android:id="@+id/d_depth_editText"
 		              android:layout_width="@dimen/input_medium_width"
@@ -416,7 +425,7 @@
 		              style="@style/Controller.Form.Element"
 		              android:ems="10"
 		              android:inputType="number" />
-		  
+
 		          <TextView
 		              android:id="@+id/d_x_textView"
 		              android:layout_width="wrap_content"
@@ -426,7 +435,7 @@
 		              android:textStyle="italic"
 		              style="@style/Controller.Form.Element"
 		              android:textAppearance="?android:attr/textAppearanceMedium" />
-		  
+
 		          <EditText
 		              android:id="@+id/d_x_editText"
 		              android:layout_width="@dimen/input_small_width"
@@ -437,7 +446,7 @@
 		              android:hint="@string/settings_edge_detection_sobel_d_x"
 		              android:ems="10"
 		              android:inputType="number" />
-		          
+
 		          <TextView
 		              android:id="@+id/d_y_textView"
 		              android:layout_width="wrap_content"
@@ -448,7 +457,7 @@
 		              android:text="@string/settings_edge_detection_sobel_d_y"
 		              android:textStyle="italic"
 		              android:textAppearance="?android:attr/textAppearanceMedium" />
-		  
+
 		          <EditText
 		              android:id="@+id/d_y_editText"
 		              android:layout_width="@dimen/input_small_width"
@@ -459,11 +468,11 @@
 		              android:hint="@string/settings_edge_detection_sobel_d_y"
 		              android:ems="10"
 		              android:inputType="number" />
-	            
+
           </RelativeLayout>
-	
+
        </RelativeLayout>
-       
+
        <Button
            android:id="@+id/settings_save_button"
            style="@style/Controller.Button.Primary"
@@ -472,6 +481,6 @@
            android:layout_below="@+id/edgeDetection_relativeLayout"
            android:layout_centerHorizontal="true"
            android:text="@string/settings_save" />
-	
+
 	</RelativeLayout>
 </ScrollView>

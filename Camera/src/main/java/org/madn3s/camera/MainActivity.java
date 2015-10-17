@@ -371,7 +371,7 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         Mat resultMat = mOnCameraFrameRender.render(inputFrame);
         JSONObject result = new JSONObject();
-        Log.d(tag, "width: " + resultMat.cols() + " height: " + resultMat.rows());
+//        Log.d(tag, "width: " + resultMat.cols() + " height: " + resultMat.rows());
         if(isCapturing.get()){
             if(isCalibrating.get()){
                 isCalibrating.set(false);
