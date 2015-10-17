@@ -24,7 +24,6 @@
   <component name="ChangeListManager">
     <list default="true" id="01d3b7cb-771b-4106-8f1c-961fc16fc58e" name="Default" comment="">
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
     </list>
     <ignored path="MADN3SCamera.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -2348,6 +2347,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MADN3S" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MADN3S" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value=".idea" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -2594,7 +2607,11 @@
       <created>1445104725285</created>
       <updated>1445104725285</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Delete .idea/workspace.xml">
+      <created>1445104828880</created>
+      <updated>1445104828880</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2684,7 +2701,8 @@
     <MESSAGE value="- Agregado modo de validacion&#10;- Reseteo de pasos en la tablet al salir&#10; - Cambiados algunos strings literales por referencias a sus constantes" />
     <MESSAGE value="Sacando .idea" />
     <MESSAGE value="Sacando .idea/workspace.xml" />
-    <option name="LAST_COMMIT_MESSAGE" value="Sacando .idea/workspace.xml" />
+    <MESSAGE value="Delete .idea/workspace.xml" />
+    <option name="LAST_COMMIT_MESSAGE" value="Delete .idea/workspace.xml" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -2913,14 +2931,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.2567325" vertical-offset="343" max-vertical-offset="990">
           <caret line="32" column="32" selection-start-line="32" selection-start-column="32" selection-end-line="32" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36764705" vertical-offset="40120" max-vertical-offset="51472">
-          <caret line="2520" column="59" selection-start-line="2520" selection-start-column="59" selection-end-line="2520" selection-end-column="59" />
-          <folding />
         </state>
       </provider>
     </entry>
