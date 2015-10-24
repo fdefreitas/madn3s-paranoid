@@ -14,10 +14,14 @@
 
     <string name="original">Original</string>
     <string name="undistorted">Undistorted</string>
-    <string name="calibrating">Calibrating...</string>
+    <string name="calibrating">Calibrating…</string>
+    <string name="processing">Processing…</string>
     <string name="please_wait">Please, wait</string>
     <string name="calibration_successful">Successfully calibrated!\nAvg. re-projection error:</string>
     <string name="calibration_unsuccessful">Unsuccessful calibration.\nTry again</string>
     <string name="more_samples">Please, capture more samples</string>
+    <string name="calibrate">Calibrate</string>
+    <string name="scan">Scan</string>
+    <string name="reset">Reset</string>
 
 </resources>

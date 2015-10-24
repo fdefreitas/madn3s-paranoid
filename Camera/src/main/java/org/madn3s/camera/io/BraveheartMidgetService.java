@@ -136,11 +136,11 @@ public class BraveheartMidgetService extends IntentService {
 					, Consts.EMPTY_JSON_OBJECT_STRING);
 				msg = new JSONObject(jsonString);
 				if(msg.has(KEY_ITERATION)){
-					MADN3SCamera.iteration = msg.getInt(KEY_ITERATION);
+                    MADN3SCamera.sharedPrefsPutInt(KEY_ITERATION, msg.getInt(KEY_ITERATION));
 				}
 				if(msg.has(KEY_ACTION)){
 					String action = msg.getString(KEY_ACTION);
-                    playSound("Action", action);
+//                    playSound("Action", action);
 					if(msg.has(KEY_SIDE)){
 						side = msg.getString(KEY_SIDE);
 					}
@@ -154,7 +154,6 @@ public class BraveheartMidgetService extends IntentService {
 					if(action.equalsIgnoreCase(KEY_CONFIG)){
 						Log.d(tag, "Received config: " + config.toString(1));
 						config = msg;
-						MainActivity.fConfig = msg;
 						MADN3SCamera.sharedPrefsPutJSONObject(KEY_CONFIG, config);
 						MADN3SCamera.isPictureTaken.set(true);
 					} else if(action.equalsIgnoreCase(ACTION_TAKE_PICTURE)){
@@ -197,7 +196,7 @@ public class BraveheartMidgetService extends IntentService {
 				Log.d(tag, "EXTRA_RESULT");
 				jsonString = intent.getExtras().getString(Consts.EXTRA_RESULT);
 				result = new JSONObject(jsonString);
-                playSound("Result", "Result received");
+//                playSound("Result", "Result received");
 
 				if(result.has(Consts.KEY_ERROR)){
 					sendResult();
@@ -215,15 +214,14 @@ public class BraveheartMidgetService extends IntentService {
 		Log.d(tag, "sendPicture");
 		Log.d(tag, "mSocketWeakReference null: " + (mSocketWeakReference == null));
 
-		SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
-		String filepath = sharedPreferences.getString(Consts.KEY_FILE_PATH, null);
+		String filepath = MADN3SCamera.sharedPrefsGetString(Consts.KEY_FILE_PATH);
 		Bitmap bitmap = BitmapFactory.decodeFile(filepath, Consts.bitmapFactoryOptionsOnSend);
 
 		if(filepath != null){
 			if(mSocketWeakReference != null){
 				HiddenMidgetWriter writerTask = new HiddenMidgetWriter(mSocketWeakReference, bitmap);
 				writerTask.setmActivity(mActivity);
-		        Log.d(tag, "Ejecutando a HiddenMidgetWriter desde sendPicture " + filepath);
+		        Log.d(tag, "Ejecutando a HiddenMidgetWriter desde sendPicture");
 		        writerTask.execute();
 		        MADN3SCamera.isPictureTaken.set(true);
 			}
@@ -233,13 +231,13 @@ public class BraveheartMidgetService extends IntentService {
 	}
 
 	private void calibrate() throws JSONException {
-        mActivity.setCaptureMode(true);
+        mActivity.setCaptureMode(true, true);
         Log.i(tag, "Me dijeron que calibrase");
-        playSound("Calibrate Please", "Me dijeron que calibrase");
+//        playSound("Calibrate Please", "Me dijeron que calibrase");
 	}
 
 	private void sendCalibrationResult(String calibrationStr) throws JSONException {
-		Log.d(tag, "calibrationStr: " + calibrationStr);
+//		Log.d(tag, "calibrationStr: " + calibrationStr);
 		try {
 			result = new JSONObject(calibrationStr);
 			result.put(Consts.KEY_ERROR, false);
@@ -263,8 +261,9 @@ public class BraveheartMidgetService extends IntentService {
     private void applyCalibration(String calibrationStr){
         boolean error = false;
         try {
-            Log.d(tag, "applyCalibration. calibrationStr: " + calibrationStr);
-            MADN3SCamera.saveJsonToExternal(calibrationStr, "calibration-result");
+            Log.d(tag, "applyCalibration");
+            Log.d(tag, "calibrationStr: " + calibrationStr);
+            MADN3SCamera.saveJsonToExternal(calibrationStr, "calibration-result", false, false);
             JSONObject calibPayload = new JSONObject(calibrationStr);
 
             // Parsear Maps
@@ -286,7 +285,7 @@ public class BraveheartMidgetService extends IntentService {
 
             // Reemplazado por setCaptureMode
             //        mActivity.setCalibrationValues(cameraMatrix, distCoeffs);
-            mActivity.setCaptureMode(false);
+            mActivity.setCaptureMode(false, false);
             // Puesto para que el socket de BT vuelva a escuchar
             MADN3SCamera.isPictureTaken.set(true);
 
@@ -337,18 +336,18 @@ public class BraveheartMidgetService extends IntentService {
 	}
 
     private void playSound(String title, String msg){
-//        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//
-//        Notification mNotification = new Notification.Builder(this)
-//                .setContentTitle(title)
-//                .setContentText(msg)
-//                .setSmallIcon(R.drawable.ic_launcher)
-////                .setContentIntent(pIntent)
-//                .setSound(soundUri)
-//                .build();
-//
-//        NotificationManager mNotificationManager =
-//                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        mNotificationManager.notify(0, mNotification);
+        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        Notification mNotification = new Notification.Builder(this)
+                .setContentTitle(title)
+                .setContentText(msg)
+                .setSmallIcon(R.drawable.ic_launcher)
+//                .setContentIntent(pIntent)
+                .setSound(soundUri)
+                .build();
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(0, mNotification);
     }
 }
