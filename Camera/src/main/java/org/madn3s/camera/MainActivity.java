@@ -88,7 +88,7 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
         MADN3SCamera.isPictureTaken = new AtomicBoolean(true);
         MADN3SCamera.isRunning = new AtomicBoolean(true);
 
-//        setDiscoverableBt();
+        setDiscoverableBt();
         setUpBridges();
 
         chron = new Chron(this);
@@ -478,30 +478,39 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
                             mActivity.getString(R.string.calibration_unsuccessful);
                     (Toast.makeText(MainActivity.this, resultMessage, Toast.LENGTH_LONG)).show();
 
+                    JSONObject resultForIntent = new JSONObject();
                     JSONObject calibPayload = new JSONObject();
 
+                    /* Se guarda el resultado de la calibración en SharedPrefs */
                     if (mCalibrator.isCalibrated()) {
                         CalibrationResult.save(MainActivity.this,
                                 mCalibrator.getCameraMatrix(), mCalibrator.getDistortionCoefficients());
                     }
+                    /* Fin - Se guarda el resultado de la calibración en SharedPrefs */
 
                     try {
                         Log.i(tag, "Result: ");
-                        Log.i(tag, "Calibration Coefficients: "
-                                + result.getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS));
-                        Log.i(tag, "Camera Matrix: "
-                                + result.getString(Consts.KEY_CALIB_CAMERA_MATRIX));
+                        Log.i(tag, "Calibration Coefficients: " + result.getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS));
+                        Log.i(tag, "Camera Matrix: " + result.getString(Consts.KEY_CALIB_CAMERA_MATRIX));
+                        Log.i(tag, "Image Points: " + result.getString(Consts.KEY_CALIB_IMAGE_POINTS));
 
-                        calibPayload.put(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS,
-                                result.getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS));
-                        calibPayload.put(Consts.KEY_CALIB_CAMERA_MATRIX,
-                                result.getString(Consts.KEY_CALIB_CAMERA_MATRIX));
-                        calibPayload.put(Consts.KEY_CALIB_IMAGE_POINTS,
-                                result.getString(Consts.KEY_CALIB_IMAGE_POINTS));
-                        calibPayload.put(Consts.KEY_ACTION,
-                                Consts.ACTION_CALIBRATION_RESULT);
+                        /* Set Calib Payload */
+                        calibPayload.put(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS, result.getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS));
+                        calibPayload.put(Consts.KEY_CALIB_CAMERA_MATRIX, result.getString(Consts.KEY_CALIB_CAMERA_MATRIX));
+                        calibPayload.put(Consts.KEY_CALIB_IMAGE_POINTS, result.getString(Consts.KEY_CALIB_IMAGE_POINTS));
+                        calibPayload.put(Consts.KEY_ACTION, Consts.ACTION_CALIBRATION_RESULT);
+                        /* End - Set Calib Payload */
 
+                        /* Guardar Sistema de Archivos */
                         MADN3SCamera.saveJsonToExternal(calibPayload.toString(), "camera-calibration", false, false);
+
+                        /* Enviar a Controller */
+                        resultForIntent.put(Consts.KEY_ACTION, Consts.ACTION_SEND_CALIBRATION_RESULT);
+                        resultForIntent.put(Consts.KEY_CALIBRATION_RESULT, calibPayload.toString());
+
+                        Intent williamWallaceIntent = new Intent(getBaseContext(), BraveheartMidgetService.class);
+                        williamWallaceIntent.putExtra(Consts.EXTRA_CALLBACK_MSG, resultForIntent.toString());
+                        startService(williamWallaceIntent);
 
                         Log.i(tag, "Result Ok");
                     } catch (Exception e) {
