@@ -374,9 +374,18 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
             protected void onPostExecute(JSONObject resultJson) {
                 try {
                     int iteration = MADN3SCamera.sharedPrefsGetInt(KEY_ITERATION);
+                    chron.stopChron("processing image");
                     if (!resultJson.getBoolean(KEY_ERROR)) {
                         MADN3SCamera.saveJsonToExternal(resultJson.toString(), "iteration-" + iteration, true, true);
                         MADN3SCamera.sharedPrefsPutInt(KEY_ITERATION, iteration + 1);
+
+
+                        /// Envío Agregado
+                        Intent williamWallaceIntent = new Intent(mActivity, BraveheartMidgetService.class);
+                        williamWallaceIntent.putExtra(Consts.EXTRA_RESULT, resultJson.toString());
+                        startService(williamWallaceIntent);
+                        /// Envío Agregado
+
                     } else {
                         Toast.makeText(mActivity, "Error procesando foto, intenta de nuevo",
                                 Toast.LENGTH_LONG).show();
