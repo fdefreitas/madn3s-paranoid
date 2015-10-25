@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.util.Base64;
 import android.util.Log;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 
@@ -38,7 +39,12 @@ public class HiddenMidgetWriter extends AsyncTask<Void, Void, Void> {
     		ByteArrayOutputStream baos = new ByteArrayOutputStream();
     		((Bitmap) msg).compress(Consts.BITMAP_COMPRESS_FORMAT, Consts.COMPRESSION_QUALITY, baos);
     		this.msg = baos.toByteArray();
-    	}
+			try {
+				baos.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
 
     	this.msg = Base64.encode(this.msg, Base64.DEFAULT);
     	md5HexBase64 = MADN3SCamera.getMD5EncryptedString(this.msg);

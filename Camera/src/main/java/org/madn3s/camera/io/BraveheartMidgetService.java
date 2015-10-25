@@ -154,6 +154,7 @@ public class BraveheartMidgetService extends IntentService {
 					if(action.equalsIgnoreCase(KEY_CONFIG)){
 						Log.d(tag, "Received config: " + config.toString(1));
 						config = msg;
+						MainActivity.config = msg;
 						MADN3SCamera.sharedPrefsPutJSONObject(KEY_CONFIG, config);
 						MADN3SCamera.isPictureTaken.set(true);
 					} else if(action.equalsIgnoreCase(ACTION_TAKE_PICTURE)){

@@ -66,7 +66,7 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
     private int mWidth;
     private int mHeight;
 
-    public JSONObject config;
+    public static JSONObject config;
 
     public static JSONObject fConfig;
 
