@@ -311,8 +311,8 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-//                            processFrameCallback(undistortionResult);
-                            capturePhoto(undistortionResult);
+                            processFrameCallback(undistortionResult);
+//                            capturePhoto(undistortionResult);
                         }
                     });
                 }
@@ -417,7 +417,7 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
             if (CalibrationResult.tryLoad(this, mCalibrator.getCameraMatrix(),
                     mCalibrator.getDistortionCoefficients())) {
                 mCalibrator.setCalibrated();
-                setCaptureMode(false, true);
+                setCaptureMode(false, false);
             }
 
             previewRender = new OnCameraFrameRender(new PreviewFrameRender(mCalibrator.mWidth, mCalibrator.mHeight));
