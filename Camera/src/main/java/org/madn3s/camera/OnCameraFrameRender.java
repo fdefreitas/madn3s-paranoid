@@ -41,6 +41,13 @@ class PreviewFrameRender extends FrameRender {
     	Core.transpose(mRgba, mRgbaT);
         Imgproc.resize(mRgbaT, mRgbaF, mRgbaF.size(), 0,0, 0);
         Core.flip(mRgbaF, mRgba, 1 );
+
+        double pX = mRgba.cols() / 3 * 2;
+        double pY = mRgba.rows() * 0.1;
+
+        Core.putText(mRgba, "Preview", new Point(pX , pY)
+                , Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 0));
+
         return mRgba;
     }
 }
