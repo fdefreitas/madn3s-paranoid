@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,7 +32,6 @@ import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
-import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -192,9 +190,6 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
     @Override
     public boolean onPrepareOptionsMenu (Menu menu) {
         super.onPrepareOptionsMenu(menu);
-//        menu.findItem(R.id.preview_mode).setEnabled(true);
-//        if (!mCalibrator.isCalibrated())
-//            menu.findItem(R.id.preview_mode).setEnabled(false);
         return true;
     }
 
@@ -345,11 +340,66 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
         }
     }
 
-    private void capturePhoto(final Mat result){
-        Bitmap iterBitmap = Bitmap.createBitmap(result.cols(), result.rows(), Bitmap.Config.RGB_565);
-        Utils.matToBitmap(result, iterBitmap);
-        MADN3SCamera.saveBitmapAsJpeg(iterBitmap, MADN3SCamera.sharedPrefsGetString(KEY_SIDE));
-        MADN3SCamera.sharedPrefsPutInt(KEY_ITERATION, MADN3SCamera.sharedPrefsGetInt(KEY_ITERATION) + 1);
+    private void capturePhoto(final Mat resultMat){
+        new AsyncTask<Void, Void, JSONObject>() {
+
+            @Override
+            protected void onPreExecute() {
+                setWorking(DIALOG_PROCESSING);
+                chron.restartChron();
+            }
+
+            @Override
+            protected JSONObject doInBackground(Void... params) {
+                JSONObject result = new JSONObject();
+
+                try {
+                    JSONArray pointsJson = null;
+                    JSONObject resultJson = figaro.shapeUp(resultMat, config, isManual.get());
+
+                    if (resultJson != null && resultJson.has(KEY_POINTS)) {
+                        pointsJson = resultJson.getJSONArray(KEY_POINTS);
+                    }
+
+                    if (pointsJson != null && pointsJson.length() > 0) {
+                        result.put(KEY_MD5, resultJson.get(KEY_MD5));
+                        result.put(Consts.KEY_ERROR, false);
+                        result.put(Consts.KEY_POINTS, pointsJson);
+                        MADN3SCamera.sharedPrefsPutString(KEY_FILE_PATH, resultJson.getString(KEY_FILE_PATH));
+                    } else {
+                        result.put(Consts.KEY_ERROR, true);
+                    }
+                } catch (JSONException e) {
+                    Log.e(tag, "Couldn't execute MidgetOfSeville.shapeUp to Camera Frame");
+                    e.printStackTrace();
+                    result = new JSONObject();
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(JSONObject resultJson) {
+                try {
+                    int iteration = MADN3SCamera.sharedPrefsGetInt(KEY_ITERATION);
+                    chron.stopChron("processing image");
+                    if (!resultJson.getBoolean(KEY_ERROR)) {
+                        MADN3SCamera.saveJsonToExternal(resultJson.toString(), "iteration-" + iteration, true, true);
+                        MADN3SCamera.sharedPrefsPutInt(KEY_ITERATION, iteration + 1);
+                    } else {
+                        Toast.makeText(mActivity, "Error procesando foto, intenta de nuevo",
+                                Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(tag, "Failure on shapeUp in doInBackground. resultJson null.");
+                } finally {
+                    unsetWorking();
+                    chron.stopChron("Processing Image");
+                    calibrationButtonImageView.setEnabled(true);
+                }
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void processFrameCallback(final Mat resultMat) {
@@ -367,7 +417,7 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
 
                 try {
                     JSONArray pointsJson = null;
-                    JSONObject resultJson = figaro.shapeUp(resultMat, config);
+                    JSONObject resultJson = figaro.shapeUp(resultMat, config, isManual.get());
 
                     if (resultJson != null && resultJson.has(KEY_POINTS)) {
                         pointsJson = resultJson.getJSONArray(KEY_POINTS);
