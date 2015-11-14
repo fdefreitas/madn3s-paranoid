@@ -6,8 +6,6 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,6 +57,7 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
 
     public static AtomicBoolean isCapturing;
     public static AtomicBoolean isCalibrating;
+    public static AtomicBoolean isManual;
 
     private CameraCalibrator mCalibrator;
     private OnCameraFrameRender previewRender;
@@ -67,8 +67,6 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
     private int mHeight;
 
     public static JSONObject config;
-
-    public static JSONObject fConfig;
 
     private BaseLoaderCallback mLoaderCallback;
     private ProgressDialog progressDialog;
@@ -84,6 +82,7 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
         //Ambos en true para arrancar listo para calibrar
         isCalibrating = new AtomicBoolean(true);
         isCapturing = new AtomicBoolean(true);
+        isManual = new AtomicBoolean(true);
 
         MADN3SCamera.isPictureTaken = new AtomicBoolean(true);
         MADN3SCamera.isRunning = new AtomicBoolean(true);
@@ -102,7 +101,23 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
         calibrationButtonImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onButtonClick();
+            }
+        });
+
+        Button calibrateButton = (Button) findViewById(R.id.manual_calibration_button);
+        calibrateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 onCalibrateButtonClick();
+            }
+        });
+
+        Button resetIterButton = (Button) findViewById(R.id.reset_iterations_button);
+        resetIterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetIterations();
             }
         });
 
@@ -206,9 +221,12 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
                         MADN3SCamera.isOpenCvLoaded = true;
                         mOpenCvCameraView.enableView();
                         mOpenCvCameraView.setOnTouchListener(MainActivity.this);
-                    } break;
-                    default:
-                    {
+
+                        /* Load configuration data */
+                        loadConfigData();
+                    }
+                    break;
+                    default: {
                         super.onManagerConnected(status);
                     } break;
                 }
@@ -279,8 +297,8 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
         progressDialog.dismiss();
 	}
 
-    private void playSound(String title, String msg){
-        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//    private void playSound(String title, String msg){
+//        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 //
 //        Notification mNotification = new Notification.Builder(this)
 //                .setContentTitle(title)
@@ -293,7 +311,7 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
 //        NotificationManager mNotificationManager =
 //                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 //        mNotificationManager.notify(0, mNotification);
-    }
+//    }
 
     //Metodos de CvCameraViewListener2
     @Override
@@ -311,22 +329,24 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            processFrameCallback(undistortionResult);
-//                            capturePhoto(undistortionResult);
+//                            processFrameCallback(undistortionResult);
+                            capturePhoto(undistortionResult);
                         }
                     });
                 }
             } else {
-                resultMat = previewRender.render(inputFrame);
+                if(isManual.get()){
+                    resultMat = undistortionRender.render(inputFrame);
+                } else {
+                    resultMat = previewRender.render(inputFrame);
+                }
             }
-
             return resultMat;
         }
     }
 
     private void capturePhoto(final Mat result){
         Bitmap iterBitmap = Bitmap.createBitmap(result.cols(), result.rows(), Bitmap.Config.RGB_565);
-        String iterStr = String.valueOf(MADN3SCamera.sharedPrefsGetInt(KEY_ITERATION));
         Utils.matToBitmap(result, iterBitmap);
         MADN3SCamera.saveBitmapAsJpeg(iterBitmap, MADN3SCamera.sharedPrefsGetString(KEY_SIDE));
         MADN3SCamera.sharedPrefsPutInt(KEY_ITERATION, MADN3SCamera.sharedPrefsGetInt(KEY_ITERATION) + 1);
@@ -534,7 +554,75 @@ public class MainActivity extends Activity  implements CameraBridgeViewBase.CvCa
         }
     }
 
+    /**
+     * Carga datos de configuracion de existir el archivo. Ya {@link CalibrationResult} se encarga de
+     * cargar los datos de calibración de la cámara desde SharedPreferences en <code>tryLoad</code>
+     */
+    private void loadConfigData(){
+        String filename = "config.json";
+        JSONObject configJson;
+
+        MADN3SCamera.sharedPrefsPutString(KEY_PROJECT_NAME, "graduation");
+
+        try {
+            configJson = MADN3SCamera.getInputJson(filename);
+            if(configJson.has(KEY_SIDE)){
+                MADN3SCamera.sharedPrefsPutString(KEY_SIDE, configJson.getString(KEY_SIDE));
+            }
+        } catch (JSONException e){
+            Log.e(tag, "Error Parsing config JSONObject");
+            e.printStackTrace();
+        }
+
+        loadCalibration();
+    }
+
+    /**
+     * Carga datos de calibración estereo de existir el archivo. Ya {@link CalibrationResult} se encarga de
+     * cargar los datos de calibración de la cámara desde SharedPreferences en <code>tryLoad</code>
+     */
+    private void loadCalibration(){
+        try {
+
+            String filename = "calibration-stereo.json";
+            String side = MADN3SCamera.sharedPrefsGetString(KEY_SIDE);
+            JSONObject calibJson = MADN3SCamera.getInputJson(filename);
+            calibJson = new JSONObject(calibJson.getString(KEY_CALIBRATION_RESULT));
+
+            // Parsear Maps
+            String map1Str = calibJson.getJSONObject(side).getString(Consts.KEY_CALIB_MAP_1);
+            Log.d(tag, "map1: " + map1Str);
+            String map2Str = calibJson.getJSONObject(side).getString(Consts.KEY_CALIB_MAP_2);
+            Log.d(tag, "map2: " + map2Str);
+            Mat map1 = MADN3SCamera.getMatFromString(map1Str);
+            Mat map2 = MADN3SCamera.getMatFromString(map2Str);
+
+            MidgetOfSeville figaro = MidgetOfSeville.getInstance();
+            figaro.setMap1(map1);
+            figaro.setMap2(map2);
+
+//            // Setear Camera Matrix y DistCoeffs en MidgetOfSeville
+//            String cameraMatrixStr = calibJson.getJSONObject(side).getString(Consts.KEY_CALIB_CAMERA_MATRIX);
+//            String distCoeffsStr = calibJson.getJSONObject(side).getString(Consts.KEY_CALIB_DISTORTION_COEFFICIENTS);
+//            Mat cameraMatrix = MADN3SCamera.getMatFromString(cameraMatrixStr);
+//            Mat distCoeffs = MADN3SCamera.getMatFromString(distCoeffsStr);
+//            Log.d(tag, "Obteniendo calib_camera_matrix:" + cameraMatrixStr);
+
+        } catch (JSONException e){
+            Log.e(tag, "Couldn't load calibration JSON");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Returns <code>KEY_ITERATION</code> value on {@link android.content.SharedPreferences } to <code>0</code>
+     */
     private void resetIterations(){
         MADN3SCamera.sharedPrefsPutInt(KEY_ITERATION, 0);
     }
+
+    private void onButtonClick() {
+        setCaptureMode(false, true);
+    }
+
 }

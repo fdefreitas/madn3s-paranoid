@@ -5,6 +5,6 @@
     android:thickness="8dp"
     android:thicknessRatio="19">
     <corners
-        android:radius="16dp"/>
+        android:radius="4dp"/>
         <solid android:color="@color/gamebookers_blue"/>
     </shape>

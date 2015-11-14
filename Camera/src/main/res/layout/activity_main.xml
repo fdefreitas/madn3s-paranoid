@@ -30,6 +30,19 @@
         android:text="@string/take_test_picture"
         android:textColor="#FFF"/>
 
+    <Button
+        android:id="@+id/manual_calibration_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/calibration_button_imageView"
+        android:layout_toLeftOf="@id/calibration_button_imageView"
+        android:padding="8dp"
+        android:layout_margin="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/selector_button_alternate"
+        android:textColor="@color/white"
+        android:text="@string/calibrate"/>
+
     <ImageView
         android:id="@+id/calibration_button_imageView"
         android:layout_width="wrap_content"
@@ -41,6 +54,18 @@
         android:src="@drawable/ic_camera_white"
         android:background="@drawable/selector_button"
         android:contentDescription="@string/calibrate"/>
+
+    <Button
+        android:id="@+id/reset_iterations_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/calibration_button_imageView"
+        android:layout_toRightOf="@id/calibration_button_imageView"
+        android:padding="8dp"
+        android:layout_margin="8dp"
+        android:layout_marginBottom="16dp"
+        android:textColor="@color/white"
+        android:text="@string/reset"/>
 
 
 </RelativeLayout>
